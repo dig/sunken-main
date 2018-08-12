@@ -1,10 +1,11 @@
 package net.sunken.common.database;
 
-import com.sun.istack.internal.Nullable;
 import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import javax.annotation.Nullable;
 
 public class RedisConnection extends Database<Jedis> {
 

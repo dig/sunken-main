@@ -7,9 +7,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.EquipmentSlot;
 
-/**
- * Created by Digital on 22/01/2018.
- */
 public class NPCInteractEvent extends Event {
 
     public enum NPCInteractType {

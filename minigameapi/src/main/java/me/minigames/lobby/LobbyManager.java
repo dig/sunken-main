@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class LobbyManager {
-    private LobbyManager() {}
 
     @Getter
     private static ScoreboardUtil scoreboard;
@@ -29,7 +28,8 @@ public class LobbyManager {
         String schematic = File.separator + "schematics" + File.separator + "lobby.schematic";
 
         try {
-            lobbyBlocks = SchematicUtil.loadAndPaste(schematic, Bukkit.getWorld("world"), new Location(Bukkit.getWorld("world"), 0, 90, 0));
+            lobbyBlocks = SchematicUtil.loadAndPaste(schematic, Bukkit
+                    .getWorld("world"), new Location(Bukkit.getWorld("world"), 0, 90, 0));
         } catch (IOException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Error occurred pasting lobby");
             Bukkit.shutdown();
@@ -42,9 +42,12 @@ public class LobbyManager {
         }
     }
 
-    public static void setupScoreboard(){
+    public static void setupScoreboard() {
         scoreboard = new ScoreboardUtil("&c" + MinigamePlugin.getInstance().getMinigame().getName());
-        scoreboard.add("test" , 1);
+        scoreboard.add("test", 1);
         scoreboard.update();
+    }
+
+    private LobbyManager() {
     }
 }

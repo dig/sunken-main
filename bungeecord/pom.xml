@@ -16,6 +16,7 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+
         <repository>
             <id>data-local</id>
             <name>data</name>
@@ -24,12 +25,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>BungeeCord</groupId>
             <artifactId>net.sunken.bungeecord</artifactId>

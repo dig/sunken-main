@@ -1,5 +1,7 @@
 package me.minigames;
 
 public enum MinigameState {
-    LOBBY, IN_PROGRESS, RESTARTING
+    LOBBY,
+    IN_PROGRESS,
+    RESTARTING
 }

@@ -41,6 +41,7 @@
                                     <include>redis.clients:jedis</include>
                                     <include>org.apache.commons:commons-pool2</include>
                                     <include>org.json:json</include>
+                                    <include>com.google.code.findbugs:jsr305</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -96,5 +97,4 @@
             <version>20160810</version>
         </dependency>
     </dependencies>
-
 </project>
