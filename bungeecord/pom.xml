@@ -67,11 +67,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/../lib/BungeeCord.jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>net.sunken</groupId>
             <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
