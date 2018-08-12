@@ -13,6 +13,8 @@
         <module>common</module>
         <module>core</module>
         <module>lobby</module>
+        <module>minigameapi</module>
+        <module>bungeecord</module>
     </modules>
 
 </project>
