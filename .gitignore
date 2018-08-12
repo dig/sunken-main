@@ -4,3 +4,7 @@
 *.ipr
 *.iws
 .idea/
+
+# maven
+target/
+dependency-reduced-pom.xml
