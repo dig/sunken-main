@@ -1,39 +1,30 @@
 package net.sunken.common.database;
 
-import net.sunken.common.Common;
-import org.bukkit.Bukkit;
+import com.sun.istack.internal.Nullable;
+import lombok.Getter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.logging.Level;
-
 public class RedisConnection extends Database<Jedis> {
-    private static Common plugin = Common.getInstance();
 
+    @Getter
     private JedisPool jedisPool;
-    private Jedis jedisSubscriber;
 
-    /*
-     * Used if creating a connection without password
+    /**
+     * Use to authenticate with a password.
+     *
+     * @param host     the host IP of the Redis instance
+     * @param port     the port the Redis instance is running on
+     * @param password the password of the Redis instance if applicable, can be null
      */
-    public RedisConnection(String host, int port) {
-        this(host, port, "");
-    }
-
-    /*
-     * Authenticating with a password
-     */
-    public RedisConnection(String host, int port, String password) {
-        Runnable redis = () -> {
-            JedisPoolConfig poolCfg = new JedisPoolConfig();
-            jedisPool = new JedisPool(poolCfg, host, port, 0, password);
-        };
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, redis);
+    public RedisConnection(String host, int port, @Nullable String password) {
+        JedisPoolConfig poolCfg = new JedisPoolConfig();
+        jedisPool = new JedisPool(poolCfg, host, port, 0, password);
     }
 
     public void sendRedisMessage(final String channel, final String message) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        this.runAsync(() -> {
             if (jedisPool != null) {
                 Jedis jedis = jedisPool.getResource();
 
@@ -44,8 +35,6 @@ public class RedisConnection extends Database<Jedis> {
                 } finally {
                     jedisPool.returnResource(jedis);
                 }
-            } else {
-                Bukkit.getLogger().log(Level.SEVERE, "Unable to send Redis message");
             }
         });
     }
@@ -58,9 +47,5 @@ public class RedisConnection extends Database<Jedis> {
     @Override
     public void disconnect() {
         jedisPool.destroy();
-    }
-
-    public void returnConnection(Jedis jedis){
-        jedisPool.returnResource(jedis);
     }
 }

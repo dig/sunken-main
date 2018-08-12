@@ -6,6 +6,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 public class User extends AbstractModel {
+
     @Getter
     @Setter
     private String uuid;

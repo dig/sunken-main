@@ -3,7 +3,7 @@ package net.sunken.common.type;
 public enum ServerType {
 
     BUNGEECORD(),
-    MAINLOBBY(),
+    MAIN_LOBBY(),
     LOBBY()
 
 }
