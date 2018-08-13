@@ -1,19 +1,20 @@
 package net.sunken.common.lobby;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class LobbyInfoCache {
 
-    private Set<LobbyInfo> cache = new LinkedHashSet<>();
+    private Set<LobbyInfo> cache = ImmutableSet.of();
 
     private final RedisConnection redisConnection;
 
@@ -28,7 +29,7 @@ public class LobbyInfoCache {
     public void updateCache() {
         AsyncHelper.executor().submit(() -> {
             try (Jedis jedis = redisConnection.getConnection()) {
-                Set<LobbyInfo> updatedCache = new LinkedHashSet<>();
+                Set<LobbyInfo> updatedCache = Sets.newHashSet();
 
                 ScanParams params = new ScanParams();
                 params.match(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":*");
