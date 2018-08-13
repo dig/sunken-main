@@ -38,9 +38,10 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onInitialJoin(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
+        String uuid = player.getUniqueId().toString();
 
-        if (!joined.contains(player.getUniqueId().toString())) {
-            joined.add(player.getUniqueId().toString());
+        if (!joined.contains(uuid)) {
+            joined.add(uuid);
 
             LobbyInfo lobby = LobbyHandler.getFreeLobby();
 
