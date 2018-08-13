@@ -17,7 +17,7 @@ public class LobbyHandler {
                 .collect(Collectors.toList());
 
         double middle = ((double) lobbies.size()) / 2;
-        LobbyInfo middleLobby;
+        LobbyInfo middleLobby = null;
 
         try {
             middleLobby = sortedViaPlayerCount.get((int) middle);
@@ -28,5 +28,7 @@ public class LobbyHandler {
                 middleLobby = sortedViaPlayerCount.get(0); // just get the first
             }
         }
+
+        return middleLobby;
     }
 }
