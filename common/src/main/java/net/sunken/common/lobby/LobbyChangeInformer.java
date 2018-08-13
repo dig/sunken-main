@@ -47,7 +47,6 @@ public class LobbyChangeInformer {
         try {
             jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
 
-            Common.getLogger().log(Level.INFO, "Updating all");
             Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
         } catch (Exception e) {
             redisConnection.getJedisPool().returnBrokenResource(jedis);
@@ -63,7 +62,6 @@ public class LobbyChangeInformer {
             try {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
 
-                Common.getLogger().log(Level.INFO, "Updating all");
                 Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);

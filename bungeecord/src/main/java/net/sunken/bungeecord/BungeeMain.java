@@ -24,6 +24,9 @@ public class BungeeMain extends Plugin {
 
         // Register events
         this.registerEvents();
+
+        // Get information about running lobbies
+        Common.getInstance().getLobbyInfoCache().updateCache();
     }
 
     @Override
