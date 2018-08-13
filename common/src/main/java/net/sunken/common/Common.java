@@ -5,7 +5,7 @@ import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.lobby.LobbyCacheUpdater;
 import net.sunken.common.lobby.LobbyInfoCache;
-import net.sunken.common.lobby.LobbyOnlineInformer;
+import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.type.ServerType;
 
 public class Common {
@@ -24,7 +24,7 @@ public class Common {
     private RedisConnection redis;
 
     private LobbyInfoCache lobbyInfoCache;
-    private LobbyOnlineInformer lobbyOnlineInformer;
+    private LobbyChangeInformer lobbyChangeInformer;
 
     public void onCommonLoad(ServerType type) {
         instance = this;
@@ -48,7 +48,7 @@ public class Common {
             lobbyInfoCache = new LobbyInfoCache(this.redis);
             LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
             lobbyCacheUpdater.start();
-            lobbyOnlineInformer = new LobbyOnlineInformer(this.redis);
+            lobbyChangeInformer = new LobbyChangeInformer(this.redis);
         }
 
         this.loaded = true;
@@ -61,11 +61,11 @@ public class Common {
         return lobbyInfoCache;
     }
 
-    public LobbyOnlineInformer getLobbyOnlineInformer() {
-        if (loaded && lobbyOnlineInformer == null) {
+    public LobbyChangeInformer getLobbyChangeInformer() {
+        if (loaded && lobbyChangeInformer == null) {
             throw new UnsupportedOperationException("the lobby online informer is unavailable, are you sure this is supported for the server type?");
         }
-        return lobbyOnlineInformer;
+        return lobbyChangeInformer;
     }
 
     public void onCommonDisable() {

@@ -17,7 +17,7 @@ public class LobbyCacheUpdater {
     public void start() {
         AsyncHelper.executor().submit(() -> {
             new Thread(() -> {
-                subscriberJedis.subscribe(new Listener(), LobbyRedisConstants.LOBBY_CACHE_CHANNEL);
+                subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
             }).start();
         });
     }
@@ -26,8 +26,8 @@ public class LobbyCacheUpdater {
 
         @Override
         public void onMessage(String channel, String message) {
-            if (channel.equals(LobbyRedisConstants.LOBBY_CACHE_CHANNEL)) {
-                if (message.equals(LobbyRedisConstants.UPDATE_LOBBY_CACHE)) {
+            if (channel.equals(LobbyRedisHelper.LOBBY_CACHE_CHANNEL)) {
+                if (message.equals(LobbyRedisHelper.UPDATE_LOBBY_CACHE)) {
                     lobbyInfoCache.updateCache();
                 }
             }
