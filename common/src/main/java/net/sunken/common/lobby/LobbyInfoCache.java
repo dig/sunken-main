@@ -39,10 +39,10 @@ public class LobbyInfoCache {
                 for (String key : keys) {
                     Map<String, String> kv = jedis.hgetAll(key); // key-value pairs of data stored with this key
 
-                    String serverName = kv.get(LobbyRedisConstants.SERVER_NAME_KEY);
-                    String playerCountStr = kv.get(LobbyRedisConstants.PLAYER_COUNT_KEY);
-                    String serverIp = kv.get(LobbyRedisConstants.SERVER_IP_KEY);
-                    String serverPortStr = kv.get(LobbyRedisConstants.SERVER_PORT_KEY);
+                    String serverName = kv.get(LobbyRedisHelper.SERVER_NAME_KEY);
+                    String playerCountStr = kv.get(LobbyRedisHelper.PLAYER_COUNT_KEY);
+                    String serverIp = kv.get(LobbyRedisHelper.SERVER_IP_KEY);
+                    String serverPortStr = kv.get(LobbyRedisHelper.SERVER_PORT_KEY);
 
                     int playerCount = Integer.parseInt(playerCountStr);
                     int serverPort = Integer.parseInt(serverPortStr);
