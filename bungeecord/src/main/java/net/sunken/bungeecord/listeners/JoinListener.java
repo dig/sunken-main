@@ -27,7 +27,6 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
         LobbyInfo lobby = LobbyHandler.getFreeLobby();
-
         // No lobbies available, kick
         if (lobby == null) {
             event.setCancelReason(ChatColor.translateAlternateColorCodes('&', Constants.NO_LOBBY));
@@ -44,7 +43,6 @@ public class JoinListener implements Listener {
             joined.add(uuid);
 
             LobbyInfo lobby = LobbyHandler.getFreeLobby();
-
             if (lobby != null) {
                 ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(
                         lobby.getServerName(),

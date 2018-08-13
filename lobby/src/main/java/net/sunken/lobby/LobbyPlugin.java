@@ -2,6 +2,7 @@ package net.sunken.lobby;
 
 import net.sunken.common.Common;
 import net.sunken.common.type.ServerType;
+import net.sunken.lobby.listeners.JoinListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
