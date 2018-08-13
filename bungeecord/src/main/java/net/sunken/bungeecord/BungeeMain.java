@@ -33,12 +33,11 @@ public class BungeeMain extends Plugin {
         common.onCommonDisable();
     }
 
-    public void registerEvents(){
+    private void registerEvents(){
         PluginManager pm = this.getProxy().getPluginManager();
 
         pm.registerListener(this, new JoinListener());
         pm.registerListener(this, new ConnectListener());
         pm.registerListener(this, new PingListener());
     }
-
 }
