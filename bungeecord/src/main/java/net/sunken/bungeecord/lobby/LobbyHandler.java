@@ -28,7 +28,7 @@ public class LobbyHandler {
 
         for(int i = 0; i<sortedViaPlayerCount.size(); i++){
             if(middleLobby == null && i >= middleFloor){
-                LobbyInfo cur = sortedViaPlayerCount.get(i - 1);
+                LobbyInfo cur = sortedViaPlayerCount.get(i);
 
                 if(cur.getPlayerCount() < cur.getMaxPlayers()){
                     middleLobby = cur;
