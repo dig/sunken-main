@@ -1,14 +1,15 @@
 package net.sunken.minigameapi;
 
 import lombok.Getter;
+import org.bukkit.plugin.Plugin;
 
 public class Minigame {
 
     @Getter
-    private static Minigame instance;
+    private static Plugin instance;
 
-    public void onMinigameLoad(){
-        instance = this;
+    public void onMinigameLoad(Plugin plugin){
+        instance = plugin;
     }
 
     public void onMinigameDisable(){
