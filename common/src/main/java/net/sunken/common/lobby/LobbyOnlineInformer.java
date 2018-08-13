@@ -21,6 +21,8 @@ public class LobbyOnlineInformer {
                                     LobbyRedisConstants.SERVER_NAME_KEY, lobbyInfo.getServerName(),
                                     LobbyRedisConstants.PLAYER_COUNT_KEY, lobbyInfo.getPlayerCount() + ""
                             ));
+                redisConnection.sendRedisMessage(LobbyRedisConstants.LOBBY_CACHE_CHANNEL,
+                                                 LobbyRedisConstants.UPDATE_LOBBY_CACHE);
             }
         });
     }

@@ -28,7 +28,6 @@ public class RedisConnection extends Database<Jedis> {
         this.runAsync(() -> {
             if (jedisPool != null) {
                 Jedis jedis = jedisPool.getResource();
-
                 try {
                     jedis.publish(channel, message);
                 } catch (Exception e) {

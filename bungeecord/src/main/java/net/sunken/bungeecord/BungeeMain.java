@@ -12,6 +12,7 @@ public class BungeeMain extends Plugin {
 
     private static Common common;
 
+    @Override
     public void onEnable(){
         instance = this;
 
@@ -20,6 +21,7 @@ public class BungeeMain extends Plugin {
         common.onCommonLoad(ServerType.BUNGEECORD);
     }
 
+    @Override
     public void onDisable(){
         common.onCommonDisable();
     }
