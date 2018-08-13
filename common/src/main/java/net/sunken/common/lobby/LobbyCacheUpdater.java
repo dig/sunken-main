@@ -21,6 +21,7 @@ public class LobbyCacheUpdater {
     public void start() {
         new Thread(() -> {
             subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
+            logger.log(Level.INFO, "Subscribe of LOBBY_CACHE_CHANNEL ended");
         }).start();
     }
 
