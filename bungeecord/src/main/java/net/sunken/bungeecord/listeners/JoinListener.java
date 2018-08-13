@@ -9,23 +9,27 @@ import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.lobby.LobbyHandler;
 import net.sunken.common.lobby.LobbyInfo;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JoinListener implements Listener {
 
-    private ArrayList<String> joined = new ArrayList<String>();
+    private ArrayList<String> joined = new ArrayList<>();
+    private static Logger logger = BungeeMain.getInstance().getLogger();
 
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
         LobbyInfo lobby = LobbyHandler.getFreeLobby();
 
         // No lobbies available, kick
-        if(lobby == null){
+        if (lobby == null) {
             event.setCancelReason(ChatColor.translateAlternateColorCodes('&', Constants.NO_LOBBY));
             event.setCancelled(true);
         }
@@ -35,22 +39,22 @@ public class JoinListener implements Listener {
     public void onInitialJoin(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        if(!joined.contains(player.getUniqueId().toString())){
+        if (!joined.contains(player.getUniqueId().toString())) {
             joined.add(player.getUniqueId().toString());
 
             LobbyInfo lobby = LobbyHandler.getFreeLobby();
 
-            if(lobby != null){
+            if (lobby != null) {
                 ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(
                         lobby.getServerName(),
                         new InetSocketAddress(lobby.getServerIp(), lobby.getServerPort()),
                         lobby.getServerName(),
                         false);
 
-                System.out.print("Connecting " + player.getName() + " to lobby " + lobby.getServerName() + " (" + lobby.getServerIp() + ")");
+                logger.log(Level.INFO, "Connecting " + player.getName() + " to lobby " + lobby
+                        .getServerName() + " (" + lobby.getServerIp() + ")");
                 event.setTarget(lobbyObj);
-            }
-            else{
+            } else {
                 event.setCancelled(true);
             }
         }
@@ -59,10 +63,7 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onDisconnect(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
-
-        if(joined.contains(player.getUniqueId().toString())){
-            joined.remove(player.getUniqueId().toString());
-        }
+        joined.remove(player.getUniqueId().toString());
     }
 
 }
