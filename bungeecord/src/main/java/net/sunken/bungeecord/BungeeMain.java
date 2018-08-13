@@ -10,6 +10,7 @@ public class BungeeMain extends Plugin {
     @Getter
     private static BungeeMain instance;
 
+    @Getter
     private static Common common;
 
     @Override
@@ -24,6 +25,10 @@ public class BungeeMain extends Plugin {
     @Override
     public void onDisable(){
         common.onCommonDisable();
+    }
+
+    public void registerEvents(){
+
     }
 
 }
