@@ -6,6 +6,8 @@ import net.sunken.common.database.RedisConnection;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
 
+import java.util.concurrent.CompletableFuture;
+
 import static net.sunken.common.lobby.LobbyRedisHelper.LOBBY_CACHE_CHANNEL;
 import static net.sunken.common.lobby.LobbyRedisHelper.UPDATE_LOBBY_CACHE;
 
@@ -37,8 +39,8 @@ public class LobbyChangeInformer {
         });
     }
 
-    public void remove(LobbyInfo lobbyInfo) {
-        AsyncHelper.executor().submit(() -> {
+    public CompletableFuture remove(LobbyInfo lobbyInfo) {
+        return CompletableFuture.runAsync(() -> {
             Jedis jedis = redisConnection.getConnection();
             try {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
@@ -48,6 +50,6 @@ public class LobbyChangeInformer {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
             Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
-        });
+        }, AsyncHelper.executor());
     }
 }

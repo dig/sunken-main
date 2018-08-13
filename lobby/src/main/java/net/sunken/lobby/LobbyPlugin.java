@@ -29,9 +29,8 @@ public class LobbyPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
-        Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo);
-
-        Common.getInstance().onCommonDisable();
+        Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo)
+                .thenRun(() -> Common.getInstance().onCommonDisable());
     }
 
     private void registerEvents() {
