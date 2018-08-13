@@ -2,6 +2,7 @@ package net.sunken.common.lobby;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
@@ -36,6 +37,8 @@ public class LobbyInfoCache {
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 
+                System.out.println("update");
+
                 for (String key : keys) {
                     Map<String, String> kv = jedis.hgetAll(key); // key-value pairs of data stored with this key
 
@@ -48,6 +51,8 @@ public class LobbyInfoCache {
 
                     LobbyInfo lobbyInfo = new LobbyInfo(serverName, playerCount, serverIp, serverPort);
                     updatedCache.add(lobbyInfo);
+
+                    System.out.println("Adding " + serverName + " count: " + playerCount + " IP: " + serverIp);
                 }
 
                 this.cache = updatedCache;

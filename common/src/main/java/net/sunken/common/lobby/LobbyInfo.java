@@ -12,6 +12,7 @@ public class LobbyInfo {
     private final String serverName;
     @Getter
     private int playerCount;
+
     @Getter
     private final String serverIp;
     @Getter
@@ -20,6 +21,7 @@ public class LobbyInfo {
     public LobbyInfo(String serverName, int playerCount, String serverIp, int serverPort) {
         this.serverName = serverName;
         this.playerCount = playerCount;
+
         this.serverIp = serverIp;
         this.serverPort = serverPort;
     }

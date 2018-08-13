@@ -21,7 +21,7 @@ public class MongoConnection extends Database<MongoClient> {
             CodecRegistry registry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
                                                     fromProviders(PojoCodecProvider.builder().automatic(true).build()));
             MongoClientURI connectionString = new MongoClientURI(uri,
-                                                                 MongoClientOptions.builder().codecRegistry(registry));
+                    MongoClientOptions.builder().codecRegistry(registry));
             this.client = new MongoClient(connectionString);
         } catch (MongoException e) {
             e.printStackTrace();

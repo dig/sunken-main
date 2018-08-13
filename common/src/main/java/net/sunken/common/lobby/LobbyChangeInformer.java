@@ -1,6 +1,7 @@
 package net.sunken.common.lobby;
 
 import com.google.common.collect.ImmutableMap;
+import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
@@ -10,15 +11,9 @@ import static net.sunken.common.lobby.LobbyRedisHelper.UPDATE_LOBBY_CACHE;
 
 public class LobbyChangeInformer {
 
-    private final RedisConnection redisConnection;
-
-    public LobbyChangeInformer(RedisConnection redisConnection) {
-        this.redisConnection = redisConnection;
-    }
-
     public void inform(LobbyInfo lobbyInfo) {
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = redisConnection.getConnection()) {
+            try (Jedis jedis = Common.getInstance().getRedis().getConnection()) {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
                             ImmutableMap.of(
                                     LobbyRedisHelper.SERVER_NAME_KEY, lobbyInfo.getServerName(),
@@ -27,7 +22,18 @@ public class LobbyChangeInformer {
                                     LobbyRedisHelper.SERVER_PORT_KEY, lobbyInfo.getServerPort() + ""
 
                             ));
-                redisConnection.sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
+
+                Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
+            }
+        });
+    }
+
+    public void remove(LobbyInfo lobbyInfo){
+        AsyncHelper.executor().submit(() -> {
+            try (Jedis jedis = Common.getInstance().getRedis().getConnection()) {
+                jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
+
+                Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
             }
         });
     }

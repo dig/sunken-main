@@ -43,11 +43,11 @@ public class Common {
                 "***REMOVED***"
         );
 
-        if (type == ServerType.BUNGEECORD || type == ServerType.MAIN_LOBBY || type == ServerType.LOBBY) {
+        if (type == ServerType.BUNGEECORD || type == ServerType.MAIN_LOBBY) {
             lobbyInfoCache = new LobbyInfoCache(this.redis);
             LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
             lobbyCacheUpdater.start();
-            lobbyChangeInformer = new LobbyChangeInformer(this.redis);
+            lobbyChangeInformer = new LobbyChangeInformer();
         }
 
         this.loaded = true;
@@ -68,6 +68,8 @@ public class Common {
     }
 
     public void onCommonDisable() {
+        this.mongo.disconnect();
+        this.redis.disconnect();
     }
 
     private Common() {
