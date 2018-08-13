@@ -7,6 +7,7 @@ import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import static net.sunken.common.lobby.LobbyRedisHelper.LOBBY_CACHE_CHANNEL;
 import static net.sunken.common.lobby.LobbyRedisHelper.UPDATE_LOBBY_CACHE;
@@ -44,6 +45,8 @@ public class LobbyChangeInformer {
             Jedis jedis = redisConnection.getConnection();
             try {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
+
+                Common.getLogger().log(Level.INFO, "Updating all");
                 Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);

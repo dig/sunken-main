@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Level;
+
 public class LobbyPlugin extends JavaPlugin {
 
     @Getter
@@ -27,6 +29,8 @@ public class LobbyPlugin extends JavaPlugin {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // mark the lobby as removed on shutdown
+            Common.getLogger().log(Level.INFO, "shutdown hook called");
+
             LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
             Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo)
                     .thenRun(() -> Common.getInstance().onCommonDisable());
