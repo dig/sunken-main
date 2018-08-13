@@ -19,6 +19,8 @@ public class BungeeMain extends Plugin {
         // Initialize common
         common = new Common();
         common.onCommonLoad(ServerType.BUNGEECORD);
+
+
     }
 
     @Override

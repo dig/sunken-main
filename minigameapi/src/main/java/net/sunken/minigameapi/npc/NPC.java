@@ -2,6 +2,7 @@ package net.sunken.minigameapi.npc;
 
 import lombok.Getter;
 import net.minecraft.server.v1_13_R1.*;
+import net.sunken.minigameapi.Minigame;
 import net.sunken.minigameapi.util.MojangUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -59,7 +60,7 @@ public class NPC extends EntityPlayer {
         connection.sendPacket(new PacketPlayOutEntityHeadRotation(this, (byte) ((this.yaw * 256.0F) / 360.0F)));
 
         // Remove the npc from scoreboard for target player
-        Bukkit.getScheduler().scheduleSyncDelayedTask(MinigamePlugin.getInstance(), new Runnable() {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Minigame.getInstance(), new Runnable() {
             @Override
             public void run() {
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(
