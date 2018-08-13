@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.lobby.LobbyInfo;
 import net.sunken.common.type.ServerType;
-import net.sunken.lobby.listeners.JoinListener;
+import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,17 +24,21 @@ public class LobbyPlugin extends JavaPlugin {
         LobbyInstance.instance(); // inform of the initial lobby information
 
         this.registerEvents();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // mark the lobby as removed on shutdown
+            LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
+            Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo)
+                    .thenRun(() -> Common.getInstance().onCommonDisable());
+        }));
     }
 
     @Override
     public void onDisable() {
-        LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
-        Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo)
-                .thenRun(() -> Common.getInstance().onCommonDisable());
     }
 
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new JoinListener(), this);
+        pm.registerEvents(new LobbyPlayerCountUpdater(), this);
     }
 }

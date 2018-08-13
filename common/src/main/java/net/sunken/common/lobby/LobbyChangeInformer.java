@@ -30,12 +30,12 @@ public class LobbyChangeInformer {
                                 LobbyRedisHelper.SERVER_IP_KEY, lobbyInfo.getServerIp(),
                                 LobbyRedisHelper.SERVER_PORT_KEY, lobbyInfo.getServerPort() + ""
                         ));
+                Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
-            Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
         });
     }
 
@@ -44,12 +44,12 @@ public class LobbyChangeInformer {
             Jedis jedis = redisConnection.getConnection();
             try {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
+                Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
-            Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
         }, AsyncHelper.executor());
     }
 }
