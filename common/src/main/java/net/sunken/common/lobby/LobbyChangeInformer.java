@@ -40,9 +40,25 @@ public class LobbyChangeInformer {
         });
     }
 
-    public CompletableFuture remove(LobbyInfo lobbyInfo) {
-        return CompletableFuture.runAsync(() -> {
+    public void removeSync(LobbyInfo lobbyInfo) {
+        Jedis jedis = redisConnection.getConnection();
+
+        try {
+            jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
+
+            Common.getLogger().log(Level.INFO, "Updating all");
+            Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
+        } catch (Exception e) {
+            redisConnection.getJedisPool().returnBrokenResource(jedis);
+        } finally {
+            redisConnection.getJedisPool().returnResource(jedis);
+        }
+    }
+
+    public void remove(LobbyInfo lobbyInfo) {
+        AsyncHelper.executor().submit(() -> {
             Jedis jedis = redisConnection.getConnection();
+
             try {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
 
@@ -53,6 +69,6 @@ public class LobbyChangeInformer {
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
-        }, AsyncHelper.executor());
+        });
     }
 }

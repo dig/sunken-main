@@ -28,12 +28,10 @@ public class LobbyPlugin extends JavaPlugin {
         this.registerEvents();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            // mark the lobby as removed on shutdown
-            Common.getLogger().log(Level.INFO, "shutdown hook called");
-
             LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
-            Common.getInstance().getLobbyChangeInformer().remove(lobbyInfo)
-                    .thenRun(() -> Common.getInstance().onCommonDisable());
+            Common.getInstance().getLobbyChangeInformer().removeSync(lobbyInfo);
+
+            Common.getInstance().onCommonDisable();
         }));
     }
 
