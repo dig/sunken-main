@@ -8,6 +8,8 @@ import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.lobby.LobbyInfoCache;
 import net.sunken.common.type.ServerType;
 
+import java.util.logging.Logger;
+
 public class Common {
 
     private boolean loaded = false;
@@ -17,6 +19,8 @@ public class Common {
 
     @Getter
     private static Common instance = new Common();
+    @Getter
+    private static Logger logger = Logger.getLogger(Common.class.getName());
 
     @Getter
     private MongoConnection mongo;

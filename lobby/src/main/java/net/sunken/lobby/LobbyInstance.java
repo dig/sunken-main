@@ -34,10 +34,14 @@ public class LobbyInstance {
 
     private LobbyInstance() {
         try {
-            lobbyInfo = new LobbyInfo(UUID.randomUUID().toString(),
+            String uuid = UUID.randomUUID().toString();
+
+            lobbyInfo = new LobbyInfo(uuid,
                                       Bukkit.getOnlinePlayers().size(),
                                       InetAddress.getLocalHost().getHostAddress(),
                                       Bukkit.getPort());
+
+            Common.getLogger().log(Level.INFO, "Server starting with UUID: " + uuid);
             Common.getInstance().getLobbyChangeInformer().inform(lobbyInfo); // initial inform on creation
         } catch (UnknownHostException e) {
             e.printStackTrace();
