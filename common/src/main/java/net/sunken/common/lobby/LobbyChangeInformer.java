@@ -25,7 +25,22 @@ public class LobbyChangeInformer {
         logger.log(Level.INFO, "inform() called");
 
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = redisConnection.getConnection()) {
+            Jedis jedis = redisConnection.getConnection();
+            try {
+                jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
+                        ImmutableMap.of(
+                                LobbyRedisHelper.SERVER_NAME_KEY, lobbyInfo.getServerName(),
+                                LobbyRedisHelper.PLAYER_COUNT_KEY, lobbyInfo.getPlayerCount() + "",
+                                LobbyRedisHelper.SERVER_IP_KEY, lobbyInfo.getServerIp(),
+                                LobbyRedisHelper.SERVER_PORT_KEY, lobbyInfo.getServerPort() + ""
+                        ));
+            } catch (Exception e) {
+                redisConnection.getJedisPool().returnBrokenResource(jedis);
+            } finally {
+                redisConnection.getJedisPool().returnResource(jedis);
+            }
+
+            /* try (Jedis jedis = redisConnection.getConnection()) {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
                             ImmutableMap.of(
                                     LobbyRedisHelper.SERVER_NAME_KEY, lobbyInfo.getServerName(),
@@ -35,7 +50,7 @@ public class LobbyChangeInformer {
                             ));
 
                 Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
-            }
+            } */
         });
     }
 
