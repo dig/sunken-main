@@ -32,7 +32,7 @@ public class LobbyInfoCache {
                 Set<LobbyInfo> updatedCache = Sets.newHashSet();
 
                 ScanParams params = new ScanParams();
-                params.match(LobbyRedisConstants.LOBBY_INFO_STORAGE_KEY + ":*");
+                params.match(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":*");
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 
