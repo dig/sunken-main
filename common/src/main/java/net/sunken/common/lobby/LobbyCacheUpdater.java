@@ -20,9 +20,7 @@ public class LobbyCacheUpdater {
 
     public void start() {
         new Thread(() -> {
-            
             subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
-            logger.log(Level.INFO, "Subscribe of LOBBY_CACHE_CHANNEL ended");
         }).start();
     }
 
@@ -34,7 +32,6 @@ public class LobbyCacheUpdater {
 
             if (channel.equals(LobbyRedisHelper.LOBBY_CACHE_CHANNEL)) {
                 if (message.equals(LobbyRedisHelper.UPDATE_LOBBY_CACHE)) {
-                    logger.log(Level.INFO, "Received local lobby cache update message");
                     lobbyInfoCache.updateCache();
                 }
             }

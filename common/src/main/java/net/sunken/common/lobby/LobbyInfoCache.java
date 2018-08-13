@@ -12,11 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LobbyInfoCache {
-
-    private static Logger logger = Logger.getLogger(LobbyInfoCache.class.getName());
 
     private Set<LobbyInfo> cache = ImmutableSet.of();
 
@@ -31,8 +28,6 @@ public class LobbyInfoCache {
     }
 
     public void updateCache() {
-        logger.log(Level.INFO, "updateCache() called");
-
         AsyncHelper.executor().submit(() -> {
             try (Jedis jedis = redisConnection.getConnection()) {
                 Set<LobbyInfo> updatedCache = Sets.newHashSet();
@@ -41,8 +36,6 @@ public class LobbyInfoCache {
                 params.match(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":*");
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
-
-                logger.log(Level.INFO, "Attempting to update local lobby cache");
 
                 for (String key : keys) {
                     Map<String, String> kv = jedis.hgetAll(key); // key-value pairs of data stored with this key
@@ -56,8 +49,6 @@ public class LobbyInfoCache {
 
                     LobbyInfo lobbyInfo = new LobbyInfo(serverName, playerCount, serverIp, serverPort);
                     updatedCache.add(lobbyInfo);
-
-                    logger.log(Level.INFO, "Adding " + serverName + " count: " + playerCount + " IP: " + serverIp + " to local lobby cache");
                 }
 
                 this.cache = updatedCache;
