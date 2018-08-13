@@ -3,6 +3,9 @@ package net.sunken.common.lobby;
 import com.google.common.base.Objects;
 import lombok.Getter;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public class LobbyInfo {
 
     @Getter
@@ -19,6 +22,14 @@ public class LobbyInfo {
         this.playerCount = playerCount;
         this.serverIp = serverIp;
         this.serverPort = serverPort;
+    }
+
+    // player count is the only mutable property of this immutable class
+    public LobbyInfo setPlayerCount(int playerCount) {
+        return new LobbyInfo(serverName,
+                             playerCount,
+                             serverIp,
+                             serverPort);
     }
 
     @Override

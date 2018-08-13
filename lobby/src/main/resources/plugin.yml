@@ -1,0 +1,3 @@
+name: Lobby
+main: net.sunken.lobby.LobbyPlugin
+version: 1.0

@@ -10,17 +10,16 @@ public class Minigame {
     @Getter
     private static Plugin instance;
 
-    public void onMinigameLoad(Plugin plugin){
+    public void onMinigameLoad(Plugin plugin) {
         instance = plugin;
 
         this.registerEvents();
     }
 
-    public void onMinigameDisable(){
-
+    public void onMinigameDisable() {
     }
 
-    private void registerEvents(){
+    private void registerEvents() {
         PluginManager pm = instance.getServer().getPluginManager();
         pm.registerEvents(new NPCListener(), instance);
     }

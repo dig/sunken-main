@@ -12,5 +12,6 @@ public final class LobbyRedisHelper {
     public static final String UPDATE_LOBBY_CACHE = "UPDATE_LOBBY_CACHE";
 
     private LobbyRedisHelper() {
+        throw new AssertionError("You must not attempt to instantiate this class.");
     }
 }
