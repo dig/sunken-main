@@ -1,18 +1,28 @@
 package net.sunken.lobby;
 
 import lombok.Getter;
+import net.sunken.common.Common;
 import net.sunken.common.lobby.LobbyInfo;
 import org.bukkit.Bukkit;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class LobbyInstance {
 
     private static LobbyInstance instance;
     @Getter
     private LobbyInfo lobbyInfo;
+
+    public void inform(int count) {
+        LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
+        LobbyInfo updatedLobbyInfo = lobbyInfo.setPlayerCount(count);
+
+        Bukkit.getLogger().log(Level.INFO, "Informing of lobby player count change");
+        Common.getInstance().getLobbyChangeInformer().inform(updatedLobbyInfo);
+    }
 
     public static LobbyInstance instance() {
         if (instance == null) {
@@ -29,6 +39,7 @@ public class LobbyInstance {
                                       Bukkit.getOnlinePlayers().size(),
                                       InetAddress.getLocalHost().getHostAddress(),
                                       Bukkit.getPort());
+            Common.getInstance().getLobbyChangeInformer().inform(lobbyInfo); // initial inform on creation
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
 package net.sunken.lobby.listeners;
 
-import net.sunken.lobby.LobbyPlugin;
+import net.sunken.lobby.LobbyInstance;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,11 +11,11 @@ public class JoinListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        LobbyPlugin.getInstance().inform(Bukkit.getOnlinePlayers().size());
+        LobbyInstance.instance().inform(Bukkit.getOnlinePlayers().size());
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        LobbyPlugin.getInstance().inform(Bukkit.getOnlinePlayers().size() - 1);
+        LobbyInstance.instance().inform(Bukkit.getOnlinePlayers().size() - 1);
     }
 }

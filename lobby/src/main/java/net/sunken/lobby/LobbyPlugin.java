@@ -9,8 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Level;
-
 public class LobbyPlugin extends JavaPlugin {
 
     @Getter
@@ -23,8 +21,9 @@ public class LobbyPlugin extends JavaPlugin {
         this.saveDefaultConfig();
         Common.getInstance().onCommonLoad(ServerType.valueOf(this.getConfig().getString("type")));
 
+        LobbyInstance.instance(); // inform of the initial lobby information
+
         this.registerEvents();
-        this.inform(0);
     }
 
     @Override
@@ -38,13 +37,5 @@ public class LobbyPlugin extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), this);
-    }
-
-    public void inform(int count) {
-        LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
-        LobbyInfo updatedLobbyInfo = lobbyInfo.setPlayerCount(count);
-
-        this.getLogger().log(Level.INFO, "Informing of lobby player count change");
-        Common.getInstance().getLobbyChangeInformer().inform(updatedLobbyInfo);
     }
 }
