@@ -19,6 +19,7 @@ public class LobbyChangeInformer {
 
     public void inform(LobbyInfo lobbyInfo) {
         AsyncHelper.executor().submit(() -> {
+
             Jedis jedis = redisConnection.getConnection();
             try {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
@@ -40,11 +41,17 @@ public class LobbyChangeInformer {
 
     public void remove(LobbyInfo lobbyInfo) {
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = redisConnection.getConnection()) {
-                jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
 
-                Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
+            Jedis jedis = redisConnection.getConnection();
+            try {
+                jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
+            } catch (Exception e) {
+                redisConnection.getJedisPool().returnBrokenResource(jedis);
+            } finally {
+                redisConnection.getJedisPool().returnResource(jedis);
             }
+
+            Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
         });
     }
 }
