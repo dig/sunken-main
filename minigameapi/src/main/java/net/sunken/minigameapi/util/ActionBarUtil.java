@@ -7,9 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class ActionBarUtil {
 
     public static void sendActionBarMessage(Player bukkitPlayer, String message) {

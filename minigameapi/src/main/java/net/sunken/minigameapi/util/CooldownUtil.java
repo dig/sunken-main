@@ -4,12 +4,6 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-/**
- * Created by Digital on 21/01/2018.
- *
- * Quick and easy way to handle cooldowns.
- * Supports multiple different cooldowns at once.
- */
 public class CooldownUtil {
 
     private static final HashMap<String, Long> cooldownRegistry = new HashMap<>();

@@ -18,9 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Digital on 22/01/2018.
- */
 public class NPC extends EntityPlayer {
 
     @Getter

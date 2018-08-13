@@ -10,11 +10,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
 
-/**
- * Created by Digital on 21/01/2018.
- *
- * Tons of shit for fireworks
- */
 public class FireworkUtil {
 
     public static Firework spawnRandomFirework(Location l) {

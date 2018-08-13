@@ -6,10 +6,6 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.ArrayList;
 
-/**
- * Created by Digital on 21/01/2018.
- */
-
 public class BookUtil {
 
     private String title = "";

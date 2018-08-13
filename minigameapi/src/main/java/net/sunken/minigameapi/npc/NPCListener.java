@@ -1,6 +1,5 @@
 package net.sunken.minigameapi.npc;
 
-import me.minigames.npc.events.NPCInteractEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -13,9 +12,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-/**
- * Created by Digital on 22/01/2018.
- */
 public class NPCListener implements Listener {
 
     @EventHandler

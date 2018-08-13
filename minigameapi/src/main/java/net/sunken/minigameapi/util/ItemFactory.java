@@ -8,9 +8,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class ItemFactory {
 
     public static ItemStack createItemStack(Material type, byte data, String name, List<String> lore){

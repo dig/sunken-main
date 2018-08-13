@@ -5,10 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-/**
- * Created by Digital on 22/01/2018.
- */
-
 public class NametagUtil {
 
     public enum TeamAction {

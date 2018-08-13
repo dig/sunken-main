@@ -12,12 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Created by Digital on 21/01/2018.
- *
- * YMLFile file = new YMLFile("data.yml", Plugin instance);
- *
- */
 public class YMLFile {
 
     public String configname;

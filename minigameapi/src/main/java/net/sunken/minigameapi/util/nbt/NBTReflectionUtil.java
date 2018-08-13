@@ -3,9 +3,6 @@ package net.sunken.minigameapi.util.nbt;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class NBTReflectionUtil {
 
     @SuppressWarnings("rawtypes")

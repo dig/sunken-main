@@ -10,9 +10,6 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-/**
- * Created by Digital on 22/01/2018.
- */
 public class MojangUtil {
 
     public static GameProfile makeProfile(String name, UUID skinId) {

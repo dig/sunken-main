@@ -5,9 +5,6 @@ import com.google.common.io.ByteStreams;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class BungeeUtil {
 
     public static void sendPlayerToLobby(Player player, Plugin instance){

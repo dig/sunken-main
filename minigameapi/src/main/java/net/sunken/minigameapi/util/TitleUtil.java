@@ -7,9 +7,6 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class TitleUtil {
 
     private static void sendPacket(Player player, Object packet) {

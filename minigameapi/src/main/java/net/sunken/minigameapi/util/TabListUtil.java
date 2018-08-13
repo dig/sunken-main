@@ -9,9 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class TabListUtil {
     public static void sendTabTitle(Player player, String header, String footer) {
         if (header == null) header = "";

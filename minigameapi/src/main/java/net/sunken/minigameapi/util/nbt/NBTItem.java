@@ -3,9 +3,6 @@ package net.sunken.minigameapi.util.nbt;
 import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * Created by Digital on 21/01/2018.
- */
 public class NBTItem {
 
     private ItemStack bukkitItem;
