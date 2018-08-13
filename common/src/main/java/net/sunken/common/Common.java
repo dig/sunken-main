@@ -47,7 +47,7 @@ public class Common {
             lobbyInfoCache = new LobbyInfoCache(this.redis);
             LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
             lobbyCacheUpdater.start();
-            lobbyChangeInformer = new LobbyChangeInformer();
+            lobbyChangeInformer = new LobbyChangeInformer(this.redis);
         }
 
         this.loaded = true;

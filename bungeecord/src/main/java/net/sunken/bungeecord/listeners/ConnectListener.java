@@ -30,20 +30,18 @@ public class ConnectListener implements Listener {
                 channel = in.readUTF();
 
                 // Connect to specified server
-                if(channel.equals("server")){
+                if (channel.equals("server")) {
                     String name = in.readUTF();
                     String server = in.readUTF();
-
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
-                    if(target != null && target.isConnected()){
+                    if (target != null && target.isConnected()) {
                         // TODO: Check local cache then check redis for server and connect
                     }
-                }
-                else if(channel.equals("lobby")){ // Connect to a free lobby
+                } else if (channel.equals("lobby")) { // Connect to a free lobby
                     String name = in.readUTF();
 
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
-                    if(target != null && target.isConnected()){
+                    if (target != null && target.isConnected()) {
                         LobbyInfo lobby = LobbyHandler.getFreeLobby();
 
                         if (lobby != null) {
@@ -54,8 +52,7 @@ public class ConnectListener implements Listener {
                                     false);
 
                             target.connect(lobbyObj);
-                        }
-                        else{
+                        } else {
                             target.disconnect(MessageUtil.stringToComponent(Constants.NO_LOBBY));
                         }
                     }
@@ -64,7 +61,6 @@ public class ConnectListener implements Listener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

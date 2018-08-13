@@ -1,6 +1,5 @@
 package net.sunken.bungeecord.lobby;
 
-import net.sunken.bungeecord.BungeeMain;
 import net.sunken.common.Common;
 import net.sunken.common.lobby.LobbyInfo;
 

@@ -1,9 +1,5 @@
 package net.sunken.lobby.listeners;
 
-import net.sunken.common.Common;
-import net.sunken.common.lobby.LobbyChangeInformer;
-import net.sunken.common.lobby.LobbyInfo;
-import net.sunken.lobby.LobbyInstance;
 import net.sunken.lobby.LobbyPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

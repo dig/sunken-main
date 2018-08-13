@@ -54,5 +54,4 @@ public class MessageUtil {
         }
         return (sb.toString() + message);
     }
-
 }

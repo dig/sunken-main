@@ -2,13 +2,14 @@ package net.sunken.lobby;
 
 import lombok.Getter;
 import net.sunken.common.Common;
-import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.lobby.LobbyInfo;
 import net.sunken.common.type.ServerType;
 import net.sunken.lobby.listeners.JoinListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public class LobbyPlugin extends JavaPlugin {
 
@@ -34,16 +35,16 @@ public class LobbyPlugin extends JavaPlugin {
         Common.getInstance().onCommonDisable();
     }
 
-    public void registerEvents(){
+    private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), this);
     }
 
-    public void inform(int count){
+    public void inform(int count) {
         LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
         LobbyInfo updatedLobbyInfo = lobbyInfo.setPlayerCount(count);
 
-        System.out.println("Informing");
+        this.getLogger().log(Level.INFO, "Informing of lobby player count change");
         Common.getInstance().getLobbyChangeInformer().inform(updatedLobbyInfo);
     }
 }

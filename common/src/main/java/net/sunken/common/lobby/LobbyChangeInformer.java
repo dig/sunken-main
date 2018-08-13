@@ -11,9 +11,15 @@ import static net.sunken.common.lobby.LobbyRedisHelper.UPDATE_LOBBY_CACHE;
 
 public class LobbyChangeInformer {
 
+    private final RedisConnection redisConnection;
+
+    public LobbyChangeInformer(RedisConnection redisConnection) {
+        this.redisConnection = redisConnection;
+    }
+
     public void inform(LobbyInfo lobbyInfo) {
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = Common.getInstance().getRedis().getConnection()) {
+            try (Jedis jedis = redisConnection.getConnection()) {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
                             ImmutableMap.of(
                                     LobbyRedisHelper.SERVER_NAME_KEY, lobbyInfo.getServerName(),
@@ -28,9 +34,9 @@ public class LobbyChangeInformer {
         });
     }
 
-    public void remove(LobbyInfo lobbyInfo){
+    public void remove(LobbyInfo lobbyInfo) {
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = Common.getInstance().getRedis().getConnection()) {
+            try (Jedis jedis = redisConnection.getConnection()) {
                 jedis.del(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName());
 
                 Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
