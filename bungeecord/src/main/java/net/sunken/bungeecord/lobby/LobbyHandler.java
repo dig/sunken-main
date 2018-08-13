@@ -1,6 +1,7 @@
 package net.sunken.bungeecord.lobby;
 
 import net.sunken.bungeecord.BungeeMain;
+import net.sunken.common.Common;
 import net.sunken.common.lobby.LobbyInfo;
 
 import javax.annotation.Nullable;
@@ -13,7 +14,7 @@ public class LobbyHandler {
 
     @Nullable
     public static LobbyInfo getFreeLobby() {
-        Set<LobbyInfo> lobbies = BungeeMain.getCommon().getLobbyInfoCache().getCache();
+        Set<LobbyInfo> lobbies = Common.getInstance().getLobbyInfoCache().getCache();
         List<LobbyInfo> sortedViaPlayerCount = lobbies.stream()
                 .sorted(Comparator.comparing(LobbyInfo::getPlayerCount))
                 .collect(Collectors.toList());
