@@ -40,6 +40,9 @@ public class LobbyChangeInformer {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
 
+            logger.log(Level.INFO, "sendRedisMessage inside inform()");
+            Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);
+
             /* try (Jedis jedis = redisConnection.getConnection()) {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
                             ImmutableMap.of(
