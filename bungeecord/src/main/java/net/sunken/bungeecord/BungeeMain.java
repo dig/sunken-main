@@ -14,15 +14,13 @@ public class BungeeMain extends Plugin {
     @Getter
     private static BungeeMain instance;
 
-    @Getter
-    private static Common common = Common.getInstance();
 
     @Override
     public void onEnable(){
         instance = this;
 
         // Initialize common
-        common.onCommonLoad(ServerType.BUNGEECORD);
+        Common.getInstance().onCommonLoad(ServerType.BUNGEECORD);
 
         // Register events
         this.registerEvents();
@@ -30,7 +28,7 @@ public class BungeeMain extends Plugin {
 
     @Override
     public void onDisable(){
-        common.onCommonDisable();
+        Common.getInstance().onCommonDisable();
     }
 
     public void registerEvents(){
