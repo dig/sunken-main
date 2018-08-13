@@ -11,7 +11,6 @@ import redis.clients.jedis.ScanResult;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 public class LobbyInfoCache {
 
@@ -29,7 +28,8 @@ public class LobbyInfoCache {
 
     public void updateCache() {
         AsyncHelper.executor().submit(() -> {
-            try (Jedis jedis = redisConnection.getConnection()) {
+            Jedis jedis = redisConnection.getConnection();
+            try {
                 Set<LobbyInfo> updatedCache = Sets.newHashSet();
 
                 ScanParams params = new ScanParams();
@@ -52,6 +52,10 @@ public class LobbyInfoCache {
                 }
 
                 this.cache = updatedCache;
+            } catch (Exception e) {
+                redisConnection.getJedisPool().returnBrokenResource(jedis);
+            } finally {
+                redisConnection.getJedisPool().returnResource(jedis);
             }
         });
     }
