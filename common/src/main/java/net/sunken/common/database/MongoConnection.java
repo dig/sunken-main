@@ -14,9 +14,9 @@ public class MongoConnection extends Database<MongoClient> {
 
     private MongoClient client;
 
-    public MongoConnection(String host, int port, String username, String password) {
+    public MongoConnection(String host, int port, String username, String password, String database) {
         try {
-            String uri = "mongodb://" + username + ":" + password + "@" + host + ":" + port;
+            String uri = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + database;
 
             CodecRegistry registry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
                                                     fromProviders(PojoCodecProvider.builder().automatic(true).build()));

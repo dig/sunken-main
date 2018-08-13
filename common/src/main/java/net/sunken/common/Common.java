@@ -33,7 +33,8 @@ public class Common {
                 "***REMOVED***",
                 19802,
                 "admin",
-                "***REMOVED***"
+                "***REMOVED***",
+                "sunken"
         );
 
         this.redis = new RedisConnection(
