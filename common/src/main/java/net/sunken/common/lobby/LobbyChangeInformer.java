@@ -26,7 +26,6 @@ public class LobbyChangeInformer {
                                     LobbyRedisHelper.PLAYER_COUNT_KEY, lobbyInfo.getPlayerCount() + "",
                                     LobbyRedisHelper.SERVER_IP_KEY, lobbyInfo.getServerIp(),
                                     LobbyRedisHelper.SERVER_PORT_KEY, lobbyInfo.getServerPort() + ""
-
                             ));
 
                 Common.getInstance().getRedis().sendRedisMessage(LOBBY_CACHE_CHANNEL, UPDATE_LOBBY_CACHE);

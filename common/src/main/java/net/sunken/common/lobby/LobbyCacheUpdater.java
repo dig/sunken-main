@@ -4,7 +4,12 @@ import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LobbyCacheUpdater {
+
+    private static Logger logger = Logger.getLogger(LobbyCacheUpdater.class.getName());
 
     private final Jedis subscriberJedis;
     private final LobbyInfoCache lobbyInfoCache;
@@ -28,6 +33,7 @@ public class LobbyCacheUpdater {
         public void onMessage(String channel, String message) {
             if (channel.equals(LobbyRedisHelper.LOBBY_CACHE_CHANNEL)) {
                 if (message.equals(LobbyRedisHelper.UPDATE_LOBBY_CACHE)) {
+                    logger.log(Level.INFO, "Received local lobby cache update message");
                     lobbyInfoCache.updateCache();
                 }
             }

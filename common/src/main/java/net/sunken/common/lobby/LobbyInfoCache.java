@@ -2,7 +2,6 @@ package net.sunken.common.lobby;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
@@ -12,8 +11,12 @@ import redis.clients.jedis.ScanResult;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LobbyInfoCache {
+
+    private static Logger logger = Logger.getLogger(LobbyInfoCache.class.getName());
 
     private Set<LobbyInfo> cache = ImmutableSet.of();
 
@@ -37,7 +40,7 @@ public class LobbyInfoCache {
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 
-                System.out.println("update");
+                logger.log(Level.INFO, "Attempting to update local lobby cache");
 
                 for (String key : keys) {
                     Map<String, String> kv = jedis.hgetAll(key); // key-value pairs of data stored with this key
@@ -52,7 +55,7 @@ public class LobbyInfoCache {
                     LobbyInfo lobbyInfo = new LobbyInfo(serverName, playerCount, serverIp, serverPort);
                     updatedCache.add(lobbyInfo);
 
-                    System.out.println("Adding " + serverName + " count: " + playerCount + " IP: " + serverIp);
+                    logger.log(Level.INFO, "Adding " + serverName + " count: " + playerCount + " IP: " + serverIp + " to local lobby cache");
                 }
 
                 this.cache = updatedCache;
