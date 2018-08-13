@@ -31,6 +31,8 @@ public class LobbyInfoCache {
     }
 
     public void updateCache() {
+        logger.log(Level.INFO, "updateCache() called");
+
         AsyncHelper.executor().submit(() -> {
             try (Jedis jedis = redisConnection.getConnection()) {
                 Set<LobbyInfo> updatedCache = Sets.newHashSet();

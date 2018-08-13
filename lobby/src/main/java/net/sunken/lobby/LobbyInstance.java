@@ -20,7 +20,6 @@ public class LobbyInstance {
         LobbyInfo lobbyInfo = LobbyInstance.instance().getLobbyInfo();
         LobbyInfo updatedLobbyInfo = lobbyInfo.setPlayerCount(count);
 
-        Bukkit.getLogger().log(Level.INFO, "Informing of lobby player count change");
         Common.getInstance().getLobbyChangeInformer().inform(updatedLobbyInfo);
     }
 
