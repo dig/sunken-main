@@ -51,8 +51,8 @@ public class JoinListener implements Listener {
                         lobby.getServerName(),
                         false);
 
-                logger.log(Level.INFO, "Connecting " + player.getName() + " to lobby " + lobby
-                        .getServerName() + " (" + lobby.getServerIp() + ")");
+                logger.log(Level.INFO, "Connecting " + player.getName() + " to lobby " + lobby.getServerName()
+                        + " (" + lobby.getServerIp() + ")");
                 event.setTarget(lobbyObj);
             } else {
                 event.setCancelled(true);
@@ -65,5 +65,4 @@ public class JoinListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
         joined.remove(player.getUniqueId().toString());
     }
-
 }
