@@ -8,11 +8,19 @@ public class LobbyInfo {
     @Getter
     private final String serverName;
     @Getter
-    private final int playerCount;
+    private int playerCount;
 
-    public LobbyInfo(String serverName, int playerCount) {
+    @Getter
+    private final String serverIp;
+    @Getter
+    private final int serverPort;
+
+    public LobbyInfo(String serverName, int playerCount, String serverIp, int serverPort) {
         this.serverName = serverName;
         this.playerCount = playerCount;
+
+        this.serverIp = serverIp;
+        this.serverPort = serverPort;
     }
 
     @Override
