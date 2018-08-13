@@ -12,6 +12,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.lobby.LobbyHandler;
+import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.lobby.LobbyInfo;
 
 import java.net.InetSocketAddress;
@@ -30,7 +31,7 @@ public class JoinListener implements Listener {
 
         // No lobbies available, kick
         if (lobby == null) {
-            event.setCancelReason(ChatColor.translateAlternateColorCodes('&', Constants.NO_LOBBY));
+            event.setCancelReason(MessageUtil.stringToComponent(Constants.NO_LOBBY));
             event.setCancelled(true);
         }
     }
