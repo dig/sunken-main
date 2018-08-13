@@ -28,7 +28,7 @@ public class LobbyCacheUpdater {
 
         @Override
         public void onMessage(String channel, String message) {
-            logger.log(Level.INFO, "onMessage() called, " + channel + " - " + message);
+            logger.log(Level.INFO, "onMessage() called - " + channel + " - " + message);
 
             if (channel.equals(LobbyRedisHelper.LOBBY_CACHE_CHANNEL)) {
                 if (message.equals(LobbyRedisHelper.UPDATE_LOBBY_CACHE)) {
