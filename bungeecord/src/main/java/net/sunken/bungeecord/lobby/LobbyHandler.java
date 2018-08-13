@@ -26,11 +26,13 @@ public class LobbyHandler {
         int middleFloor = (int) middle;
         LobbyInfo middleLobby = null;
 
-        try {
-            middleLobby = sortedViaPlayerCount.get(middleFloor - 1); // indices start at 0
-        } catch (IndexOutOfBoundsException e) {
-            if (!sortedViaPlayerCount.isEmpty()) {
-                middleLobby = sortedViaPlayerCount.get(0); // just get the first
+        for(int i = 0; i<sortedViaPlayerCount.size(); i++){
+            if(middleLobby == null && i >= middleFloor){
+                LobbyInfo cur = sortedViaPlayerCount.get(i - 1);
+
+                if(cur.getPlayerCount() < cur.getMaxPlayers()){
+                    middleLobby = cur;
+                }
             }
         }
 

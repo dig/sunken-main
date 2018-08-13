@@ -27,6 +27,7 @@ public class LobbyChangeInformer {
                 jedis.hmset(LobbyRedisHelper.LOBBY_INFO_STORAGE_KEY + ":" + lobbyInfo.getServerName(),
                         ImmutableMap.of(
                                 LobbyRedisHelper.SERVER_NAME_KEY, lobbyInfo.getServerName(),
+                                LobbyRedisHelper.MAX_PLAYER_KEY, lobbyInfo.getMaxPlayers() + "",
                                 LobbyRedisHelper.PLAYER_COUNT_KEY, lobbyInfo.getPlayerCount() + "",
                                 LobbyRedisHelper.SERVER_IP_KEY, lobbyInfo.getServerIp(),
                                 LobbyRedisHelper.SERVER_PORT_KEY, lobbyInfo.getServerPort() + ""

@@ -41,13 +41,15 @@ public class LobbyInfoCache {
                     Map<String, String> kv = jedis.hgetAll(key); // key-value pairs of data stored with this key
 
                     String serverName = kv.get(LobbyRedisHelper.SERVER_NAME_KEY);
+                    String maxPlayersStr = kv.get(LobbyRedisHelper.MAX_PLAYER_KEY);
                     String playerCountStr = kv.get(LobbyRedisHelper.PLAYER_COUNT_KEY);
                     String serverIp = kv.get(LobbyRedisHelper.SERVER_IP_KEY);
                     String serverPortStr = kv.get(LobbyRedisHelper.SERVER_PORT_KEY);
+                    int maxPlayers = Integer.parseInt(maxPlayersStr);
                     int playerCount = Integer.parseInt(playerCountStr);
                     int serverPort = Integer.parseInt(serverPortStr);
 
-                    LobbyInfo lobbyInfo = new LobbyInfo(serverName, playerCount, serverIp, serverPort);
+                    LobbyInfo lobbyInfo = new LobbyInfo(serverName, maxPlayers, playerCount, serverIp, serverPort);
                     updatedCache.add(lobbyInfo);
                 }
 

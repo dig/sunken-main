@@ -10,6 +10,9 @@ public class LobbyInfo {
 
     @Getter
     private final String serverName;
+
+    @Getter
+    private int maxPlayers;
     @Getter
     private int playerCount;
 
@@ -18,8 +21,10 @@ public class LobbyInfo {
     @Getter
     private final int serverPort;
 
-    public LobbyInfo(String serverName, int playerCount, String serverIp, int serverPort) {
+    public LobbyInfo(String serverName, int maxPlayers, int playerCount, String serverIp, int serverPort) {
         this.serverName = serverName;
+
+        this.maxPlayers = maxPlayers;
         this.playerCount = playerCount;
 
         this.serverIp = serverIp;
@@ -29,6 +34,7 @@ public class LobbyInfo {
     // player count is the only mutable property of this immutable class
     public LobbyInfo setPlayerCount(int playerCount) {
         return new LobbyInfo(serverName,
+                             maxPlayers,
                              playerCount,
                              serverIp,
                              serverPort);

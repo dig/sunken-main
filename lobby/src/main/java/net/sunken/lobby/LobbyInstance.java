@@ -37,6 +37,7 @@ public class LobbyInstance {
             String uuid = UUID.randomUUID().toString();
 
             lobbyInfo = new LobbyInfo(uuid,
+                                      Bukkit.getMaxPlayers(),
                                       Bukkit.getOnlinePlayers().size(),
                                       InetAddress.getLocalHost().getHostAddress(),
                                       Bukkit.getPort());
