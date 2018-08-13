@@ -1,6 +1,5 @@
 package net.sunken.common.lobby;
 
-import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
@@ -20,11 +19,9 @@ public class LobbyCacheUpdater {
     }
 
     public void start() {
-        AsyncHelper.executor().submit(() -> {
-            new Thread(() -> {
-                subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
-            }).start();
-        });
+        new Thread(() -> {
+            subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
+        }).start();
     }
 
     private class Listener extends JedisPubSub {
