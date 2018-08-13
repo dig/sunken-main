@@ -29,8 +29,18 @@ public class Common {
 
         this.type = type;
 
-        this.mongo = new MongoConnection("localhost", 27017, "username", "password");
-        this.redis = new RedisConnection("localhost", 3306, "password");
+        this.mongo = new MongoConnection(
+                "***REMOVED***",
+                19802,
+                "admin",
+                "***REMOVED***"
+        );
+
+        this.redis = new RedisConnection(
+                "***REMOVED***",
+                11640,
+                "***REMOVED***"
+        );
 
         if (type == ServerType.BUNGEECORD || type == ServerType.MAIN_LOBBY || type == ServerType.LOBBY) {
             lobbyInfoCache = new LobbyInfoCache(this.redis);
