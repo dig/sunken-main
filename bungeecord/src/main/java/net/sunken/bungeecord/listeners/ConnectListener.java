@@ -1,6 +1,5 @@
 package net.sunken.bungeecord.listeners;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -23,7 +22,6 @@ public class ConnectListener implements Listener {
     @EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
         if (event.getTag().equals("BungeeCord") && event.getSender() instanceof Server) {
-
             ByteArrayInputStream stream = new ByteArrayInputStream(event.getData());
             DataInputStream in = new DataInputStream(stream);
             String channel;

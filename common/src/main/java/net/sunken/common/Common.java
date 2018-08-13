@@ -4,8 +4,8 @@ import lombok.Getter;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.lobby.LobbyCacheUpdater;
-import net.sunken.common.lobby.LobbyInfoCache;
 import net.sunken.common.lobby.LobbyChangeInformer;
+import net.sunken.common.lobby.LobbyInfoCache;
 import net.sunken.common.type.ServerType;
 
 public class Common {
@@ -16,7 +16,7 @@ public class Common {
     private ServerType type;
 
     @Getter
-    public static Common instance;
+    public static Common instance = new Common();
 
     @Getter
     private MongoConnection mongo;
@@ -27,8 +27,6 @@ public class Common {
     private LobbyChangeInformer lobbyChangeInformer;
 
     public void onCommonLoad(ServerType type) {
-        instance = this;
-
         this.type = type;
 
         this.mongo = new MongoConnection(
@@ -69,5 +67,8 @@ public class Common {
     }
 
     public void onCommonDisable() {
+    }
+
+    private Common() {
     }
 }
