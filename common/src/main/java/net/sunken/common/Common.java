@@ -16,7 +16,7 @@ public class Common {
     private ServerType type;
 
     @Getter
-    public static Common instance = new Common();
+    private static Common instance = new Common();
 
     @Getter
     private MongoConnection mongo;
