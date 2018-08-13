@@ -21,9 +21,7 @@ public class Common {
     @Getter
     private RedisConnection redis;
 
-    @Getter
     private LobbyInfoCache lobbyInfoCache;
-    @Getter
     private LobbyOnlineInformer lobbyOnlineInformer;
 
     public void onCommonLoad(ServerType type) {
@@ -40,6 +38,20 @@ public class Common {
             lobbyCacheUpdater.start();
             lobbyOnlineInformer = new LobbyOnlineInformer(this.redis);
         }
+    }
+
+    public LobbyInfoCache getLobbyInfoCache() {
+        if (lobbyInfoCache == null) {
+            throw new UnsupportedOperationException("the lobby server cache is unavailable, are you sure this is supported for the server type?");
+        }
+        return lobbyInfoCache;
+    }
+
+    public LobbyOnlineInformer getLobbyOnlineInformer() {
+        if (lobbyOnlineInformer == null) {
+            throw new UnsupportedOperationException("the lobby online informer is unavailable, are you sure this is supported for the server type?");
+        }
+        return lobbyOnlineInformer;
     }
 
     public void onCommonDisable() {

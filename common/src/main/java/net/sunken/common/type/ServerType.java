@@ -5,5 +5,4 @@ public enum ServerType {
     BUNGEECORD(),
     MAIN_LOBBY(),
     LOBBY()
-
 }

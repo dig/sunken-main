@@ -22,7 +22,7 @@ public class LobbyCacheUpdater {
         });
     }
 
-    public class Listener extends JedisPubSub {
+    private class Listener extends JedisPubSub {
 
         @Override
         public void onMessage(String channel, String message) {
