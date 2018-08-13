@@ -34,10 +34,12 @@ public class Common {
         this.mongo = new MongoConnection("localhost", 27017, "username", "password");
         this.redis = new RedisConnection("localhost", 3306, "password");
 
-        lobbyInfoCache = new LobbyInfoCache(this.redis);
-        LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
-        lobbyCacheUpdater.start();
-        lobbyOnlineInformer = new LobbyOnlineInformer(this.redis);
+        if (type == ServerType.BUNGEECORD || type == ServerType.MAIN_LOBBY || type == ServerType.LOBBY) {
+            lobbyInfoCache = new LobbyInfoCache(this.redis);
+            LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
+            lobbyCacheUpdater.start();
+            lobbyOnlineInformer = new LobbyOnlineInformer(this.redis);
+        }
     }
 
     public void onCommonDisable() {
