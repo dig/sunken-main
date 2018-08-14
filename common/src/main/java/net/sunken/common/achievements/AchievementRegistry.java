@@ -1,26 +1,26 @@
 package net.sunken.common.achievements;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 
-import java.util.Set;
+import java.util.Map;
 
 public final class AchievementRegistry {
 
-    private static final Set<Achievement> achievements;
+    private static final Map<String, Achievement> achievements;
 
     static {
-        achievements = Sets.newHashSet();
+        achievements = Maps.newHashMap();
     }
 
     public static void addAchievement(Achievement achievement) {
-        achievements.add(achievement);
+        achievements.put(achievement.getId(), achievement);
     }
 
     public static void removeListener(Achievement achievement) {
-        achievements.remove(achievement);
+        achievements.remove(achievement.getId());
     }
 
-    public static Set<Achievement> allAchievements() {
+    public static Map<String, Achievement> allAchievements() {
         return achievements;
     }
 

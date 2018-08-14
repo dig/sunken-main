@@ -3,6 +3,7 @@ package net.sunken.common;
 import lombok.Getter;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.achievements.NetworkFirstJoinAchievement;
+import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.player.AbstractPlayer;
@@ -41,7 +42,7 @@ public class Common {
                 19802,
                 "admin",
                 "***REMOVED***",
-                "sunken"
+                DatabaseConstants.DATABASE_NAME
         );
 
         this.redis = new RedisConnection(
