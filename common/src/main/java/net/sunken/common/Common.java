@@ -60,6 +60,7 @@ public class Common {
         serverChangeInformer = new ServerChangeInformer(this.redis);
 
         this.onlinePlayers = new ConcurrentHashMap<>();
+
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
 
         this.loaded = true;

@@ -77,7 +77,7 @@ public abstract class AbstractPlayer {
         if (!this.achievements.containsKey(achievementId)) {
             List<Document> persistedAchievements = this.getPersistedAchievements();
             persistedAchievements.add(new Document(ACHIEVEMENTS_ID_FIELD, achievementId));
-            playerCollection.findOneAndUpdate(new Document(UUID_FIELD, uuid), playerDocument);
+            playerCollection.replaceOne(new Document(UUID_FIELD, uuid), playerDocument);
             this.achievements.put(achievementId, achievement);
         }
     }
