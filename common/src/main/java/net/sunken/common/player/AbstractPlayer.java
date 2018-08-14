@@ -8,6 +8,7 @@ import net.sunken.common.achievements.Achievement;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.trigger.TriggerListenerRegistry;
+import net.sunken.common.trigger.TriggerManager;
 import org.bson.Document;
 
 import java.util.*;
@@ -32,6 +33,9 @@ public abstract class AbstractPlayer {
     @Getter
     private String name;
 
+    @Getter
+    private boolean firstJoin;
+
     /**
      * ID of the achievement mapped against the achievement itself for O(1) achievement retrieval
      * NOTE: These are achieved achievements, not all the achievements themselves
@@ -45,7 +49,11 @@ public abstract class AbstractPlayer {
                                       .getDatabase(DatabaseConstants.DATABASE_NAME)
                                       .getCollection(DatabaseConstants.PLAYER_COLLECTION);
         this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
+        this.firstJoin = false;
+
         if (playerDocument == null) {
+            this.firstJoin = true;
+
             Document playerDocument = new Document(ImmutableMap.of(
                     UUID_FIELD, uuid,
                     NAME_FIELD, name
@@ -58,6 +66,10 @@ public abstract class AbstractPlayer {
         this.name = name;
         this.achievements = new HashMap<>();
         this.loadAchievements();
+
+        if (this.firstJoin) {
+            TriggerManager.NETWORK_JOIN_TRIGGER.trigger(this, true);
+        }
     }
 
     public void grantAchievement(Achievement achievement) {

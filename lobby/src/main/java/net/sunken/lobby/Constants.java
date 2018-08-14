@@ -13,7 +13,7 @@ public class Constants {
     public static final List<String> JOIN_MESSAGES = Arrays.asList(
             ChatColor.GRAY + "&m                               ",
             " ",
-            ChatColor.BLUE + "&lSUNKEN&7.net",
+            ChatColor.BLUE + "&lSUNKEN",
             " ",
             ChatColor.GRAY + "Sunken is a minigames network with unique",
             ChatColor.GRAY + "minigames to play! To get started, right click",

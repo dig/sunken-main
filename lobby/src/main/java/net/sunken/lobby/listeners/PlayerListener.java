@@ -2,6 +2,7 @@ package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.trigger.TriggerManager;
 import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
