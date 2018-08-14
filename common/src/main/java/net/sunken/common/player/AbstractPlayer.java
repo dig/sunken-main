@@ -1,12 +1,12 @@
 package net.sunken.common.player;
 
+import com.google.common.collect.ImmutableMap;
 import com.mongodb.client.MongoCollection;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.achievements.Achievement;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.database.DatabaseConstants;
-import net.sunken.common.exception.DocumentNotFoundException;
 import net.sunken.common.trigger.TriggerListenerRegistry;
 import org.bson.Document;
 
@@ -20,6 +20,8 @@ public abstract class AbstractPlayer {
     private static Common common = Common.getInstance();
 
     private static final String UUID_FIELD = "uuid";
+    private static final String NAME_FIELD = "name";
+
     private static final String ACHIEVEMENTS_FIELD = "achievements";
     private static final String ACHIEVEMENTS_ID_FIELD = "id";
 
@@ -38,17 +40,18 @@ public abstract class AbstractPlayer {
     private Map<String, Achievement> achievements;
 
     public AbstractPlayer(String uuid, String name) {
-        try{
-            this.playerCollection = common.getMongo()
-                    .getConnection()
-                    .getDatabase(DatabaseConstants.DATABASE_NAME)
-                    .getCollection(DatabaseConstants.PLAYER_COLLECTION);
-            this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
-            if (playerDocument == null) {
-                throw new DocumentNotFoundException("Player with UUID " + uuid + "  was not found in the collection " + DatabaseConstants.PLAYER_COLLECTION);
-            }
-        } catch (DocumentNotFoundException ev){
-
+        this.playerCollection = common.getMongo()
+                                      .getConnection()
+                                      .getDatabase(DatabaseConstants.DATABASE_NAME)
+                                      .getCollection(DatabaseConstants.PLAYER_COLLECTION);
+        this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
+        if (playerDocument == null) {
+            Document playerDocument = new Document(ImmutableMap.of(
+                    UUID_FIELD, uuid,
+                    NAME_FIELD, name
+            ));
+            playerCollection.insertOne(playerDocument);
+            this.playerDocument = playerDocument;
         }
 
         this.uuid = uuid;
@@ -68,7 +71,7 @@ public abstract class AbstractPlayer {
         }
     }
 
-    /** This must be called when the AbstractPlayer is being destroyed e.g. server going down */
+    /** This must be called when the AbstractPlayer is being destroyed e.g. player leaving */
     public void cleanup() {
         // cleanup the trigger listeners from the achievements that have not yet been achieved
         AchievementRegistry.allAchievements().forEach((id, achievement) -> {
