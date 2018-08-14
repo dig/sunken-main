@@ -1,7 +1,6 @@
 package net.sunken.common;
 
 import lombok.Getter;
-import net.sunken.common.achievements.AchievementManager;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.achievements.NetworkFirstJoinAchievement;
 import net.sunken.common.database.MongoConnection;
