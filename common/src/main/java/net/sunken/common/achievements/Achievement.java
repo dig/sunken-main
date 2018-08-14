@@ -2,9 +2,12 @@ package net.sunken.common.achievements;
 
 import com.google.common.base.Objects;
 import lombok.Getter;
+import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.trigger.Trigger;
 import net.sunken.common.trigger.TriggerListener;
+
+import java.util.logging.Level;
 
 public class Achievement implements AchievementInformation, TriggerListener {
 
@@ -27,6 +30,8 @@ public class Achievement implements AchievementInformation, TriggerListener {
 
     @Override
     public void onSuccessfulTrigger(AbstractPlayer player) {
+        Common.getLogger()
+              .log(Level.INFO, "Granting player " + player.getName() + " the " + this.getId() + " achievement");
         player.grantAchievement(this);
     }
 
