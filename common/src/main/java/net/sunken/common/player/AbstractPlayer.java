@@ -84,12 +84,6 @@ public abstract class AbstractPlayer {
 
     /** This must be called when the AbstractPlayer is being destroyed e.g. player leaving */
     public void cleanup() {
-//        // cleanup the trigger listeners from the achievements that have not yet been achieved
-//        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
-//            if (!this.achievements.containsKey(id)) {
-//                TriggerListenerRegistry.removeListener(achievement);
-//            }
-//        });
     }
 
     private void loadAchievements() {
@@ -102,14 +96,6 @@ public abstract class AbstractPlayer {
                                 // remove nulls from the list from bad achievement IDs present for reasons such as the removal of that achievement from the registry
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toMap(Achievement::getId, achievement -> achievement));
-
-//        // then, go through all the available achievements
-//        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
-//            if (!this.achievements.containsKey(id)) { // if the player has not achieved this achievement
-//                // add a listener for the non-achieved achievement
-//                TriggerListenerRegistry.addListener(achievement);
-//            }
-//        });
     }
 
     private List<Document> getPersistedAchievements() {
