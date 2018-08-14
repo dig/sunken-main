@@ -31,7 +31,7 @@ public class Achievement implements AchievementInformation, TriggerListener {
     }
 
     @Override
-    public Trigger.Condition getStartCondition() {
+    public Trigger.Condition getSuccessCondition() {
         return this.condition;
     }
 

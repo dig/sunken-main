@@ -6,5 +6,5 @@ public interface TriggerListener {
 
     void successfulTrigger(UUID playerUUID);
 
-    Trigger.Condition getStartCondition();
+    Trigger.Condition getSuccessCondition();
 }

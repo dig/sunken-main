@@ -26,5 +26,7 @@ public class AchievementManager {
     public void unloadPlayer(UUID playerUUID) {
         checkNotNull(playerUUID, "player UUID cannot be null");
         checkState(loadedAchievements.containsKey(playerUUID), "player's achievements are not loaded");
+
+        // persist player achievements
     }
 }

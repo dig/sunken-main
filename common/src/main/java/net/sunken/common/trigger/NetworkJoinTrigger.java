@@ -7,8 +7,8 @@ public class NetworkJoinTrigger extends Trigger {
 
     public void trigger(UUID uuid, @Nullable Boolean joinedBefore) {
         for (TriggerListener listener : TriggerListenerRegistry.all()) {
-            if (listener.getStartCondition() instanceof Condition) {
-                Condition condition = (Condition) listener.getStartCondition();
+            if (listener.getSuccessCondition() instanceof Condition) {
+                Condition condition = (Condition) listener.getSuccessCondition();
                 if (condition.isProposalMet(new Proposal(joinedBefore))) {
                     listener.successfulTrigger(uuid);
                 }
