@@ -1,10 +1,10 @@
 package net.sunken.common.trigger;
 
-import java.util.UUID;
+import net.sunken.common.player.AbstractPlayer;
 
 public interface TriggerListener {
 
-    void successfulTrigger(UUID playerUUID);
+    void onSuccessfulTrigger(AbstractPlayer player);
 
     Trigger.Condition getSuccessCondition();
 }
