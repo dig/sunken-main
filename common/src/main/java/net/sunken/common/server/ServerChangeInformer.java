@@ -21,7 +21,7 @@ public class ServerChangeInformer {
         AsyncHelper.executor().submit(() -> {
             Jedis jedis = redisConnection.getConnection();
             try {
-                ImmutableMap<String, String> serverKeys = ImmutableMap.<String, String> builder()
+                ImmutableMap<String, String> serverKeys = ImmutableMap.<String, String>builder()
                         .put(ServerRedisHelper.SERVER_NAME_KEY, serverObject.getServerName())
                         .put(ServerRedisHelper.SERVER_TYPE_KEY, serverObject.getServerType().toString())
                         .put(ServerRedisHelper.MAX_PLAYER_KEY, serverObject.getMaxPlayers() + "")
@@ -52,22 +52,6 @@ public class ServerChangeInformer {
         } finally {
             redisConnection.getJedisPool().returnResource(jedis);
         }
-    }
-
-    public void remove(ServerObject serverObject) {
-        AsyncHelper.executor().submit(() -> {
-            Jedis jedis = redisConnection.getConnection();
-
-            try {
-                jedis.del(ServerRedisHelper.SERVER_STORAGE_KEY + ":" + serverObject.getServerName());
-
-                Common.getInstance().getRedis().sendRedisMessage(SERVER_CACHE_CHANNEL, UPDATE_SERVER_CACHE);
-            } catch (Exception e) {
-                redisConnection.getJedisPool().returnBrokenResource(jedis);
-            } finally {
-                redisConnection.getJedisPool().returnResource(jedis);
-            }
-        });
     }
 }
 
