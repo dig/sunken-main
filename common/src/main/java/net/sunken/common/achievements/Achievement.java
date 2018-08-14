@@ -6,16 +6,13 @@ import net.sunken.common.trigger.TriggerListener;
 
 import java.util.UUID;
 
-public class Achievement implements TriggerListener {
+public class Achievement implements AchievementInformation, TriggerListener {
 
     /** ID of the achievement */
-    @Getter
     private final String id;
     /** Name of the achievement */
-    @Getter
     private final String name;
     /** Short description of the achievement */
-    @Getter
     private final String description;
     /** The condition required that has to be met for this achievement to be awarded */
     @Getter
@@ -36,5 +33,20 @@ public class Achievement implements TriggerListener {
     @Override
     public Trigger.Condition getStartCondition() {
         return this.condition;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

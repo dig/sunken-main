@@ -1,13 +1,15 @@
 package net.sunken.common;
 
 import lombok.Getter;
+import net.sunken.common.achievements.AchievementManager;
+import net.sunken.common.achievements.AchievementRegistry;
+import net.sunken.common.achievements.NetworkFirstJoinAchievement;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.lobby.LobbyCacheUpdater;
 import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.lobby.LobbyInfoCache;
 import net.sunken.common.player.AbstractPlayer;
-import net.sunken.common.type.ServerType;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -32,6 +34,9 @@ public class Common {
     @Getter
     private ConcurrentHashMap<String, AbstractPlayer> onlinePlayers;
 
+    @Getter
+    private AchievementManager achievementManager;
+
     public void onCommonLoad(boolean listenForLobbies) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
@@ -54,7 +59,11 @@ public class Common {
             lobbyChangeInformer = new LobbyChangeInformer(this.redis);
         }
 
-        this.onlinePlayers = new ConcurrentHashMap<String, AbstractPlayer>();
+        this.onlinePlayers = new ConcurrentHashMap<>();
+
+        this.achievementManager = new AchievementManager();
+        AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
+
         this.loaded = true;
     }
 

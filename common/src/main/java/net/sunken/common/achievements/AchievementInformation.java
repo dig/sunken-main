@@ -1,6 +1,10 @@
-package net.sunken.common;
+package net.sunken.common.achievements;
 
-public interface Identifiable {
+public interface AchievementInformation {
 
-    void getID();
+    String getId();
+
+    String getName();
+
+    String getDescription();
 }
