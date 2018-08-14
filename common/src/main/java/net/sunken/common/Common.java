@@ -6,7 +6,6 @@ import net.sunken.common.database.RedisConnection;
 import net.sunken.common.lobby.LobbyCacheUpdater;
 import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.lobby.LobbyInfoCache;
-import net.sunken.common.type.ServerType;
 
 import java.util.logging.Logger;
 

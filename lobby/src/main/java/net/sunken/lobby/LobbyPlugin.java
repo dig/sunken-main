@@ -7,11 +7,10 @@ import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
+import net.sunken.lobby.listeners.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Level;
 
 public class LobbyPlugin extends JavaPlugin {
 
@@ -52,5 +51,6 @@ public class LobbyPlugin extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new LobbyPlayerCountUpdater(), this);
         pm.registerEvents(new PlayerListener(), this);
+        pm.registerEvents(new WorldListener(), this);
     }
 }
