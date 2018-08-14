@@ -1,26 +1,24 @@
-package net.sunken.common.lobby;
+package net.sunken.common.server;
 
+import net.sunken.common.Common;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class LobbyCacheUpdater {
-
-    private static Logger logger = Logger.getLogger(LobbyCacheUpdater.class.getName());
+public class ServerCacheUpdater {
 
     private final Jedis subscriberJedis;
-    private final LobbyInfoCache lobbyInfoCache;
+    private final ServerObjectCache serverObjectCache;
 
-    public LobbyCacheUpdater(Jedis subscriberJedis, LobbyInfoCache lobbyInfoCache) {
+    public ServerCacheUpdater(Jedis subscriberJedis, ServerObjectCache serverObjectCache) {
         this.subscriberJedis = subscriberJedis;
-        this.lobbyInfoCache = lobbyInfoCache;
+        this.serverObjectCache = serverObjectCache;
     }
 
     public void start() {
         new Thread(() -> {
-            subscriberJedis.subscribe(new Listener(), LobbyRedisHelper.LOBBY_CACHE_CHANNEL);
+            subscriberJedis.subscribe(new Listener(), ServerRedisHelper.SERVER_CACHE_CHANNEL);
         }).start();
     }
 
@@ -28,11 +26,11 @@ public class LobbyCacheUpdater {
 
         @Override
         public void onMessage(String channel, String message) {
-            logger.log(Level.INFO, "onMessage() called - " + channel + " - " + message);
+            Common.getLogger().log(Level.INFO, "onMessage() called - " + channel + " - " + message);
 
-            if (channel.equals(LobbyRedisHelper.LOBBY_CACHE_CHANNEL)) {
-                if (message.equals(LobbyRedisHelper.UPDATE_LOBBY_CACHE)) {
-                    lobbyInfoCache.updateCache();
+            if (channel.equals(ServerRedisHelper.SERVER_CACHE_CHANNEL)) {
+                if (message.equals(ServerRedisHelper.UPDATE_SERVER_CACHE)) {
+                    serverObjectCache.updateCache();
                 }
             }
         }

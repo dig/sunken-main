@@ -10,7 +10,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.lobby.LobbyHandler;
 import net.sunken.bungeecord.util.MessageUtil;
-import net.sunken.common.lobby.LobbyInfo;
+import net.sunken.common.server.ServerObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -42,7 +42,7 @@ public class ConnectListener implements Listener {
 
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
                     if (target != null && target.isConnected()) {
-                        LobbyInfo lobby = LobbyHandler.getFreeLobby();
+                        ServerObject lobby = LobbyHandler.getFreeLobby();
 
                         if (lobby != null) {
                             ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(

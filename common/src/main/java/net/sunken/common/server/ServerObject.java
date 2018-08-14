@@ -1,15 +1,18 @@
-package net.sunken.common.lobby;
+package net.sunken.common.server;
 
 import com.google.common.base.Objects;
 import lombok.Getter;
+import net.sunken.common.type.ServerType;
 
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public class LobbyInfo {
+public class ServerObject {
 
     @Getter
     private final String serverName;
+    @Getter
+    private final ServerType serverType;
 
     @Getter
     private int maxPlayers;
@@ -21,8 +24,10 @@ public class LobbyInfo {
     @Getter
     private final int serverPort;
 
-    public LobbyInfo(String serverName, int maxPlayers, int playerCount, String serverIp, int serverPort) {
+    public ServerObject(String serverName, ServerType serverType,
+                      int maxPlayers, int playerCount, String serverIp, int serverPort) {
         this.serverName = serverName;
+        this.serverType = serverType;
 
         this.maxPlayers = maxPlayers;
         this.playerCount = playerCount;
@@ -32,12 +37,13 @@ public class LobbyInfo {
     }
 
     // player count is the only mutable property of this immutable class
-    public LobbyInfo setPlayerCount(int playerCount) {
-        return new LobbyInfo(serverName,
-                             maxPlayers,
-                             playerCount,
-                             serverIp,
-                             serverPort);
+    public ServerObject setPlayerCount(int playerCount) {
+        return new ServerObject(serverName,
+                serverType,
+                maxPlayers,
+                playerCount,
+                serverIp,
+                serverPort);
     }
 
     @Override
@@ -45,7 +51,7 @@ public class LobbyInfo {
         if (obj == null) return false;
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
-        LobbyInfo other = (LobbyInfo) obj;
+        ServerObject other = (ServerObject) obj;
         return Objects.equal(this.getServerName(), other.getServerName());
     }
 

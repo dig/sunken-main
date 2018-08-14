@@ -26,13 +26,8 @@ public class BungeeMain extends Plugin {
         // Register events
         this.registerEvents();
 
-        // Get information about running lobbies
-        Common.getInstance().getLobbyInfoCache().updateCache();
-    }
-
-    @Override
-    public void onDisable(){
-        Common.getInstance().onCommonDisable();
+        // Get information about running servers
+        Common.getInstance().getServerCache().updateCache();
     }
 
     private void registerEvents(){

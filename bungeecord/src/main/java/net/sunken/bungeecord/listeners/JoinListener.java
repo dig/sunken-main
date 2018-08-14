@@ -12,7 +12,7 @@ import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.lobby.LobbyHandler;
 import net.sunken.bungeecord.util.MessageUtil;
-import net.sunken.common.lobby.LobbyInfo;
+import net.sunken.common.server.ServerObject;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
-        LobbyInfo lobby = LobbyHandler.getFreeLobby();
+        ServerObject lobby = LobbyHandler.getFreeLobby();
         // No lobbies available, kick
         if (lobby == null) {
             event.setCancelReason(MessageUtil.stringToComponent(Constants.NO_LOBBY));
@@ -42,7 +42,7 @@ public class JoinListener implements Listener {
         if (!joined.contains(uuid)) {
             joined.add(uuid);
 
-            LobbyInfo lobby = LobbyHandler.getFreeLobby();
+            ServerObject lobby = LobbyHandler.getFreeLobby();
             if (lobby != null) {
                 ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(
                         lobby.getServerName(),

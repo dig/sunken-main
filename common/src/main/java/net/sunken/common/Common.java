@@ -5,10 +5,12 @@ import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.achievements.NetworkFirstJoinAchievement;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
-import net.sunken.common.lobby.LobbyCacheUpdater;
-import net.sunken.common.lobby.LobbyChangeInformer;
-import net.sunken.common.lobby.LobbyInfoCache;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.server.ServerCacheUpdater;
+import net.sunken.common.server.ServerChangeInformer;
+import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.ServerObjectCache;
+import net.sunken.common.type.ServerType;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -27,16 +29,13 @@ public class Common {
     @Getter
     private RedisConnection redis;
 
-    private LobbyInfoCache lobbyInfoCache;
-    private LobbyChangeInformer lobbyChangeInformer;
+    private ServerObjectCache serverObjectCache;
+    private ServerChangeInformer serverChangeInformer;
 
     @Getter
     private ConcurrentHashMap<String, AbstractPlayer> onlinePlayers;
 
-    @Getter
-    private AchievementManager achievementManager;
-
-    public void onCommonLoad(boolean listenForLobbies) {
+    public void onCommonLoad(boolean listenForServers) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
                 19802,
@@ -51,36 +50,50 @@ public class Common {
                 "***REMOVED***"
         );
 
-        if (listenForLobbies) {
-            lobbyInfoCache = new LobbyInfoCache(this.redis);
-            LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
-            lobbyCacheUpdater.start();
-            lobbyChangeInformer = new LobbyChangeInformer(this.redis);
+        // Should the server keep track of other servers?
+        if (listenForServers) {
+            serverObjectCache = new ServerObjectCache(this.redis);
+            ServerCacheUpdater serverCacheUpdater = new ServerCacheUpdater(redis.getConnection(), serverObjectCache);
+            serverCacheUpdater.start();
         }
+        serverChangeInformer = new ServerChangeInformer(this.redis);
 
         this.onlinePlayers = new ConcurrentHashMap<>();
-
-        this.achievementManager = new AchievementManager();
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
 
         this.loaded = true;
     }
 
-    public LobbyInfoCache getLobbyInfoCache() {
-        if (loaded && lobbyInfoCache == null) {
-            throw new UnsupportedOperationException("the lobby server cache is unavailable, are you sure this is supported for the server type?");
-        }
-        return lobbyInfoCache;
+    public void onCommonLoad(boolean listenForServers, ServerType serverType, int maxPlayers, int serverPort){
+        this.onCommonLoad(listenForServers);
+
+        // Add server to the network
+        ServerInstance.setInstance(new ServerInstance(serverType, maxPlayers, 0, serverPort));
+
+        // Add shutdown hook for when server closes
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ServerObject serverObject = ServerInstance.instance().getServerObject();
+            Common.getInstance().getServerChangeInformer().removeSync(serverObject);
+
+            Common.getInstance().onCommonDisable();
+        }));
     }
 
-    public LobbyChangeInformer getLobbyChangeInformer() {
-        if (loaded && lobbyChangeInformer == null) {
-            throw new UnsupportedOperationException("the lobby online informer is unavailable, are you sure this is supported for the server type?");
+    public ServerObjectCache getServerCache() {
+        if (loaded && serverObjectCache == null) {
+            throw new UnsupportedOperationException("the server cache is unavailable, are you sure this is supported for the server type?");
         }
-        return lobbyChangeInformer;
+        return serverObjectCache;
     }
 
-    public void onCommonDisable() {
+    public ServerChangeInformer getServerChangeInformer() {
+        if (loaded && serverChangeInformer == null) {
+            throw new UnsupportedOperationException("the online informer is unavailable, are you sure this is supported for the server type?");
+        }
+        return serverChangeInformer;
+    }
+
+    private void onCommonDisable() {
         this.mongo.disconnect();
         this.redis.disconnect();
     }

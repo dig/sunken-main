@@ -9,7 +9,7 @@ import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.lobby.LobbyHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.Common;
-import net.sunken.common.lobby.LobbyInfo;
+import net.sunken.common.server.ServerObject;
 
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
@@ -20,7 +20,7 @@ public class FailListener implements Listener {
     public void onServerFail(ServerConnectFailEvent event) {
         event.setSendMessage(true);
 
-        LobbyInfo lobby = LobbyHandler.getFreeLobby();
+        ServerObject lobby = LobbyHandler.getFreeLobby();
         if(lobby != null){
             ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(
                     lobby.getServerName(),
