@@ -20,7 +20,7 @@ public class BungeeMain extends Plugin {
         instance = this;
 
         // Initialize common
-        Common.getInstance().onCommonLoad(ServerType.BUNGEECORD);
+        Common.getInstance().onCommonLoad(true);
 
         // Register events
         this.registerEvents();
