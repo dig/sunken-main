@@ -3,6 +3,7 @@ package net.sunken.common.player;
 import lombok.Getter;
 import net.sunken.common.achievements.Achievement;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractPlayer {
@@ -16,11 +17,11 @@ public abstract class AbstractPlayer {
     private final Map<String, Achievement> achievements;
 
     public AbstractPlayer(String uuid,
-                          String name,
-                          Map<String, Achievement> achievements) {
-
+                          String name) {
         this.uuid = uuid;
         this.name = name;
-        this.achievements = achievements;
+        this.achievements = new HashMap<String, Achievement>();
+
+        // Load achievements from mongo ...
     }
 }

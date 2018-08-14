@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.listeners.ConnectListener;
+import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
 import net.sunken.common.Common;
@@ -40,5 +41,6 @@ public class BungeeMain extends Plugin {
         pm.registerListener(this, new JoinListener());
         pm.registerListener(this, new ConnectListener());
         pm.registerListener(this, new PingListener());
+        pm.registerListener(this, new FailListener());
     }
 }
