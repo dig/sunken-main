@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class NetworkJoinTrigger extends Trigger {
 
-    public void trigger(AbstractPlayer player, @Nullable Boolean joinedBefore) {
+    public void trigger(AbstractPlayer player, Boolean joinedBefore) {
         for (TriggerListener listener : TriggerListenerRegistry.all()) {
             if (listener.getSuccessCondition() instanceof Condition) {
                 Condition condition = (Condition) listener.getSuccessCondition();
@@ -39,7 +39,7 @@ public class NetworkJoinTrigger extends Trigger {
 
         private final Boolean joinedBefore;
 
-        public Proposal(@Nullable Boolean joinedBefore) {
+        public Proposal(Boolean joinedBefore) {
             this.joinedBefore = joinedBefore;
         }
     }
