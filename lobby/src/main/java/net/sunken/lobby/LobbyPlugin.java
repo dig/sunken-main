@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.lobby.LobbyInfo;
 import net.sunken.common.type.ServerType;
+import net.sunken.core.Core;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -26,6 +27,7 @@ public class LobbyPlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
         Common.getInstance().onCommonLoad(true);
+        Core.getInstance().onCoreLoad(this);
 
         LobbyInstance.instance(); // inform of the initial lobby information
 
