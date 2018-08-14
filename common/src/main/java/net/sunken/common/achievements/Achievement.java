@@ -1,10 +1,9 @@
 package net.sunken.common.achievements;
 
 import lombok.Getter;
+import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.trigger.Trigger;
 import net.sunken.common.trigger.TriggerListener;
-
-import java.util.UUID;
 
 public class Achievement implements AchievementInformation, TriggerListener {
 
@@ -26,8 +25,8 @@ public class Achievement implements AchievementInformation, TriggerListener {
     }
 
     @Override
-    public void successfulTrigger(UUID playerUUID) {
-        // award this achievement to the player
+    public void onSuccessfulTrigger(AbstractPlayer player) {
+        player.grantAchievement(this);
     }
 
     @Override

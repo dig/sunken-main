@@ -16,10 +16,6 @@ public final class AchievementRegistry {
         achievements.put(achievement.getId(), achievement);
     }
 
-    public static void removeListener(Achievement achievement) {
-        achievements.remove(achievement.getId());
-    }
-
     public static Map<String, Achievement> allAchievements() {
         return achievements;
     }
