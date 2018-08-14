@@ -10,9 +10,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -33,7 +39,9 @@ public class PlayerListener implements Listener {
                 Bukkit.getWorld(config.getString("spawn.world")),
                 config.getDouble("spawn.x"),
                 config.getDouble("spawn.y"),
-                config.getDouble("spawn.z")
+                config.getDouble("spawn.z"),
+                config.getInt("spawn.yaw"),
+                config.getInt("spawn.pitch")
         );
         player.teleport(spawn);
 
@@ -57,5 +65,43 @@ public class PlayerListener implements Listener {
         event.setQuitMessage("");
 
         Common.getInstance().getOnlinePlayers().remove(player.getUniqueId().toString());
+    }
+
+    @EventHandler
+    public void onHunger(FoodLevelChangeEvent event){
+        event.setCancelled(true);
+        event.setFoodLevel(15);
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event){
+        Player player = event.getPlayer();
+
+        if(player.getGameMode() != GameMode.CREATIVE){
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityHit(EntityDamageByEntityEvent event){
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerDamage(final EntityDamageEvent event) {
+        Entity e = event.getEntity();
+
+        if(e instanceof Player) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryMove(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+
+        if(player.getGameMode() != GameMode.CREATIVE){
+            event.setCancelled(true);
+        }
     }
 }

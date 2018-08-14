@@ -5,6 +5,7 @@ import net.sunken.common.achievements.Achievement;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class AbstractPlayer {
 
@@ -23,5 +24,9 @@ public abstract class AbstractPlayer {
         this.achievements = new HashMap<String, Achievement>();
 
         // Load achievements from mongo ...
+    }
+
+    public UUID getUUID(){
+        return UUID.fromString(this.uuid);
     }
 }
