@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.lobby;
+package net.sunken.bungeecord.server;
 
 import net.sunken.common.Common;
 import net.sunken.common.server.ServerObject;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class LobbyHandler {
+public class ServerHandler {
 
     @Nullable
-    public static ServerObject getFreeLobby() {
-        Set<ServerObject> lobbies = Common.getInstance().getServerCache().getCache(ServerType.MAIN_LOBBY);
+    public static ServerObject getFreeServer(ServerType server) {
+        Set<ServerObject> lobbies = Common.getInstance().getServerCache().getCache(server);
 
         List<ServerObject> sortedViaPlayerCount = lobbies.stream()
                 .sorted(Comparator.comparing(ServerObject::getPlayerCount))
@@ -39,4 +39,5 @@ public class LobbyHandler {
 
         return middleLobby;
     }
+
 }

@@ -24,6 +24,8 @@ public class ServerObjectCache {
         this.redisConnection = redisConnection;
     }
 
+    public Set<ServerObject> getCache() { return this.cache; }
+
     public Set<ServerObject> getCache(ServerType serverType) {
         Set<ServerObject> sortedServers = this.cache.stream()
                 .filter(server -> server.getServerType() == serverType)
@@ -31,6 +33,7 @@ public class ServerObjectCache {
 
         return sortedServers;
     }
+
 
     public void updateCache() {
         AsyncHelper.executor().submit(() -> {

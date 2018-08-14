@@ -29,6 +29,8 @@ public class ConfigHandler {
     public ConfigHandler(BungeeMain instance, String configName){
         this.plugin = instance;
         this.configName = configName;
+
+        this.saveDefaultConfig();
         this.loadConfig();
     }
 

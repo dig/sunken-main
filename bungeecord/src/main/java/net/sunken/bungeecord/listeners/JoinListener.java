@@ -10,9 +10,10 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
-import net.sunken.bungeecord.lobby.LobbyHandler;
+import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.server.ServerObject;
+import net.sunken.common.type.ServerType;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class JoinListener implements Listener {
         }
 
         // No lobbies available, kick
-        ServerObject lobby = LobbyHandler.getFreeLobby();
+        ServerObject lobby = ServerHandler.getFreeServer(ServerType.MAIN_LOBBY);
         if (lobby == null) {
             event.setCancelReason(MessageUtil.stringToComponent(Constants.NO_LOBBY));
             event.setCancelled(true);
@@ -51,7 +52,7 @@ public class JoinListener implements Listener {
         if (!joined.contains(uuid)) {
             joined.add(uuid);
 
-            ServerObject lobby = LobbyHandler.getFreeLobby();
+            ServerObject lobby = ServerHandler.getFreeServer(ServerType.MAIN_LOBBY);
             if (lobby != null) {
                 ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(
                         lobby.getServerName(),

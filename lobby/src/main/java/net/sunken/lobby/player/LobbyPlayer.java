@@ -16,7 +16,7 @@ public class LobbyPlayer extends AbstractPlayer {
     }
 
     public Player toPlayer(){
-        return Bukkit.getPlayer(UUID.fromString(this.getUuid()));
+        return Bukkit.getPlayer(this.getUUID());
     }
 
 }
