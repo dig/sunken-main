@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util.nbt;
+package net.sunken.core.util.nbt;
 
 import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;

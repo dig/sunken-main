@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util;
+package net.sunken.core.util;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;

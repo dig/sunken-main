@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util;
+package net.sunken.core.util;
 
 import net.minecraft.server.v1_13_R1.ChatMessageType;
 import net.minecraft.server.v1_13_R1.IChatBaseComponent;

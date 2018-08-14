@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util.world;
+package net.sunken.core.util.world;
 
 import java.util.ArrayList;
 import java.util.List;

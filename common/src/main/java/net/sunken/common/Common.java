@@ -15,9 +15,6 @@ public class Common {
     private boolean loaded = false;
 
     @Getter
-    private ServerType type;
-
-    @Getter
     private static Common instance = new Common();
     @Getter
     private static Logger logger = Logger.getLogger(Common.class.getName());
@@ -30,9 +27,7 @@ public class Common {
     private LobbyInfoCache lobbyInfoCache;
     private LobbyChangeInformer lobbyChangeInformer;
 
-    public void onCommonLoad(ServerType type) {
-        this.type = type;
-
+    public void onCommonLoad(boolean listenForLobbies) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
                 19802,
@@ -47,7 +42,7 @@ public class Common {
                 "***REMOVED***"
         );
 
-        if (type == ServerType.BUNGEECORD || type == ServerType.MAIN_LOBBY) {
+        if (listenForLobbies) {
             lobbyInfoCache = new LobbyInfoCache(this.redis);
             LobbyCacheUpdater lobbyCacheUpdater = new LobbyCacheUpdater(redis.getConnection(), lobbyInfoCache);
             lobbyCacheUpdater.start();

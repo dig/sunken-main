@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.npc;
+package net.sunken.core.npc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;

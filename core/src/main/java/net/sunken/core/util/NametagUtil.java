@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util;
+package net.sunken.core.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

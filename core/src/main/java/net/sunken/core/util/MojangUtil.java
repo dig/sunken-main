@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util;
+package net.sunken.core.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

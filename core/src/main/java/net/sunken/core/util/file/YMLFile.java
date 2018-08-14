@@ -1,4 +1,4 @@
-package net.sunken.minigameapi.util.file;
+package net.sunken.core.util.file;
 
 import java.io.File;
 import java.io.IOException;
