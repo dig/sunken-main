@@ -2,23 +2,29 @@ package net.sunken.core.util;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import net.sunken.common.type.ServerType;
+import net.sunken.core.Core;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class BungeeUtil {
 
-    public static void sendPlayerToLobby(Player player, Plugin instance){
+    public static void sendPlayerToType(Player player, ServerType type){
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("lobby");
-        out.writeUTF(player.getName());
-        player.sendPluginMessage(instance, "BungeeCord", out.toByteArray());
+
+        out.writeUTF("type");
+        out.writeUTF(type.toString());
+
+        player.sendPluginMessage(Core.getPlugin(), "BungeeCord", out.toByteArray());
     }
 
-    public static void sendPlayerToServer(Player player, String server, Plugin instance){
+    public static void sendPlayerToServer(Player player, String name){
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("connect");
-        out.writeUTF(server);
-        player.sendPluginMessage(instance, "BungeeCord", out.toByteArray());
+
+        out.writeUTF("server");
+        out.writeUTF(name);
+
+        player.sendPluginMessage(Core.getPlugin(), "BungeeCord", out.toByteArray());
     }
 
 }
