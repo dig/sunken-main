@@ -1,5 +1,6 @@
 package net.sunken.lobby.player;
 
+import net.sunken.common.exception.DocumentNotFoundException;
 import net.sunken.common.player.AbstractPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

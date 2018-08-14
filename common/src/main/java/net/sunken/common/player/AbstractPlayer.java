@@ -37,14 +37,18 @@ public abstract class AbstractPlayer {
     @Getter
     private Map<String, Achievement> achievements;
 
-    public AbstractPlayer(String uuid, String name) throws DocumentNotFoundException {
-        this.playerCollection = common.getMongo()
-                                      .getConnection()
-                                      .getDatabase(DatabaseConstants.DATABASE_NAME)
-                                      .getCollection(DatabaseConstants.PLAYER_COLLECTION);
-        this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
-        if (playerDocument == null) {
-            throw new DocumentNotFoundException("Player with UUID " + uuid + "  was not found in the collection " + DatabaseConstants.PLAYER_COLLECTION);
+    public AbstractPlayer(String uuid, String name) {
+        try{
+            this.playerCollection = common.getMongo()
+                    .getConnection()
+                    .getDatabase(DatabaseConstants.DATABASE_NAME)
+                    .getCollection(DatabaseConstants.PLAYER_COLLECTION);
+            this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
+            if (playerDocument == null) {
+                throw new DocumentNotFoundException("Player with UUID " + uuid + "  was not found in the collection " + DatabaseConstants.PLAYER_COLLECTION);
+            }
+        } catch (DocumentNotFoundException ev){
+
         }
 
         this.uuid = uuid;

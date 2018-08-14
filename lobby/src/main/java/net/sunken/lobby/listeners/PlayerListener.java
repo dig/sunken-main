@@ -1,6 +1,7 @@
 package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
+import net.sunken.common.player.AbstractPlayer;
 import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
@@ -21,6 +22,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerListener implements Listener {
 
@@ -64,7 +67,9 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         event.setQuitMessage("");
 
-        Common.getInstance().getOnlinePlayers().remove(player.getUniqueId().toString());
+        ConcurrentHashMap<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
+        players.get(player.getUniqueId().toString()).cleanup();
+        players.remove(player.getUniqueId().toString());
     }
 
     @EventHandler
