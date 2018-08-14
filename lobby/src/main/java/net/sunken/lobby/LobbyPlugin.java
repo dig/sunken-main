@@ -43,6 +43,8 @@ public class LobbyPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Core.getInstance().onCoreDisable();
+        Common.getInstance().onCommonDisable();
     }
 
     private void registerEvents() {

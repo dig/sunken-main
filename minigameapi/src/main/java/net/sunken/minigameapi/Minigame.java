@@ -20,6 +20,8 @@ public class Minigame {
     }
 
     public void onMinigameDisable() {
+        Core.getInstance().onCoreDisable();
+        Common.getInstance().onCommonDisable();
     }
 
 }
