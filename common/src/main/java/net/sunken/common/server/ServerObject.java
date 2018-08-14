@@ -24,8 +24,13 @@ public class ServerObject {
     @Getter
     private final int serverPort;
 
-    public ServerObject(String serverName, ServerType serverType,
-                      int maxPlayers, int playerCount, String serverIp, int serverPort) {
+    public ServerObject(String serverName,
+                        ServerType serverType,
+                        int maxPlayers,
+                        int playerCount,
+                        String serverIp,
+                        int serverPort) {
+
         this.serverName = serverName;
         this.serverType = serverType;
 
@@ -39,11 +44,11 @@ public class ServerObject {
     // player count is the only mutable property of this immutable class
     public ServerObject setPlayerCount(int playerCount) {
         return new ServerObject(serverName,
-                serverType,
-                maxPlayers,
-                playerCount,
-                serverIp,
-                serverPort);
+                                serverType,
+                                maxPlayers,
+                                playerCount,
+                                serverIp,
+                                serverPort);
     }
 
     @Override
@@ -57,6 +62,6 @@ public class ServerObject {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.getServerName(), this.getServerName());
+        return Objects.hashCode(this.getServerName());
     }
 }

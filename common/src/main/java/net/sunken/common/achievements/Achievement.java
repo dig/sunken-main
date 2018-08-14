@@ -1,5 +1,6 @@
 package net.sunken.common.achievements;
 
+import com.google.common.base.Objects;
 import lombok.Getter;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.trigger.Trigger;
@@ -47,5 +48,19 @@ public class Achievement implements AchievementInformation, TriggerListener {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj.getClass() != getClass()) return false;
+        Achievement other = (Achievement) obj;
+        return Objects.equal(this.getId(), other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getId());
     }
 }

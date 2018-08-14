@@ -7,7 +7,6 @@ import net.sunken.common.Common;
 import net.sunken.common.achievements.Achievement;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.database.DatabaseConstants;
-import net.sunken.common.trigger.TriggerListenerRegistry;
 import net.sunken.common.trigger.TriggerManager;
 import org.bson.Document;
 
@@ -80,18 +79,17 @@ public abstract class AbstractPlayer {
             persistedAchievements.add(new Document(ACHIEVEMENTS_ID_FIELD, achievementId));
             playerCollection.findOneAndUpdate(new Document(UUID_FIELD, uuid), playerDocument);
             this.achievements.put(achievementId, achievement);
-            TriggerListenerRegistry.removeListener(achievement);
         }
     }
 
     /** This must be called when the AbstractPlayer is being destroyed e.g. player leaving */
     public void cleanup() {
-        // cleanup the trigger listeners from the achievements that have not yet been achieved
-        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
-            if (!this.achievements.containsKey(id)) {
-                TriggerListenerRegistry.removeListener(achievement);
-            }
-        });
+//        // cleanup the trigger listeners from the achievements that have not yet been achieved
+//        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
+//            if (!this.achievements.containsKey(id)) {
+//                TriggerListenerRegistry.removeListener(achievement);
+//            }
+//        });
     }
 
     private void loadAchievements() {
@@ -105,13 +103,13 @@ public abstract class AbstractPlayer {
                                 .filter(Objects::nonNull)
                                 .collect(Collectors.toMap(Achievement::getId, achievement -> achievement));
 
-        // then, go through all the available achievements
-        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
-            if (!this.achievements.containsKey(id)) { // if the player has not achieved this achievement
-                // add a listener for the non-achieved achievement
-                TriggerListenerRegistry.addListener(achievement);
-            }
-        });
+//        // then, go through all the available achievements
+//        AchievementRegistry.allAchievements().forEach((id, achievement) -> {
+//            if (!this.achievements.containsKey(id)) { // if the player has not achieved this achievement
+//                // add a listener for the non-achieved achievement
+//                TriggerListenerRegistry.addListener(achievement);
+//            }
+//        });
     }
 
     private List<Document> getPersistedAchievements() {
