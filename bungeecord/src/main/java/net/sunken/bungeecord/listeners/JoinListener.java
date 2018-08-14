@@ -16,6 +16,7 @@ import net.sunken.common.server.ServerObject;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,8 +27,16 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
-        ServerObject lobby = LobbyHandler.getFreeLobby();
+
+        // Check that we support the version of minecraft
+        List<Integer> versions = BungeeMain.getConfigHandler().getConfig().getIntList("versions");
+        if(!versions.contains(event.getConnection().getVersion())){
+            event.setCancelReason(MessageUtil.stringToComponent(Constants.OUTDATED_VER));
+            event.setCancelled(true);
+        }
+
         // No lobbies available, kick
+        ServerObject lobby = LobbyHandler.getFreeLobby();
         if (lobby == null) {
             event.setCancelReason(MessageUtil.stringToComponent(Constants.NO_LOBBY));
             event.setCancelled(true);
