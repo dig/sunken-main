@@ -30,7 +30,7 @@ public abstract class AbstractPlayer {
     private String name;
 
     @Getter
-    private final Map<String, Achievement> achievements;
+    private Map<String, Achievement> achievements;
 
     public AbstractPlayer(String uuid, String name) throws DocumentNotFoundException {
         MongoClient connection = common.getMongo().getConnection();
@@ -56,7 +56,7 @@ public abstract class AbstractPlayer {
                                         })
                                         // remove nulls from the list from bad achievement IDs present for reasons such as the removal of that achievement from the registry
                                         .filter(Objects::nonNull)
-                                        .collect(Collectors.toMap(Achievement::getId, achievement -> achievement);
+                                        .collect(Collectors.toMap(Achievement::getId, achievement -> achievement));
     }
 
     public UUID getUUID() {
