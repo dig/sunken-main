@@ -4,7 +4,6 @@ import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.core.Core;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 public class Minigame {
 
