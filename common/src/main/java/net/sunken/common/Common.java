@@ -6,8 +6,10 @@ import net.sunken.common.database.RedisConnection;
 import net.sunken.common.lobby.LobbyCacheUpdater;
 import net.sunken.common.lobby.LobbyChangeInformer;
 import net.sunken.common.lobby.LobbyInfoCache;
+import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.type.ServerType;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class Common {
@@ -26,6 +28,9 @@ public class Common {
 
     private LobbyInfoCache lobbyInfoCache;
     private LobbyChangeInformer lobbyChangeInformer;
+
+    @Getter
+    private ConcurrentHashMap<String, AbstractPlayer> onlinePlayers;
 
     public void onCommonLoad(boolean listenForLobbies) {
         this.mongo = new MongoConnection(
@@ -49,6 +54,7 @@ public class Common {
             lobbyChangeInformer = new LobbyChangeInformer(this.redis);
         }
 
+        this.onlinePlayers = new ConcurrentHashMap<String, AbstractPlayer>();
         this.loaded = true;
     }
 
