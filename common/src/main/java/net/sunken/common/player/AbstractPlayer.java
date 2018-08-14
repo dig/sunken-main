@@ -43,12 +43,15 @@ public abstract class AbstractPlayer {
     private Map<String, Achievement> achievements;
 
     public AbstractPlayer(String uuid, String name) {
+        this.uuid = uuid;
+        this.name = name;
+        this.firstJoin = false;
+
         this.playerCollection = common.getMongo()
                                       .getConnection()
                                       .getDatabase(DatabaseConstants.DATABASE_NAME)
                                       .getCollection(DatabaseConstants.PLAYER_COLLECTION);
         this.playerDocument = playerCollection.find(eq(UUID_FIELD, uuid)).first();
-        this.firstJoin = false;
 
         if (playerDocument == null) {
             this.firstJoin = true;
@@ -62,8 +65,6 @@ public abstract class AbstractPlayer {
             this.playerDocument = playerDocument;
         }
 
-        this.uuid = uuid;
-        this.name = name;
         this.achievements = new HashMap<>();
         this.loadAchievements();
 
