@@ -16,12 +16,16 @@ public class LobbyPlugin extends JavaPlugin {
     @Getter
     private static LobbyPlugin instance;
 
+    @Getter
+    private ServerType type;
+
     @Override
     public void onEnable() {
         instance = this;
+        this.type = ServerType.valueOf(this.getConfig().getString("type"));
 
         this.saveDefaultConfig();
-        Common.getInstance().onCommonLoad(ServerType.valueOf(this.getConfig().getString("type")));
+        Common.getInstance().onCommonLoad(true);
 
         LobbyInstance.instance(); // inform of the initial lobby information
 
