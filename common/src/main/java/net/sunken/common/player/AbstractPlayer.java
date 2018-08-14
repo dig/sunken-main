@@ -56,7 +56,8 @@ public abstract class AbstractPlayer {
 
             Document playerDocument = new Document(ImmutableMap.of(
                     UUID_FIELD, uuid,
-                    NAME_FIELD, name
+                    NAME_FIELD, name,
+                    ACHIEVEMENTS_FIELD, new ArrayList<Document>()
             ));
             playerCollection.insertOne(playerDocument);
             this.playerDocument = playerDocument;
@@ -68,7 +69,7 @@ public abstract class AbstractPlayer {
         this.loadAchievements();
 
         if (this.firstJoin) {
-            TriggerManager.NETWORK_JOIN_TRIGGER.trigger(this, true);
+            TriggerManager.NETWORK_JOIN_TRIGGER.trigger(this, false);
         }
     }
 
