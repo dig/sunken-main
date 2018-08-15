@@ -44,6 +44,7 @@
                                     <include>org.apache.commons:commons-pool2</include>
                                     <include>org.json:json</include>
                                     <include>com.google.code.findbugs:jsr305</include>
+                                    <include>javax.inject:javax.inject</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -83,6 +84,12 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
 
         <dependency>
