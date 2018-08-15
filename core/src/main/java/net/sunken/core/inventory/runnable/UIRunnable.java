@@ -1,4 +1,4 @@
-package net.sunken.core.inventory.action;
+package net.sunken.core.inventory.runnable;
 
 public interface UIRunnable {
 

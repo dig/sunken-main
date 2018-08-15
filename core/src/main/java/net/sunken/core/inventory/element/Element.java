@@ -1,4 +1,4 @@
-package net.sunken.core.inventory;
+package net.sunken.core.inventory.element;
 
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;

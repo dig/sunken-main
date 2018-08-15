@@ -1,4 +1,4 @@
-package net.sunken.core.inventory.action;
+package net.sunken.core.inventory.runnable;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
