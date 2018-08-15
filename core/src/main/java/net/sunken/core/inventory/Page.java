@@ -12,7 +12,9 @@ public class Page {
 
     @Getter
     private final String id;
+    @Getter
     private final String title;
+    @Getter
     private final int size;
 
     public Page(String id, String title, int size) {

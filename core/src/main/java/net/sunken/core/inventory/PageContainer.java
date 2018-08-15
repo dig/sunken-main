@@ -1,7 +1,9 @@
 package net.sunken.core.inventory;
 
 import com.google.common.collect.Maps;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
 
@@ -38,5 +40,9 @@ public class PageContainer {
 
         // create an inventory to open from a page
         Page page = this.pages.get(pageId);
+        Inventory inventory = Bukkit.createInventory(null, page.getSize(), page.getTitle());
+        // add items to the inventory
+
+        player.openInventory(inventory);
     }
 }
