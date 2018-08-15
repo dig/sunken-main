@@ -1,6 +1,7 @@
 package net.sunken.core.inventory.element;
 
 import com.google.common.cache.Cache;
+import net.sunken.common.Common;
 import net.sunken.core.inventory.PageContainer;
 import net.sunken.core.inventory.runnable.UIRunnableContext;
 import net.sunken.core.util.nbt.NBTItem;
@@ -11,6 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class ElementClickListener implements Listener {
 
@@ -23,8 +25,10 @@ public class ElementClickListener implements Listener {
 
         if (clicked != null) {
             NBTItem nbtItem = new NBTItem(clicked);
-            
-            if (nbtItem.hasKey(ActionableElement.ACTIONABLE_NBT_KEY)) {
+
+            Common.getLogger().log(Level.INFO, nbtItem.getKeys().toString());
+
+            if (nbtItem.getKeys().contains(ActionableElement.ACTIONABLE_NBT_KEY)) {
                 String uuid = nbtItem.getString(ActionableElement.ACTIONABLE_NBT_KEY);
                 ActionableElement actionableElement = actionableElements.getIfPresent(UUID.fromString(uuid));
                 if (actionableElement != null) {
