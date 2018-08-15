@@ -1,6 +1,7 @@
 package net.sunken.lobby.parkour;
 
 import lombok.Getter;
+import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.configuration.Configuration;
 
 import java.util.ArrayList;
@@ -21,6 +22,17 @@ public class ParkourCache {
 
     private void loadParkours(){
 
+        
+    }
+
+    public boolean inParkour(LobbyPlayer player){
+        for(Parkour parkour : this.parkours){
+            if(parkour.getPlayers().containsKey(player.getUUID())){
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
