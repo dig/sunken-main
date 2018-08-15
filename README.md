@@ -23,6 +23,9 @@ Main
 ├── lobby
 │   └── Lobby plugin for main lobbies and gamemode lobbies.
 │
+├── master
+│   └── Master control handles large database calls and server scheduling.
+│
 └── minigameapi
     └── All minigames will include this module.
 ```
