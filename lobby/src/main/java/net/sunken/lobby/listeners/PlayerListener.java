@@ -2,8 +2,6 @@ package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
-import net.sunken.common.trigger.TriggerManager;
-import net.sunken.core.hologram.Hologram;
 import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
@@ -25,7 +23,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerListener implements Listener {

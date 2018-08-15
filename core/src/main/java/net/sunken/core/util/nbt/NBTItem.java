@@ -1,76 +1,53 @@
 package net.sunken.core.util.nbt;
 
-import java.util.HashMap;
 import org.bukkit.inventory.ItemStack;
 
-public class NBTItem {
+public class NBTItem extends NBTCompound {
 
     private ItemStack bukkitItem;
 
     public NBTItem(ItemStack item) {
+        super(null, null);
+        if(item == null){
+            throw new NullPointerException("ItemStack can't be null!");
+        }
         bukkitItem = item.clone();
+    }
+
+    protected Object getCompound() {
+        return NBTReflectionUtil.getItemRootNBTTagCompound(ReflectionMethod.ITEMSTACK_NMSCOPY.run(null, bukkitItem));
+    }
+
+    protected void setCompound(Object compound) {
+        Object stack = ReflectionMethod.ITEMSTACK_NMSCOPY.run(null, bukkitItem);
+        ReflectionMethod.ITEMSTACK_SET_TAG.run(stack, compound);
+        bukkitItem = (ItemStack) ReflectionMethod.ITEMSTACK_BUKKITMIRROR.run(null, stack);
     }
 
     public ItemStack getItem() {
         return bukkitItem;
     }
 
-    public void updateItem(ItemStack item) {
-        this.bukkitItem = item;
+    protected void setItem(ItemStack item) {
+        bukkitItem = item;
     }
-
-    public void setString(String key, String value) {
-        bukkitItem = NBTReflectionUtil.setString(bukkitItem, key, value);
+    
+    
+    /**
+     * This may return true even when the NBT is empty.
+     * 
+     * @return Does the ItemStack have a NBTCompound.
+     */
+    public boolean hasNBTData(){
+        return getCompound() != null;
     }
-
-    public String getString(String key) {
-        return NBTReflectionUtil.getString(bukkitItem, key);
+    
+    public static NBTContainer convertItemtoNBT(ItemStack item){
+        return NBTReflectionUtil.convertNMSItemtoNBTCompound(ReflectionMethod.ITEMSTACK_NMSCOPY.run(null, item));
     }
-
-    public void setInteger(String key, int value) {
-        bukkitItem = NBTReflectionUtil.setInt(bukkitItem, key, value);
-    }
-
-    public Integer getInteger(String key) {
-        return NBTReflectionUtil.getInt(bukkitItem, key);
-    }
-
-    public void setDouble(String key, double value) {
-        bukkitItem = NBTReflectionUtil.setDouble(bukkitItem, key, value);
-    }
-
-    public double getDouble(String key) {
-        return NBTReflectionUtil.getDouble(bukkitItem, key);
-    }
-
-    public void setBoolean(String key, boolean value) {
-        bukkitItem = NBTReflectionUtil.setBoolean(bukkitItem, key, value);
-    }
-
-    public boolean getBoolean(String key) {
-        return NBTReflectionUtil.getBoolean(bukkitItem, key);
-    }
-
-    public boolean hasKey(String key) {
-        return NBTReflectionUtil.hasKey(bukkitItem, key);
-    }
-
-    public static ItemStack addStringTags(ItemStack item, HashMap<String, String> tags) {
-        ItemStack result = item;
-        NBTItem e = new NBTItem(result);
-        for (String s : tags.keySet()) {
-            e.setString(s, tags.get(s));
-        }
-        return e.getItem();
-    }
-
-    public static ItemStack addIntegerTags(ItemStack item, HashMap<String, Integer> tags) {
-        ItemStack result = item;
-        NBTItem e = new NBTItem(result);
-        for (String s : tags.keySet()) {
-            e.setInteger(s, tags.get(s));
-        }
-        return e.getItem();
+    
+    public static ItemStack convertNBTtoItem(NBTCompound comp){
+        return (ItemStack) ReflectionMethod.ITEMSTACK_BUKKITMIRROR.run(null, NBTReflectionUtil.convertNBTCompoundtoNMSItem(comp));
     }
 
 }
