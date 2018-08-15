@@ -32,12 +32,6 @@ public class Page {
         this.title = title;
         this.size = size;
         this.elements = elements;
-
-        elements.forEach((position, element) -> {
-            if (element instanceof ActionableElement) {
-                PageContainer.getActionableElements().put(UUID.randomUUID(), (ActionableElement) element);
-            }
-        });
     }
 
     public static Builder builder(String id) {
@@ -55,7 +49,7 @@ public class Page {
             elements = Maps.newHashMap();
         }
 
-        public Builder(String id) {
+        private Builder(String id) {
             this.id = id;
         }
 

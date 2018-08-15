@@ -25,14 +25,13 @@ public class ElementClickListener implements Listener {
 
         if (clicked != null) {
             NBTItem nbtItem = new NBTItem(clicked);
-
-            Common.getLogger().log(Level.INFO, nbtItem.getKeys().toString());
-
             if (nbtItem.getKeys().contains(ActionableElement.ACTIONABLE_NBT_KEY)) {
                 String uuid = nbtItem.getString(ActionableElement.ACTIONABLE_NBT_KEY);
                 ActionableElement actionableElement = actionableElements.getIfPresent(UUID.fromString(uuid));
                 if (actionableElement != null) {
-                    actionableElement.getRunnable().run(new UIRunnableContext(player));
+                    UIRunnableContext context = new UIRunnableContext(player);
+                    context.setCancelled(e.isCancelled());
+                    actionableElement.getRunnable().run(context);
                 }
             }
         }

@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public class Element {
 
     @Getter
-    private final ItemStack item;
+    protected ItemStack item;
 
     public Element(ItemStack item) {
         this.item = item;

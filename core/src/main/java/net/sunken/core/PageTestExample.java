@@ -22,6 +22,7 @@ public class PageTestExample {
                                 .putElement(1, new ActionableElement(new ItemStack(Material.ACACIA_BUTTON), context -> {
                                     Player observer = context.getObserver();
                                     observer.sendMessage("yo");
+                                    context.setCancelled(true);
                                 }))
                                 .build();
         // add the page to the state container
