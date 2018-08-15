@@ -20,13 +20,16 @@ public class ElementClickListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         ItemStack clicked = e.getCurrentItem();
-        NBTItem nbtItem = new NBTItem(clicked);
 
-        if (nbtItem.hasKey(ActionableElement.ACTIONABLE_NBT_KEY)) {
-            String uuid = nbtItem.getString(ActionableElement.ACTIONABLE_NBT_KEY);
-            ActionableElement actionableElement = actionableElements.getIfPresent(UUID.fromString(uuid));
-            if (actionableElement != null) {
-                actionableElement.getRunnable().run(new UIRunnableContext(player));
+        if (clicked != null) {
+            NBTItem nbtItem = new NBTItem(clicked);
+            
+            if (nbtItem.hasKey(ActionableElement.ACTIONABLE_NBT_KEY)) {
+                String uuid = nbtItem.getString(ActionableElement.ACTIONABLE_NBT_KEY);
+                ActionableElement actionableElement = actionableElements.getIfPresent(UUID.fromString(uuid));
+                if (actionableElement != null) {
+                    actionableElement.getRunnable().run(new UIRunnableContext(player));
+                }
             }
         }
     }
