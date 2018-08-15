@@ -10,7 +10,7 @@ public class UIRunnableContext {
     private final Player observer;
     @Getter
     @Setter
-    private boolean cancelled = false;
+    private boolean cancelled = true;
 
     public UIRunnableContext(Player observer) {
         this.observer = observer;

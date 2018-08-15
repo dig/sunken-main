@@ -22,14 +22,27 @@ public class PageTestExample {
                                 .putElement(1, new ActionableElement(new ItemStack(Material.ACACIA_BUTTON), context -> {
                                     Player observer = context.getObserver();
                                     observer.sendMessage("yo");
-                                    context.setCancelled(true);
+                                    return context;
                                 }))
                                 .build();
         // add the page to the state container
         container.addPage(mainMenuPage);
 
+        Page anotherPage = Page.builder("another-menu")
+                                .title("Some other shit page")
+                                .size(54)
+                                .putElement(0, new Element(new ItemStack(Material.BEDROCK)))
+                                .putElement(1, new ActionableElement(new ItemStack(Material.BIRCH_BOAT), context -> {
+                                    Player observer = context.getObserver();
+                                    observer.sendMessage("another page");
+                                    container.openPage(observer, "main-menu");
+                                    return context;
+                                }))
+                                .build();
+        container.addPage(anotherPage);
+
         // set it as the page to launch with
-        container.setInitialPage(mainMenuPage);
+        container.setInitialPage(anotherPage);
 
         // launch
         container.launchFor(player);

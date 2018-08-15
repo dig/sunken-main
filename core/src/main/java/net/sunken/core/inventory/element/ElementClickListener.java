@@ -1,8 +1,5 @@
 package net.sunken.core.inventory.element;
 
-import com.google.common.cache.Cache;
-import net.sunken.common.Common;
-import net.sunken.core.inventory.PageContainer;
 import net.sunken.core.inventory.runnable.UIRunnableContext;
 import net.sunken.core.util.nbt.NBTItem;
 import org.bukkit.entity.Player;
@@ -12,11 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class ElementClickListener implements Listener {
-
-    private static final Cache<UUID, ActionableElement> actionableElements = PageContainer.getActionableElements();
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
@@ -25,13 +19,20 @@ public class ElementClickListener implements Listener {
 
         if (clicked != null) {
             NBTItem nbtItem = new NBTItem(clicked);
-            if (nbtItem.getKeys().contains(ActionableElement.ACTIONABLE_NBT_KEY)) {
-                String uuid = nbtItem.getString(ActionableElement.ACTIONABLE_NBT_KEY);
-                ActionableElement actionableElement = actionableElements.getIfPresent(UUID.fromString(uuid));
-                if (actionableElement != null) {
-                    UIRunnableContext context = new UIRunnableContext(player);
-                    context.setCancelled(e.isCancelled());
-                    actionableElement.getRunnable().run(context);
+            if (nbtItem.getKeys().contains(Element.ELEMENT_NBT_KEY)) {
+                String uuid = nbtItem.getString(Element.ELEMENT_NBT_KEY);
+                Element element = Element.getElementRegistry().getIfPresent(UUID.fromString(uuid));
+
+                if (element != null) {
+                    e.setCancelled(true); // cancel by default since it's a GUI
+
+                    if (element instanceof ActionableElement) {
+                        UIRunnableContext context = new UIRunnableContext(player);
+                        context.setCancelled(e.isCancelled());
+
+                        UIRunnableContext modifiedContext = ((ActionableElement) element).getRunnable().run(context);
+                        e.setCancelled(modifiedContext.isCancelled());
+                    }
                 }
             }
         }
