@@ -15,15 +15,15 @@ import org.bukkit.inventory.EquipmentSlot;
 public class NPCListener implements Listener {
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event){
+    public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        for(World w : Bukkit.getWorlds()){
-            for(Entity ent : w.getEntities()){
-                if(ent instanceof NPC){
+        for (World w : Bukkit.getWorlds()) {
+            for (Entity ent : w.getEntities()) {
+                if (ent instanceof NPC) {
                     NPC npc = (NPC) ent;
 
-                    if(npc.isVisible()){
+                    if (npc.isVisible()) {
                         npc.showToPlayer(player);
                     }
                 }
@@ -32,31 +32,34 @@ public class NPCListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEntityEvent event){
+    public void onPlayerInteract(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
-        if(event.getRightClicked() instanceof NPC){
+        if (event.getRightClicked() instanceof NPC) {
             NPC target = (NPC) event.getRightClicked();
-            Bukkit.getPluginManager().callEvent(new NPCInteractEvent(player, target, event.getHand(), NPCInteractEvent.NPCInteractType.INTERACT));
+            Bukkit.getPluginManager().callEvent(new NPCInteractEvent(player, target, event
+                    .getHand(), NPCInteractEvent.NPCInteractType.INTERACT));
         }
     }
 
     @EventHandler
-    public void onPlayerInteractAt(PlayerInteractAtEntityEvent event){
+    public void onPlayerInteractAt(PlayerInteractAtEntityEvent event) {
         Player player = event.getPlayer();
 
-        if(event.getRightClicked() instanceof NPC){
+        if (event.getRightClicked() instanceof NPC) {
             NPC target = (NPC) event.getRightClicked();
-            Bukkit.getPluginManager().callEvent(new NPCInteractEvent(player, target, event.getHand(), NPCInteractEvent.NPCInteractType.INTERACT_AT));
+            Bukkit.getPluginManager().callEvent(new NPCInteractEvent(player, target, event
+                    .getHand(), NPCInteractEvent.NPCInteractType.INTERACT_AT));
         }
     }
 
     @EventHandler
-    public void onPlayerDamage(EntityDamageByEntityEvent event){
-        if(event.getDamager() instanceof Player && event.getEntity() instanceof NPC){
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof NPC) {
             Player damager = (Player) event.getDamager();
             NPC target = (NPC) event.getEntity();
-            Bukkit.getPluginManager().callEvent(new NPCInteractEvent(damager, target, EquipmentSlot.HAND, NPCInteractEvent.NPCInteractType.ATTACK));
+            Bukkit.getPluginManager()
+                  .callEvent(new NPCInteractEvent(damager, target, EquipmentSlot.HAND, NPCInteractEvent.NPCInteractType.ATTACK));
         }
     }
 

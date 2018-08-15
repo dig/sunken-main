@@ -13,9 +13,4 @@ public class RunnableAction extends Action {
     public RunnableAction(PageContainer container, ActionType actionType) {
         super(container, actionType);
     }
-
-    public interface Runnable {
-
-        void run(RunnableAction context);
-    }
 }

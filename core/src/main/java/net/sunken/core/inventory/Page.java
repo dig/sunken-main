@@ -16,11 +16,18 @@ public class Page {
     private final String title;
     @Getter
     private final int size;
+    @Getter
+    private final Map<Integer, Element> elements;
 
-    public Page(String id, String title, int size) {
+    private Page(String id,
+                 String title,
+                 int size,
+                 Map<Integer, Element> elements) {
+
         this.id = id;
         this.title = title;
         this.size = size;
+        this.elements = elements;
     }
 
     public static Builder builder(String id) {
@@ -53,6 +60,7 @@ public class Page {
         }
 
         public Builder putElement(int position, Element element) {
+            checkState(position >= 0 && position <= 53, "position must be between 0 and 53");
             elements.put(position, element);
             return this;
         }
@@ -62,7 +70,7 @@ public class Page {
             checkNotNull(title, "title cannot be null");
             checkState(size <= 54, "size cannot be bigger than 54");
 
-            return new Page(id, title, size);
+            return new Page(id, title, size, elements);
         }
     }
 }

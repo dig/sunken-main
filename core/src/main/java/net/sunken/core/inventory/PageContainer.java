@@ -42,6 +42,8 @@ public class PageContainer {
         Page page = this.pages.get(pageId);
         Inventory inventory = Bukkit.createInventory(null, page.getSize(), page.getTitle());
         // add items to the inventory
+        Map<Integer, Element> elements = page.getElements();
+        elements.forEach((position, element) -> inventory.setItem(position, element.getItem()));
 
         player.openInventory(inventory);
     }

@@ -15,7 +15,7 @@ public class Core {
     private static Plugin plugin;
 
     public void onCoreLoad(Plugin plugin) {
-        this.plugin = plugin;
+        Core.plugin = plugin;
         this.registerEvents();
     }
 

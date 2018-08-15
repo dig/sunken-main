@@ -1,4 +1,6 @@
 package net.sunken.core.inventory;
 
-public class UIRunnable {
+public interface UIRunnable {
+
+    void run(RunnableAction context);
 }
