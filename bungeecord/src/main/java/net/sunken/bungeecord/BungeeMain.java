@@ -36,6 +36,11 @@ public class BungeeMain extends Plugin {
         Common.getInstance().getServerCache().updateCache();
     }
 
+    @Override
+    public void onDisable(){
+        Common.getInstance().onCommonDisable();
+    }
+
     private void registerEvents(){
         PluginManager pm = this.getProxy().getPluginManager();
 

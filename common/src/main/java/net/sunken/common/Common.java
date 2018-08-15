@@ -95,7 +95,7 @@ public class Common {
         return serverChangeInformer;
     }
 
-    private void onCommonDisable() {
+    public void onCommonDisable() {
         this.mongo.disconnect();
         this.redis.disconnect();
     }

@@ -69,16 +69,17 @@ public class LobbyPlayer extends AbstractPlayer {
 
     public void updateParkourTime(String id, Long time){
         List<Document> parkours = this.getPersistedParkourTimes();
+        boolean found = false;
 
-        if(this.parkourTimes.containsKey(id)){
-            for(Document parkour : parkours) {
-                if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
-                    parkour.put(PARKOUR_TIME_FIELD, time);
-                    break;
-                }
+        for(Document parkour : parkours) {
+            if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
+                parkour.put(PARKOUR_TIME_FIELD, time);
+                found = true;
+                break;
             }
         }
-        else{
+
+        if(!found){
             parkours.add(new Document(ImmutableMap.of(PARKOUR_ID_FIELD, id, PARKOUR_TIME_FIELD, time)));
         }
 
