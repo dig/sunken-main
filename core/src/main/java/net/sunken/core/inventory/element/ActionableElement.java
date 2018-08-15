@@ -5,6 +5,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ActionableElement extends Element {
 
+    public static final String ACTIONABLE_NBT_KEY = "SunkenActionable";
+
     @Getter
     private final Action action;
     @Getter

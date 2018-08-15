@@ -1,9 +1,13 @@
 package net.sunken.core.inventory;
 
 import com.google.common.collect.Maps;
+import lombok.AccessLevel;
 import lombok.Getter;
+import net.sunken.core.inventory.element.ActionableElement;
+import net.sunken.core.inventory.element.Element;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -16,7 +20,7 @@ public class Page {
     private final String title;
     @Getter
     private final int size;
-    @Getter
+    @Getter(value = AccessLevel.PACKAGE)
     private final Map<Integer, Element> elements;
 
     private Page(String id,
@@ -28,6 +32,12 @@ public class Page {
         this.title = title;
         this.size = size;
         this.elements = elements;
+
+        elements.forEach((position, element) -> {
+            if (element instanceof ActionableElement) {
+                PageContainer.getActionableElements().put(UUID.randomUUID(), (ActionableElement) element);
+            }
+        });
     }
 
     public static Builder builder(String id) {

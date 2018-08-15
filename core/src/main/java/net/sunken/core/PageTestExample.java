@@ -1,8 +1,9 @@
 package net.sunken.core;
 
-import net.sunken.core.inventory.Element;
 import net.sunken.core.inventory.Page;
 import net.sunken.core.inventory.PageContainer;
+import net.sunken.core.inventory.element.ActionableElement;
+import net.sunken.core.inventory.element.Element;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +19,10 @@ public class PageTestExample {
                                 .title("Main menu of some kind")
                                 .size(54)
                                 .putElement(0, new Element(new ItemStack(Material.BEACON)))
+                                .putElement(1, new ActionableElement(new ItemStack(Material.ACACIA_BUTTON), context -> {
+                                    Player observer = context.getObserver();
+                                    observer.sendMessage("yo");
+                                }))
                                 .build();
         // add the page to the state container
         container.addPage(mainMenuPage);

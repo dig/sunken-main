@@ -62,5 +62,4 @@ public class NPCListener implements Listener {
                   .callEvent(new NPCInteractEvent(damager, target, EquipmentSlot.HAND, NPCInteractEvent.NPCInteractType.ATTACK));
         }
     }
-
 }

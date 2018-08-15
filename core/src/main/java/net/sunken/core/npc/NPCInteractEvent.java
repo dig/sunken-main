@@ -12,8 +12,7 @@ public class NPCInteractEvent extends Event {
 
         INTERACT(),
         INTERACT_AT(),
-        ATTACK();
-
+        ATTACK()
     }
 
     @Getter
@@ -42,5 +41,4 @@ public class NPCInteractEvent extends Event {
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
-
 }
