@@ -9,6 +9,7 @@ import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.parkour.Parkour;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -37,6 +38,10 @@ public class LobbyPlayer extends AbstractPlayer {
 
     public Player toPlayer(){
         return Bukkit.getPlayer(this.getUUID());
+    }
+
+    public ChatColor getRankColour(){
+        return ChatColor.valueOf(this.rank.getColour());
     }
 
     private List<Document> getPersistedParkourTimes(){
@@ -79,7 +84,7 @@ public class LobbyPlayer extends AbstractPlayer {
         }
 
         this.parkourTimes.put(id, time);
-        playerCollection.replaceOne(new Document(UUID_FIELD, uuid), playerDocument);
+        this.playerCollection.replaceOne(new Document(UUID_FIELD, this.uuid), playerDocument);
     }
 
 }

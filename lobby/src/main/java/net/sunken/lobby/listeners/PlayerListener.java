@@ -2,12 +2,14 @@ package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.core.util.NametagUtil;
 import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
 import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,12 +62,19 @@ public class PlayerListener implements Listener {
         for(int i = 0; i<Constants.JOIN_MESSAGES.size(); i++){
             player.sendMessage(MessageUtil.getCenteredMessage(Constants.JOIN_MESSAGES.get(i), MessageUtil.CENTER_PX));
         }
+
+        // Rank colours
+        player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
+        NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
         event.setQuitMessage("");
+
+        // Remove team created for nametag colour
+        NametagUtil.changePlayerName(player, ChatColor.GRAY, NametagUtil.TeamAction.DESTROY);
 
         ConcurrentHashMap<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
         players.get(player.getUniqueId().toString()).cleanup();

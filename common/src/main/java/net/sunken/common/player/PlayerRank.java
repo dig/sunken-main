@@ -7,6 +7,7 @@ public enum PlayerRank {
     USER(0, "GRAY"),
     MODERATOR(5, "BLUE"),
     ADMIN(8, "RED"),
+    DEVELOPER(9, "YELLOW"),
     OWNER(10, "DARK_RED");
 
     @Getter
