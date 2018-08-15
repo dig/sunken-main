@@ -58,7 +58,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.emberthorne.master.Main</mainClass>
+                            <mainClass>net.sunken.master.Master</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
