@@ -8,6 +8,7 @@ public class NetworkFirstJoinAchievement extends Achievement {
         super("NETWORK_FIRST_JOIN",
               "Network First Join",
               "Join the network for the first time",
-              new NetworkJoinTrigger.Condition(false));
+              new NetworkJoinTrigger.Condition(false),
+              1);
     }
 }

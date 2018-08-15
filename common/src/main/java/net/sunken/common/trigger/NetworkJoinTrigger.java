@@ -11,7 +11,7 @@ public class NetworkJoinTrigger extends Trigger {
             if (listener.getSuccessCondition() instanceof Condition) {
                 Condition condition = (Condition) listener.getSuccessCondition();
                 if (condition.isProposalMet(new Proposal(joinedBefore))) {
-                    listener.onSuccessfulTrigger(player);
+                    listener.onSuccessfulTrigger(player, 1);
                 }
             }
         }

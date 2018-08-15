@@ -20,19 +20,27 @@ public class Achievement implements AchievementInformation, TriggerListener {
     /** The condition required that has to be met for this achievement to be awarded */
     @Getter
     private final Trigger.Condition condition;
+    @Getter
+    private final int targetProgress;
 
-    public Achievement(String id, String name, String description, Trigger.Condition condition) {
+    public Achievement(String id,
+                       String name,
+                       String description,
+                       Trigger.Condition condition,
+                       int targetProgress) {
+
         this.id = id;
         this.name = name;
         this.description = description;
         this.condition = condition;
+        this.targetProgress = targetProgress;
     }
 
     @Override
-    public void onSuccessfulTrigger(AbstractPlayer player) {
-        Common.getLogger()
-              .log(Level.INFO, "Granting player " + player.getName() + " the " + this.getId() + " achievement");
-        player.grantAchievement(this);
+    public void onSuccessfulTrigger(AbstractPlayer player, int progressToAdd) {
+        Common.getLogger().log(Level.INFO, "Attempting to progress player " + player.getName() +
+                ", the " + this.getId() + " achievement by " + progressToAdd);
+        player.progressAchievement(this, progressToAdd);
     }
 
     @Override

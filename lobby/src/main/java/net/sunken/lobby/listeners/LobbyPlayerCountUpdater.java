@@ -15,6 +15,7 @@ public class LobbyPlayerCountUpdater implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onQuit(PlayerQuitEvent event) { ServerInstance.instance().inform(Bukkit.getOnlinePlayers().size() - 1);
+    public void onQuit(PlayerQuitEvent event) {
+        ServerInstance.instance().inform(Bukkit.getOnlinePlayers().size() - 1);
     }
 }

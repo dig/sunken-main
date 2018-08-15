@@ -24,6 +24,8 @@ public abstract class AbstractPlayer {
 
     private static final String ACHIEVEMENTS_FIELD = "achievements";
     private static final String ACHIEVEMENTS_ID_FIELD = "id";
+    private static final String ACHIEVEMENTS_PROGRESS_FIELD = "progress";
+    private static final String ACHIEVEMENTS_DONE_FIELD = "done";
 
     private MongoCollection<Document> playerCollection;
     private Document playerDocument;
@@ -73,13 +75,32 @@ public abstract class AbstractPlayer {
         }
     }
 
-    public void grantAchievement(Achievement achievement) {
+    public void progressAchievement(Achievement achievement, int progressToAdd) {
         String achievementId = achievement.getId();
+        List<Document> persistedAchievements = this.getPersistedAchievements();
+        // this achievement has not yet been progressed
         if (!this.achievements.containsKey(achievementId)) {
-            List<Document> persistedAchievements = this.getPersistedAchievements();
-            persistedAchievements.add(new Document(ACHIEVEMENTS_ID_FIELD, achievementId));
+            persistedAchievements.add(new Document(ImmutableMap.of(ACHIEVEMENTS_ID_FIELD, achievementId,
+                                                                   ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd,
+                                                                   ACHIEVEMENTS_DONE_FIELD, false)));
             playerCollection.replaceOne(new Document(UUID_FIELD, uuid), playerDocument);
             this.achievements.put(achievementId, achievement);
+        } else {
+            for (Document persistedAchievement : persistedAchievements) {
+                if (persistedAchievement.getString(ACHIEVEMENTS_ID_FIELD).equals(achievementId)) {
+                    boolean done = persistedAchievement.getBoolean(ACHIEVEMENTS_DONE_FIELD);
+                    if (!done) {
+                        persistedAchievement.put(ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd);
+                        int targetProgress = achievement.getTargetProgress();
+                        if (persistedAchievement.getInteger(ACHIEVEMENTS_PROGRESS_FIELD) >= targetProgress) {
+                            persistedAchievement.put(ACHIEVEMENTS_DONE_FIELD, true);
+                        }
+                        playerCollection.replaceOne(new Document(UUID_FIELD, uuid), playerDocument);
+                        this.achievements.put(achievementId, achievement);
+                    }
+                    break;
+                }
+            }
         }
     }
 
