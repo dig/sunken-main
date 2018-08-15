@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,23 +56,32 @@ public class Parkour {
 
     public void addPlayer(LobbyPlayer player){
         this.players.put(player.getUUID(), System.currentTimeMillis());
-        player.toPlayer().sendMessage("starting parkour");
+
+        player.sendMessage("&aParkour started! Finish the course in as little time as possible.");
     }
 
     public void stopPlayer(LobbyPlayer player, boolean finished){
         if(finished){
-            long time = System.currentTimeMillis() - this.players.get(player.getUUID());
-            player.updateParkourTime(this.id, time);
-            player.toPlayer().sendMessage("end");
+            double time = System.currentTimeMillis() - this.players.get(player.getUUID());
+
+            DecimalFormat df = new DecimalFormat("0.000");
+            player.sendMessage("&aParkour finished! You finished in " + df.format((time / 1000)) + " seconds.");
+
+            if(time < player.getBestTime(this.id)){
+                player.updateParkourTime(this.id,(long) time);
+                player.sendMessage("&a&lNew personal best!");
+            }
         }
 
         players.remove(player.getUUID());
         player.toPlayer().teleport(this.resetPoint);
-        player.toPlayer().sendMessage("finished parkour");
     }
 
     public void setCheckpoint(LobbyPlayer player, int index){
-        player.toPlayer().sendMessage("checkpoint " + index);
+        long time = System.currentTimeMillis() - this.players.get(player.getUUID());
+
+        DecimalFormat df = new DecimalFormat("0.000");
+        player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format((time / 1000)) + " seconds.");
     }
 
 }
