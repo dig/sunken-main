@@ -15,6 +15,8 @@ public class ParkourCache {
     public ParkourCache(Configuration config){
         this.parkours = new ArrayList<Parkour>();
         this.config = config;
+
+        this.loadParkours();
     }
 
     private void loadParkours(){

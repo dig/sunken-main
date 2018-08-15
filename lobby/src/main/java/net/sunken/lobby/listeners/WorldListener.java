@@ -1,6 +1,7 @@
 package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
+import net.sunken.core.PageTestExample;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -32,6 +33,8 @@ public class WorldListener implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent event){
         Player player = event.getPlayer();
+
+        PageTestExample.testInventoryFramework(player);
 
         if(player.getGameMode() != GameMode.CREATIVE){
             event.setCancelled(true);
