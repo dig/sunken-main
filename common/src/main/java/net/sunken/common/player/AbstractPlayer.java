@@ -17,32 +17,32 @@ import static com.mongodb.client.model.Filters.eq;
 
 public abstract class AbstractPlayer {
 
-    private static Common common = Common.getInstance();
+    protected static Common common = Common.getInstance();
 
-    private static final String UUID_FIELD = "uuid";
-    private static final String NAME_FIELD = "name";
+    protected static final String UUID_FIELD = "uuid";
+    protected static final String NAME_FIELD = "name";
 
-    private static final String ACHIEVEMENTS_FIELD = "achievements";
-    private static final String ACHIEVEMENTS_ID_FIELD = "id";
-    private static final String ACHIEVEMENTS_PROGRESS_FIELD = "progress";
-    private static final String ACHIEVEMENTS_DONE_FIELD = "done";
+    protected static final String ACHIEVEMENTS_FIELD = "achievements";
+    protected static final String ACHIEVEMENTS_ID_FIELD = "id";
+    protected static final String ACHIEVEMENTS_PROGRESS_FIELD = "progress";
+    protected static final String ACHIEVEMENTS_DONE_FIELD = "done";
 
-    private MongoCollection<Document> playerCollection;
-    private Document playerDocument;
+    protected MongoCollection<Document> playerCollection;
+    protected Document playerDocument;
 
-    private String uuid;
+    protected String uuid;
     @Getter
-    private String name;
+    protected String name;
 
     @Getter
-    private boolean firstJoin;
+    protected boolean firstJoin;
 
     /**
      * ID of the achievement mapped against the achievement itself for O(1) achievement retrieval
      * NOTE: These are achieved achievements, not all the achievements themselves
      */
     @Getter
-    private Map<String, Achievement> achievements;
+    protected Map<String, Achievement> achievements;
 
     public AbstractPlayer(String uuid, String name) {
         this.uuid = uuid;

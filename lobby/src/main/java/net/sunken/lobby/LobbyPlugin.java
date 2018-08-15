@@ -7,6 +7,7 @@ import net.sunken.core.Core;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
 import net.sunken.lobby.listeners.WorldListener;
+import net.sunken.lobby.parkour.ParkourCache;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,8 @@ public class LobbyPlugin extends JavaPlugin {
 
     @Getter
     private static LobbyPlugin instance;
+
+    private ParkourCache parkourCache;
 
     @Override
     public void onEnable() {
@@ -26,6 +29,8 @@ public class LobbyPlugin extends JavaPlugin {
                 Bukkit.getMaxPlayers(), Bukkit.getPort());
 
         Core.getInstance().onCoreLoad(this);
+
+        parkourCache = new ParkourCache(this.getConfig());
 
         this.registerEvents();
     }
@@ -40,5 +45,9 @@ public class LobbyPlugin extends JavaPlugin {
         pm.registerEvents(new LobbyPlayerCountUpdater(), this);
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new WorldListener(), this);
+    }
+
+    public ParkourCache getParkourCache(){
+        return this.parkourCache;
     }
 }
