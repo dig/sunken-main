@@ -34,8 +34,6 @@ public class WorldListener implements Listener {
     public void onBreak(BlockBreakEvent event){
         Player player = event.getPlayer();
 
-        PageTestExample.testInventoryFramework(player);
-
         if(player.getGameMode() != GameMode.CREATIVE){
             event.setCancelled(true);
         }

@@ -21,6 +21,7 @@ public class Parkour {
     private String id;
     @Getter
     private HashMap<UUID, Long> players;
+    private HashMap<UUID, Integer> checkpoint;
 
     @Getter
     private Material mainBlock;
@@ -42,6 +43,7 @@ public class Parkour {
                     Location resetPoint, boolean timed){
         this.id = id;
         this.players = new HashMap<>();
+        this.checkpoint = new HashMap<>();
 
         this.mainBlock = mainBlock;
         this.allowedMaterials = allowedMaterials;
@@ -56,6 +58,7 @@ public class Parkour {
 
     public void addPlayer(LobbyPlayer player){
         this.players.put(player.getUUID(), System.currentTimeMillis());
+        this.checkpoint.put(player.getUUID(), 0);
 
         player.sendMessage("&aParkour started! Finish the course in as little time as possible.");
     }
@@ -73,6 +76,7 @@ public class Parkour {
             }
         }
 
+        checkpoint.remove(player.getUUID());
         players.remove(player.getUUID());
         player.toPlayer().teleport(this.resetPoint);
     }
@@ -80,8 +84,12 @@ public class Parkour {
     public void setCheckpoint(LobbyPlayer player, int index){
         long time = System.currentTimeMillis() - this.players.get(player.getUUID());
 
-        DecimalFormat df = new DecimalFormat("0.000");
-        player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format(((double) time / 1000)) + " seconds.");
+        if((index + 1) > checkpoint.get(player.getUUID())){
+            checkpoint.put(player.getUUID(), (index + 1));
+
+            DecimalFormat df = new DecimalFormat("0.000");
+            player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format(((double) time / 1000)) + " seconds.");
+        }
     }
 
 }
