@@ -10,6 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Hologram {
@@ -27,12 +28,13 @@ public class Hologram {
         this.lines = lines;
         this.spawned = false;
 
+        this.entities = new ArrayList<LivingEntity>();
         this.spawnEntities();
     }
 
     private void spawnEntities(){
         if(this.lines.size() > 0 && !this.spawned){
-            double offsetY = 0;
+            double offsetY = (0.25 * this.lines.size());
 
             for(String line : this.lines){
                 ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offsetY, 0), EntityType.ARMOR_STAND);
@@ -45,7 +47,7 @@ public class Hologram {
                 entity.setMetadata("Hologram", new FixedMetadataValue(Core.getPlugin(), true));
 
                 this.entities.add((LivingEntity) entity);
-                offsetY += 0.25;
+                offsetY -= 0.25;
             }
 
             this.spawned = true;

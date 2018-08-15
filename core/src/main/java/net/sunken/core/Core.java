@@ -1,6 +1,7 @@
 package net.sunken.core;
 
 import lombok.Getter;
+import net.sunken.core.hologram.HologramInteractListener;
 import net.sunken.core.npc.NPCListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -26,6 +27,7 @@ public class Core {
     private void registerEvents() {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new NPCListener(), plugin);
+        pm.registerEvents(new HologramInteractListener(), plugin);
     }
 
     private Core() {
