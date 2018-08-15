@@ -1,13 +1,10 @@
 package net.sunken.lobby.player;
 
 import com.google.common.collect.ImmutableMap;
-import lombok.Getter;
-import net.sunken.common.achievements.Achievement;
-import net.sunken.common.achievements.AchievementRegistry;
+import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
-import net.sunken.lobby.LobbyPlugin;
-import net.sunken.lobby.parkour.Parkour;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,8 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
 
 public class LobbyPlayer extends AbstractPlayer {
 
@@ -44,6 +40,10 @@ public class LobbyPlayer extends AbstractPlayer {
         return ChatColor.valueOf(this.rank.getColour());
     }
 
+    public void sendMessage(String message){
+        this.toPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+    }
+
     private List<Document> getPersistedParkourTimes(){
         if(this.playerDocument.containsKey(PARKOUR_FIELD)){
             return this.playerDocument.get(PARKOUR_FIELD, List.class);
@@ -64,7 +64,7 @@ public class LobbyPlayer extends AbstractPlayer {
             return this.parkourTimes.get(id);
         }
 
-        return (long) 0;
+        return Long.MAX_VALUE;
     }
 
     public void updateParkourTime(String id, Long time){
@@ -73,7 +73,6 @@ public class LobbyPlayer extends AbstractPlayer {
         if(this.parkourTimes.containsKey(id)){
             for(Document parkour : parkours) {
                 if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
-                    parkour.remove(PARKOUR_TIME_FIELD);
                     parkour.put(PARKOUR_TIME_FIELD, time);
                     break;
                 }
@@ -84,7 +83,9 @@ public class LobbyPlayer extends AbstractPlayer {
         }
 
         this.parkourTimes.put(id, time);
-        this.playerCollection.replaceOne(new Document(UUID_FIELD, this.uuid), playerDocument);
+
+        Bson updateDocument = new Document("$set", new Document(PARKOUR_FIELD, parkours));
+        this.playerCollection.updateOne(new Document(UUID_FIELD, this.uuid), updateDocument);
     }
 
 }
