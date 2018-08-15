@@ -15,6 +15,7 @@
         <module>lobby</module>
         <module>minigameapi</module>
         <module>bungeecord</module>
+        <module>master</module>
     </modules>
 
     <dependencies>
