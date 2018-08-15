@@ -21,6 +21,7 @@ public abstract class AbstractPlayer {
 
     protected static final String UUID_FIELD = "uuid";
     protected static final String NAME_FIELD = "name";
+    protected static final String RANK_FIELD = "rank";
 
     protected static final String ACHIEVEMENTS_FIELD = "achievements";
     protected static final String ACHIEVEMENTS_ID_FIELD = "id";
@@ -33,6 +34,8 @@ public abstract class AbstractPlayer {
     protected String uuid;
     @Getter
     protected String name;
+    @Getter
+    protected PlayerRank rank;
 
     @Getter
     protected boolean firstJoin;
@@ -47,6 +50,7 @@ public abstract class AbstractPlayer {
     public AbstractPlayer(String uuid, String name) {
         this.uuid = uuid;
         this.name = name;
+        this.rank = PlayerRank.USER;
         this.firstJoin = false;
 
         this.playerCollection = common.getMongo()
@@ -61,10 +65,13 @@ public abstract class AbstractPlayer {
             Document playerDocument = new Document(ImmutableMap.of(
                     UUID_FIELD, uuid,
                     NAME_FIELD, name,
+                    RANK_FIELD, rank.toString(),
                     ACHIEVEMENTS_FIELD, new ArrayList<Document>()
             ));
             playerCollection.insertOne(playerDocument);
             this.playerDocument = playerDocument;
+        } else {
+            this.rank = PlayerRank.valueOf(this.playerDocument.getString(RANK_FIELD));
         }
 
         this.achievements = new HashMap<>();
