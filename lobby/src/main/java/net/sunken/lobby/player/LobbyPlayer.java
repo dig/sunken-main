@@ -1,6 +1,7 @@
 package net.sunken.lobby.player;
 
 import com.google.common.collect.ImmutableMap;
+import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 public class LobbyPlayer extends AbstractPlayer {
 
@@ -62,7 +64,7 @@ public class LobbyPlayer extends AbstractPlayer {
             return this.parkourTimes.get(id);
         }
 
-        return (long) 0;
+        return Long.MAX_VALUE;
     }
 
     public void updateParkourTime(String id, Long time){
@@ -71,7 +73,6 @@ public class LobbyPlayer extends AbstractPlayer {
         if(this.parkourTimes.containsKey(id)){
             for(Document parkour : parkours) {
                 if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
-                    parkour.remove(PARKOUR_TIME_FIELD);
                     parkour.put(PARKOUR_TIME_FIELD, time);
                     break;
                 }

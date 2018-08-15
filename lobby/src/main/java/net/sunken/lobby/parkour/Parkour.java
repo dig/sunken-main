@@ -62,13 +62,13 @@ public class Parkour {
 
     public void stopPlayer(LobbyPlayer player, boolean finished){
         if(finished){
-            double time = System.currentTimeMillis() - this.players.get(player.getUUID());
+            long time = System.currentTimeMillis() - this.players.get(player.getUUID());
 
             DecimalFormat df = new DecimalFormat("0.000");
-            player.sendMessage("&aParkour finished! You finished in " + df.format((time / 1000)) + " seconds.");
+            player.sendMessage("&aParkour finished! You finished in " + df.format(((double) time / 1000)) + " seconds.");
 
             if(time < player.getBestTime(this.id)){
-                player.updateParkourTime(this.id,(long) time);
+                player.updateParkourTime(this.id, time);
                 player.sendMessage("&a&lNew personal best!");
             }
         }
@@ -81,7 +81,7 @@ public class Parkour {
         long time = System.currentTimeMillis() - this.players.get(player.getUUID());
 
         DecimalFormat df = new DecimalFormat("0.000");
-        player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format((time / 1000)) + " seconds.");
+        player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format(((double) time / 1000)) + " seconds.");
     }
 
 }
