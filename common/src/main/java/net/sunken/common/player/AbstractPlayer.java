@@ -77,12 +77,13 @@ public abstract class AbstractPlayer {
 
     public void progressAchievement(Achievement achievement, int progressToAdd) {
         String achievementId = achievement.getId();
+        int targetProgress = achievement.getTargetProgress();
         List<Document> persistedAchievements = this.getPersistedAchievements();
         // this achievement has not yet been progressed
         if (!this.achievements.containsKey(achievementId)) {
             persistedAchievements.add(new Document(ImmutableMap.of(ACHIEVEMENTS_ID_FIELD, achievementId,
                                                                    ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd,
-                                                                   ACHIEVEMENTS_DONE_FIELD, false)));
+                                                                   ACHIEVEMENTS_DONE_FIELD, progressToAdd >= targetProgress)));
             playerCollection.replaceOne(new Document(UUID_FIELD, uuid), playerDocument);
             this.achievements.put(achievementId, achievement);
         } else {
@@ -91,7 +92,6 @@ public abstract class AbstractPlayer {
                     boolean done = persistedAchievement.getBoolean(ACHIEVEMENTS_DONE_FIELD);
                     if (!done) {
                         persistedAchievement.put(ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd);
-                        int targetProgress = achievement.getTargetProgress();
                         if (persistedAchievement.getInteger(ACHIEVEMENTS_PROGRESS_FIELD) >= targetProgress) {
                             persistedAchievement.put(ACHIEVEMENTS_DONE_FIELD, true);
                         }
