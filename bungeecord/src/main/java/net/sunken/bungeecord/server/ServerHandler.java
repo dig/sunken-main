@@ -15,7 +15,7 @@ public class ServerHandler {
 
     @Nullable
     public static ServerObject getFreeServer(ServerType server) {
-        Set<ServerObject> lobbies = Common.getInstance().getServerCache().getCache(server);
+        List<ServerObject> lobbies = Common.getInstance().getServerCache().getCache(server);
 
         List<ServerObject> sortedViaPlayerCount = lobbies.stream()
                 .sorted(Comparator.comparing(ServerObject::getPlayerCount))

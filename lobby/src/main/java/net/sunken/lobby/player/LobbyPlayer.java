@@ -72,8 +72,6 @@ public class LobbyPlayer extends AbstractPlayer {
         boolean found = false;
 
         for(Document parkour : parkours) {
-            Common.getLogger().log(Level.INFO, parkour.getString(PARKOUR_ID_FIELD));
-
             if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
                 parkour.put(PARKOUR_TIME_FIELD, time);
 

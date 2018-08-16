@@ -10,6 +10,7 @@ public class ServerRedisHelper {
     public static final String PLAYER_COUNT_KEY = "player_count";
     public static final String SERVER_IP_KEY = "ip";
     public static final String SERVER_PORT_KEY = "port";
+    public static final String SERVER_CREATED_KEY = "created";
 
     public static final String SERVER_CACHE_CHANNEL = "server_cache";
     public static final String UPDATE_SERVER_CACHE = "UPDATE_SERVER_CACHE";
