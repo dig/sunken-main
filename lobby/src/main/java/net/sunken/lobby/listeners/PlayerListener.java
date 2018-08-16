@@ -53,7 +53,7 @@ public class PlayerListener implements Listener {
         // Reset player
         player.getInventory().clear();
         player.getActivePotionEffects().clear();
-        player.setGameMode(GameMode.SURVIVAL);
+        player.setGameMode(GameMode.ADVENTURE);
 
         // Tab list
         TabListUtil.sendTabTitle(player, Constants.TAB_TOP, Constants.TAB_BOTTOM);
