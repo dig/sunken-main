@@ -26,13 +26,15 @@ public class PacketListener extends BinaryJedisPubSub {
 
     @Override
     public void onMessage(byte[] channel, byte[] message) {
+        Common.getLogger().log(Level.INFO, " onMessage() PacketListener");
+
         if (Arrays.equals(channel, PACKET_CHANNEL)) {
             Packet deserialized = Packet.fromBytes(message);
 
+            Common.getLogger().log(Level.INFO, " onMessage() handler: " + deserialized.getClass());
+
             if (deserialized != null && handlers.containsKey(deserialized.getClass())) {
                 PacketHandler handler = handlers.get(deserialized.getClass());
-                Common.getLogger().log(Level.INFO, " onMessage() handler: " + deserialized.getClass());
-
                 handler.onReceive(deserialized);
             }
         }

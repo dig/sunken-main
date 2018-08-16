@@ -2,6 +2,7 @@ package net.sunken.lobby;
 
 import lombok.Getter;
 import net.sunken.common.Common;
+import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
 import net.sunken.common.type.ServerType;
@@ -15,6 +16,8 @@ import net.sunken.lobby.parkour.ParkourListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Level;
 
 public class LobbyPlugin extends JavaPlugin {
 
@@ -35,6 +38,7 @@ public class LobbyPlugin extends JavaPlugin {
         Core.getInstance().onCoreLoad(this);
 
         PacketHandlerRegistry.registerHandler(new ParkourLeaderboardUpdatePacket(), new ParkourHandler());
+
         parkourCache = new ParkourCache(this.getConfig());
 
         this.registerEvents();

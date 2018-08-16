@@ -40,7 +40,7 @@ public class ParkourCache {
         this.bestTimeCache = new HashMap<>();
 
         this.loadParkours();
-        // this.updateBestTimes();
+        this.updateBestTimes();
     }
 
     private void loadParkours(){
