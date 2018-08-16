@@ -1,19 +1,18 @@
 package net.sunken.lobby.parkour;
 
 import lombok.Getter;
-import net.sunken.common.Common;
+import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
+import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class Parkour {
 
@@ -73,6 +72,18 @@ public class Parkour {
             if(time < player.getBestTime(this.id)){
                 player.updateParkourTime(this.id, time);
                 player.sendMessage("&a&lNew personal best!");
+
+                // Check if we should update the leaderboard
+                ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
+                List<ParkourData> parkourData = cache.getBestTimes(this.id);
+
+                if (parkourData != null) {
+                    if(parkourData.size() < 10 || time <= parkourData.get((parkourData.size() - 1)).getTime()){
+                        PacketUtil.sendPacket(new ParkourCacheUpdatePacket(this.id));
+                    }
+                } else {
+                    PacketUtil.sendPacket(new ParkourCacheUpdatePacket(this.id));
+                }
             }
         }
 

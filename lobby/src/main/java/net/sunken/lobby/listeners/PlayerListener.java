@@ -10,6 +10,7 @@ import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
 import net.sunken.lobby.LobbyPlugin;
+import net.sunken.lobby.parkour.ParkourData;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -77,7 +78,11 @@ public class PlayerListener implements Listener {
 
         player.getInventory().setItem(8, new ActionableElement(Constants.ITEM_LOBBY.make(), Action.INTERACT, context -> {
             Player observer = context.getObserver();
-            observer.sendMessage("lobby");
+
+            for(ParkourData data : LobbyPlugin.getInstance().getParkourCache().getBestTimes("test")){
+                observer.sendMessage(data.getUuid() + " - " + data.getName() + " - " + data.getTime());
+            }
+
             return context;
         }).getItem());
     }

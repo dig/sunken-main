@@ -1,10 +1,12 @@
 package net.sunken.common.packet;
 
+import net.sunken.common.Common;
 import redis.clients.jedis.BinaryJedisPubSub;
 import redis.clients.jedis.Jedis;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class PacketListener extends BinaryJedisPubSub {
 
@@ -26,7 +28,8 @@ public class PacketListener extends BinaryJedisPubSub {
     public void onMessage(byte[] channel, byte[] message) {
         if (Arrays.equals(channel, PACKET_CHANNEL)) {
             Packet deserialized = Packet.fromBytes(message);
-            if (deserialized != null) {
+
+            if (deserialized != null && handlers.containsKey(deserialized.getClass())) {
                 PacketHandler handler = handlers.get(deserialized.getClass());
                 handler.onReceive(deserialized);
             }

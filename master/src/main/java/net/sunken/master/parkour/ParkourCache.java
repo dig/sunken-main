@@ -10,14 +10,15 @@ import com.mongodb.client.model.Sorts;
 import net.sunken.common.Common;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.database.RedisConnection;
+import net.sunken.common.parkour.ParkourRedisHelper;
 import org.bson.Document;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.ScanParams;
+import redis.clients.jedis.ScanResult;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 public class ParkourCache {
 
@@ -45,6 +46,14 @@ public class ParkourCache {
             Jedis jedis = redisConnection.getConnection();
 
             try {
+                // Delete previous data
+                ScanParams params = new ScanParams();
+                params.match(ParkourRedisHelper.PARKOUR_STORAGE_KEY + ":" + id + ":*");
+                ScanResult<String> scanResult = jedis.scan("0", params);
+                List<String> keys = scanResult.getResult();
+
+                jedis.del(keys.toArray(new String[keys.size()]));
+
                 MongoCursor<Document> iterator = aggregate.iterator();
                 while (iterator.hasNext()) {
                     Document next = iterator.next();
@@ -65,8 +74,8 @@ public class ParkourCache {
                             ParkourRedisHelper.PARKOUR_UUID_KEY, uuid,
                             ParkourRedisHelper.PARKOUR_NAME_KEY, name,
                             ParkourRedisHelper.PARKOUR_RANK_KEY, rank,
+                            ParkourRedisHelper.PARKOUR_TYPE_KEY, id,
                             ParkourRedisHelper.PARKOUR_TIME_KEY, time + ""
-
                     ));
                 }
             } catch (Exception e) {

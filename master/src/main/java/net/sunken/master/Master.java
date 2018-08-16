@@ -3,7 +3,9 @@ package net.sunken.master;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
+import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
 
@@ -39,6 +41,10 @@ public class Master {
         PacketHandlerRegistry.registerHandler(new ParkourCacheUpdatePacket(), new ParkourCacheHandler());
 
         this.parkourCache = new ParkourCache();
+
+        Master.getInstance().getParkourCache().updateCache("test").thenRun(() -> {
+            PacketUtil.sendPacket(new ParkourLeaderboardUpdatePacket());
+        });
     }
 
     public void onDisable(){

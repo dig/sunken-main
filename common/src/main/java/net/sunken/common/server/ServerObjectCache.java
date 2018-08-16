@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +40,7 @@ public class ServerObjectCache {
         AsyncHelper.executor().submit(() -> {
             Jedis jedis = redisConnection.getConnection();
             try {
-                Set<ServerObject> updatedCache = Sets.newHashSet();
+                Set<ServerObject> updatedCache = Sets.newLinkedHashSet();
 
                 ScanParams params = new ScanParams();
                 params.match(ServerRedisHelper.SERVER_STORAGE_KEY + ":*");
