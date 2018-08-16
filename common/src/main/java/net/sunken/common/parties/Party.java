@@ -5,6 +5,7 @@ import lombok.Setter;
 import redis.clients.johm.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Model
 public class Party {
@@ -18,9 +19,8 @@ public class Party {
     private Long id;
     @Attribute
     @Indexed
-    @Getter
     @Setter
-    private PartyPlayer leader;
+    private String leaderUUID;
     @CollectionSet(of = PartyPlayer.class)
     @Indexed
     @Getter
@@ -31,9 +31,13 @@ public class Party {
     @Setter
     private long createdAt;
 
-    public Party(PartyPlayer leader, Set<PartyPlayer> allMembers, long createdAt) {
-        this.leader = leader;
+    public Party(UUID leaderUUID, Set<PartyPlayer> allMembers, long createdAt) {
+        this.leaderUUID = leaderUUID.toString();
         this.allMembers = allMembers;
         this.createdAt = createdAt;
+    }
+
+    public UUID getLeaderUUID() {
+        return UUID.fromString(leaderUUID);
     }
 }

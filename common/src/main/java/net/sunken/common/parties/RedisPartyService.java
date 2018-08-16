@@ -16,7 +16,7 @@ public class RedisPartyService implements PartyService {
             return PartyCreateStatus.ALREADY_IN_PARTY;
         }
 
-        Party newParty = new Party(leader, ImmutableSet.of(toInvite), System.currentTimeMillis());
+        Party newParty = new Party(leader.getUUID(), ImmutableSet.of(leader, toInvite), System.currentTimeMillis());
         JOhm.save(newParty);
 
         PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(leader.getUUID(), toInvite.getUUID());
