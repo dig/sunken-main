@@ -46,6 +46,7 @@
                                     <include>com.google.code.findbugs:jsr305</include>
                                     <include>javax.inject:javax.inject</include>
                                     <include>redis:johm</include>
+                                    <include>com.google.guava:guava</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -115,6 +116,12 @@
             <groupId>com.google.collections</groupId>
             <artifactId>google-collections</artifactId>
             <version>1.0-rc2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>26.0-jre</version>
         </dependency>
     </dependencies>
 </project>
