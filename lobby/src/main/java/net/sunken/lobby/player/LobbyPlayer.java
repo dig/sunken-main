@@ -72,8 +72,11 @@ public class LobbyPlayer extends AbstractPlayer {
         boolean found = false;
 
         for(Document parkour : parkours) {
+            Common.getLogger().log(Level.INFO, parkour.getString(PARKOUR_ID_FIELD));
+
             if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
                 parkour.put(PARKOUR_TIME_FIELD, time);
+
                 found = true;
                 break;
             }
@@ -83,6 +86,7 @@ public class LobbyPlayer extends AbstractPlayer {
             parkours.add(new Document(ImmutableMap.of(PARKOUR_ID_FIELD, id, PARKOUR_TIME_FIELD, time)));
         }
 
+        this.playerDocument.put(PARKOUR_FIELD, parkours);
         this.parkourTimes.put(id, time);
 
         Bson updateDocument = new Document("$set", new Document(PARKOUR_FIELD, parkours));
