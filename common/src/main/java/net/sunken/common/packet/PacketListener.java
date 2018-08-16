@@ -6,22 +6,22 @@ import redis.clients.jedis.Jedis;
 import java.util.Arrays;
 import java.util.Map;
 
-public class PacketUpdater {
+public class PacketListener {
 
     public static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
 
     private final Jedis subscriberJedis;
-    public PacketUpdater(Jedis subscriberJedis) {
+    public PacketListener(Jedis subscriberJedis) {
         this.subscriberJedis = subscriberJedis;
     }
 
     public void start() {
         new Thread(() -> {
-            subscriberJedis.subscribe(new PacketListener(), PACKET_CHANNEL);
+            subscriberJedis.subscribe(new Listener(), PACKET_CHANNEL);
         }).start();
     }
 
-    private class PacketListener extends BinaryJedisPubSub {
+    private class Listener extends BinaryJedisPubSub {
 
         private Map<Class<? extends Packet>, PacketHandler> handlers = PacketHandlerRegistry.getHandlers();
 

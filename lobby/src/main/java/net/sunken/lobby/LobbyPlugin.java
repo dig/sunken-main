@@ -36,8 +36,6 @@ public class LobbyPlugin extends JavaPlugin {
         parkourCache = new ParkourCache(this.getConfig());
 
         this.registerEvents();
-
-        PacketUtil.sendPacket(new ParkourCacheUpdatePacket("test"));
     }
 
     @Override

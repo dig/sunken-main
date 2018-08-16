@@ -14,7 +14,7 @@ public final class PacketUtil {
             Jedis jedis = redisConnection.getConnection();
 
             try {
-                jedis.publish(PacketUpdater.PACKET_CHANNEL, packet.toBytes());
+                jedis.publish(PacketListener.PACKET_CHANNEL, packet.toBytes());
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
