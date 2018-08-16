@@ -11,7 +11,6 @@ public class ParkourHandler extends PacketHandler<ParkourLeaderboardUpdatePacket
 
     @Override
     public void onReceive(ParkourLeaderboardUpdatePacket packet) {
-        Common.getLogger().log(Level.INFO, "ParkourLeaderboardUpdatePacket");
         LobbyPlugin.getInstance().getParkourCache().updateBestTimes();
     }
 }

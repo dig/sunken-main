@@ -127,7 +127,6 @@ public class Parkour {
 
     public void updateLeaderboard(){
         if(this.leaderboard){
-            Common.getLogger().log(Level.INFO, "Updating leaderboard for " + this.id);
             List<String> lines = new ArrayList<>();
 
             lines.add(ChatColor.BLUE + "" + ChatColor.BOLD + "Parkour Leaderboard");
@@ -154,19 +153,16 @@ public class Parkour {
             if (this.hologram != null) {
                 x = 0;
                 for(String line : lines){
-                    if(!this.hologram.getLine(x).equals(line)){
-                        Common.getLogger().log(Level.INFO, "Updating line " + x + " text: " + line);
+                    if (this.hologram.getLine(x) == null) {
+                        this.hologram.addLine(line);
+                    } else if (!this.hologram.getLine(x).equals(line)) {
                         this.hologram.updateLine(x, line);
-                    } else if (this.hologram.getLine(x) == null) {
-                        Common.getLogger().log(Level.INFO, "Adding line " + x + " text: " + line);
-
                     }
+
                     x++;
                 }
             } else {
-                Common.getLogger().log(Level.INFO, "new Hologram()");
-
-                this.hologram = new Hologram(this.leaderboardPos, lines, 0.50);
+                this.hologram = new Hologram(this.leaderboardPos, lines, 0.40);
             }
         }
     }

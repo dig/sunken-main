@@ -41,7 +41,7 @@ public class Hologram {
                 chunk.load(true);
             }
 
-            double offY = (offsetY * this.lines.size());
+            double offY = 0;
 
             for(String line : this.lines){
                 ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offY, 0), EntityType.ARMOR_STAND);
@@ -62,7 +62,7 @@ public class Hologram {
     }
 
     public void addLine(String line){
-        double offY = (offsetY * this.lines.size()) - (this.offsetY * (this.lines.size() + 1));
+        double offY = (0 - (this.offsetY * this.lines.size()));
 
         ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offY, 0), EntityType.ARMOR_STAND);
         entity.setVisible(false);
