@@ -24,12 +24,16 @@ public class ServerObject {
     @Getter
     private final int serverPort;
 
+    @Getter
+    private final Long created;
+
     public ServerObject(String serverName,
                         ServerType serverType,
                         int maxPlayers,
                         int playerCount,
                         String serverIp,
-                        int serverPort) {
+                        int serverPort,
+                        long created) {
 
         this.serverName = serverName;
         this.serverType = serverType;
@@ -39,6 +43,8 @@ public class ServerObject {
 
         this.serverIp = serverIp;
         this.serverPort = serverPort;
+
+        this.created = created;
     }
 
     // player count is the only mutable property of this immutable class
@@ -48,7 +54,8 @@ public class ServerObject {
                                 maxPlayers,
                                 playerCount,
                                 serverIp,
-                                serverPort);
+                                serverPort,
+                                created);
     }
 
     @Override

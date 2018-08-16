@@ -28,6 +28,7 @@ public class ServerChangeInformer {
                         .put(ServerRedisHelper.PLAYER_COUNT_KEY, serverObject.getPlayerCount() + "")
                         .put(ServerRedisHelper.SERVER_IP_KEY, serverObject.getServerIp())
                         .put(ServerRedisHelper.SERVER_PORT_KEY, serverObject.getServerPort() + "")
+                        .put(ServerRedisHelper.SERVER_CREATED_KEY, serverObject.getCreated() + "")
                         .build();
 
                 jedis.hmset(ServerRedisHelper.SERVER_STORAGE_KEY + ":" + serverObject.getServerName(), serverKeys);

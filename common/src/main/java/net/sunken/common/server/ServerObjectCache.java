@@ -9,10 +9,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ServerObjectCache {
@@ -27,10 +24,11 @@ public class ServerObjectCache {
 
     public Set<ServerObject> getCache() { return this.cache; }
 
-    public Set<ServerObject> getCache(ServerType serverType) {
-        Set<ServerObject> sortedServers = this.cache.stream()
+    public List<ServerObject> getCache(ServerType serverType) {
+        List<ServerObject> sortedServers = this.cache.stream()
                 .filter(server -> server.getServerType() == serverType)
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(ServerObject::getCreated))
+                .collect(Collectors.toList());
 
         return sortedServers;
     }
@@ -58,13 +56,15 @@ public class ServerObjectCache {
                     String playerCountStr = kv.get(ServerRedisHelper.PLAYER_COUNT_KEY);
                     String serverIp = kv.get(ServerRedisHelper.SERVER_IP_KEY);
                     String serverPortStr = kv.get(ServerRedisHelper.SERVER_PORT_KEY);
+                    String createdStr = kv.get(ServerRedisHelper.SERVER_CREATED_KEY);
 
                     ServerType serverType = ServerType.valueOf(serverTypeStr);
                     int maxPlayers = Integer.parseInt(maxPlayersStr);
                     int playerCount = Integer.parseInt(playerCountStr);
                     int serverPort = Integer.parseInt(serverPortStr);
+                    Long created = Long.parseLong(createdStr);
 
-                    ServerObject serverObject = new ServerObject(serverName, serverType, maxPlayers, playerCount, serverIp, serverPort);
+                    ServerObject serverObject = new ServerObject(serverName, serverType, maxPlayers, playerCount, serverIp, serverPort, created);
                     updatedCache.add(serverObject);
                 }
 

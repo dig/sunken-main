@@ -38,9 +38,10 @@ public class ServerInstance {
                     maxPlayers,
                     playerCount,
                     InetAddress.getLocalHost().getHostAddress(),
-                    serverPort);
+                    serverPort,
+                    System.currentTimeMillis());
 
-            Common.getLogger().log(Level.INFO, "Server starting with UUID: " + uuid);
+            Common.getLogger().log(Level.INFO, "Server starting at " + System.currentTimeMillis() + " with UUID: " + uuid);
             Common.getInstance().getServerChangeInformer().inform(serverObject); // initial inform on creation
         } catch (UnknownHostException e) {
             e.printStackTrace();
