@@ -11,7 +11,7 @@ public class RedisPartyService implements PartyService {
 
     @Override
     public PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite) {
-        List<Party> bySameCreator = JOhm.find(Party.class, Party.LEADER_KEY, leader.getUUID());
+        List<Party> bySameCreator = JOhm.find(Party.class, Party.LEADER_KEY, leader.getUUID().toString());
         if (bySameCreator.size() > 0) {
             return PartyCreateStatus.ALREADY_IN_PARTY;
         }
