@@ -8,6 +8,7 @@ import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.packet.PacketUpdater;
 import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.server.ServerCacheUpdater;
@@ -53,6 +54,9 @@ public class Common {
                 11640,
                 "***REMOVED***"
         );
+
+        PacketUpdater packetUpdater = new PacketUpdater(redis.getConnection());
+        packetUpdater.start();
 
         // Should the server keep track of other servers?
         if (listenForServers) {

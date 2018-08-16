@@ -2,6 +2,8 @@ package net.sunken.lobby;
 
 import lombok.Getter;
 import net.sunken.common.Common;
+import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
@@ -34,6 +36,8 @@ public class LobbyPlugin extends JavaPlugin {
         parkourCache = new ParkourCache(this.getConfig());
 
         this.registerEvents();
+
+        PacketUtil.sendPacket(new ParkourCacheUpdatePacket("test"));
     }
 
     @Override

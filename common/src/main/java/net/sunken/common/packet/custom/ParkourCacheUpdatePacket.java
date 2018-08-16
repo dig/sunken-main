@@ -8,4 +8,10 @@ public class ParkourCacheUpdatePacket extends Packet {
     @Getter
     private String id;
 
+    public ParkourCacheUpdatePacket(String id){
+        this.id = id;
+    }
+
+    public ParkourCacheUpdatePacket(){}
+
 }

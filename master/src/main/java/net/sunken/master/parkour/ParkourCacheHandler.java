@@ -5,6 +5,8 @@ import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
 import net.sunken.master.Master;
 
+import java.util.logging.Level;
+
 public class ParkourCacheHandler extends PacketHandler<ParkourCacheUpdatePacket> {
 
     @Override
