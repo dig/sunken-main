@@ -14,7 +14,7 @@ public class PartyInviteSendPacket extends Packet {
 
     @Getter
     @Setter
-    private UUID uuid;
+    private UUID creator;
     @Getter
     @Setter
     private UUID to;

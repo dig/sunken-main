@@ -10,7 +10,7 @@ public class ParkourRedisHelper {
     public static final String UPDATE_PARKOUR_LEADERBOARD = "UPDATE_PARKOUR_LEADERBOARD";
 
     public static final String PARKOUR_NAME_KEY = "name";
-    public static final String PARKOUR_UUID_KEY = "uuid";
+    public static final String PARKOUR_UUID_KEY = "creator";
     public static final String PARKOUR_RANK_KEY = "rank";
     public static final String PARKOUR_TIME_KEY = "time";
 

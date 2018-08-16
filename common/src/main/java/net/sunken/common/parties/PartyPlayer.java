@@ -19,9 +19,8 @@ public class PartyPlayer {
     @Setter
     private Long id;
     @Attribute
-    @Getter
     @Setter
-    private UUID uuid;
+    private String uuid;
     @Attribute
     @Getter
     @Setter
@@ -35,11 +34,15 @@ public class PartyPlayer {
     @Setter
     private PlayerRank rank;
 
-    PartyPlayer(UUID uuid, String name, ServerType serverType, PlayerRank rank) {
-        this.uuid = uuid;
+    public PartyPlayer(UUID uuid, String name, ServerType serverType, PlayerRank rank) {
+        this.uuid = uuid.toString();
         this.name = name;
         this.serverType = serverType;
         this.rank = rank;
+    }
+
+    public UUID getUUID() {
+        return UUID.fromString(this.uuid);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class PartyPlayer {
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
         PartyPlayer other = (PartyPlayer) obj;
-        return Objects.equal(this.uuid, other.getUuid());
+        return Objects.equal(this.getUUID(), other.getUUID());
     }
 
     @Override

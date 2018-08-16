@@ -7,7 +7,11 @@ import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.packet.PacketListener;
+import net.sunken.common.parties.PartyPlayer;
+import net.sunken.common.parties.PartyService;
+import net.sunken.common.parties.RedisPartyService;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.player.PlayerRank;
 import net.sunken.common.server.ServerCacheUpdater;
 import net.sunken.common.server.ServerChangeInformer;
 import net.sunken.common.server.ServerObject;
@@ -15,6 +19,7 @@ import net.sunken.common.server.ServerObjectCache;
 import net.sunken.common.type.ServerType;
 import redis.clients.johm.JOhm;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -69,6 +74,10 @@ public class Common {
         this.onlinePlayers = new ConcurrentHashMap<>();
 
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
+
+        PartyService partyService = new RedisPartyService();
+        partyService.createParty(new PartyPlayer(UUID.randomUUID(), "LeaderName", ServerType.MAIN_LOBBY, PlayerRank.MODERATOR),
+                                 new PartyPlayer(UUID.randomUUID(), "InvitedName", ServerType.MAIN_LOBBY, PlayerRank.OWNER) );
 
         this.loaded = true;
     }

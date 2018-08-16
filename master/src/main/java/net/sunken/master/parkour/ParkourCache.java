@@ -49,7 +49,7 @@ public class ParkourCache {
                 while (iterator.hasNext()) {
                     Document next = iterator.next();
 
-                    String uuid = next.getString("uuid");
+                    String uuid = next.getString("creator");
                     String name = next.getString("name");
                     String rank = next.getString("rank");
                     Long time = Long.MAX_VALUE;
