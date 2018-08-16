@@ -8,7 +8,7 @@ import java.util.Map;
 public class PacketListener extends BinaryJedisPubSub {
 
     private Map<Class<? extends Packet>, PacketHandler> handlers = PacketHandlerRegistry.getHandlers();
-    public static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
+    static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
 
     @Override
     public void onMessage(byte[] channel, byte[] message) {
