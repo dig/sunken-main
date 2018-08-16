@@ -30,11 +30,12 @@ public class ElementListener implements Listener {
                     if (element instanceof ActionableElement) {
                         ActionableElement actionableElement = (ActionableElement) element;
 
-                        if (actionableElement.getAction().equals(Action.CLICK)){
+                        if (actionableElement.getAction().equals(Action.CLICK)) {
                             UIRunnableContext context = new UIRunnableContext(player);
                             context.setCancelled(e.isCancelled());
 
-                            UIRunnableContext modifiedContext = ((ActionableElement) element).getRunnable().run(context);
+                            UIRunnableContext modifiedContext = ((ActionableElement) element).getRunnable()
+                                                                                             .run(context);
                             e.setCancelled(modifiedContext.isCancelled());
                         }
                     }
@@ -58,11 +59,12 @@ public class ElementListener implements Listener {
                     if (element instanceof ActionableElement) {
                         ActionableElement actionableElement = (ActionableElement) element;
 
-                        if (actionableElement.getAction().equals(Action.INTERACT)){
+                        if (actionableElement.getAction().equals(Action.INTERACT)) {
                             UIRunnableContext context = new UIRunnableContext(player);
                             context.setCancelled(event.isCancelled());
 
-                            UIRunnableContext modifiedContext = ((ActionableElement) element).getRunnable().run(context);
+                            UIRunnableContext modifiedContext = ((ActionableElement) element).getRunnable()
+                                                                                             .run(context);
                             event.setCancelled(modifiedContext.isCancelled());
                         }
                     }

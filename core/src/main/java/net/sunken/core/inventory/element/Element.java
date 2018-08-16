@@ -16,8 +16,7 @@ public class Element {
     private static final Cache<UUID, Element> elementRegistry;
 
     static {
-        elementRegistry = CacheBuilder.newBuilder()
-                                      .build();
+        elementRegistry = CacheBuilder.newBuilder().build();
     }
 
     @Getter
