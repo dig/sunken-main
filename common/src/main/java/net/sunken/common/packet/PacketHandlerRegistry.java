@@ -17,7 +17,6 @@ public final class PacketHandlerRegistry {
     }
 
     public static <T extends Packet> void registerHandler(T packet, PacketHandler<T> handler) {
-        Common.getLogger().log(Level.INFO, "registerHandler() Registered " + packet.getClass());
         handlers.put(packet.getClass(), handler);
     }
 

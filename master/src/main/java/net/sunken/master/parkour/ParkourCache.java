@@ -46,7 +46,10 @@ public class ParkourCache {
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 
-                jedis.del(keys.toArray(new String[keys.size()]));
+                if (keys.size() > 0) {
+                    jedis.del(keys.toArray(new String[keys.size()]));
+                    Common.getLogger().log(Level.INFO, "Deleting" + keys.toString());
+                }
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
@@ -88,8 +91,6 @@ public class ParkourCache {
                             ParkourRedisHelper.PARKOUR_TYPE_KEY, id,
                             ParkourRedisHelper.PARKOUR_TIME_KEY, time + ""
                     ));
-
-                    Common.getLogger().log(Level.INFO, "Adding " + name + " with time " + time + " to redis");
                 }
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);

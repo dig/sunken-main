@@ -129,8 +129,6 @@ public class ParkourCache {
     }
 
     public void updateBestTimes(){
-        Common.getLogger().log(Level.INFO, "updateBestTimes() finished");
-
         CompletableFuture.runAsync(() -> {
             this.bestTimeCache = new HashMap<>();
 
@@ -163,21 +161,16 @@ public class ParkourCache {
                     this.bestTimeCache.get(type).add(new ParkourData(uuid, name, rank, type, time));
                 }
 
-                Common.getLogger().log(Level.INFO, "updateBestTimes() finished");
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
         }).thenRun(() -> {
-            Common.getLogger().log(Level.INFO, "starting to update parkours 1");
-
             new BukkitRunnable(){
 
                 @Override
                 public void run(){
-                    Common.getLogger().log(Level.INFO, "starting to update parkours 2");
-
                     ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
                     for(Parkour parkour : cache.getParkours()){
                         parkour.updateLeaderboard();
