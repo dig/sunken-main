@@ -3,6 +3,7 @@ package net.sunken.lobby.listeners;
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.core.inventory.ItemBuilder;
+import net.sunken.core.inventory.element.Action;
 import net.sunken.core.inventory.element.ActionableElement;
 import net.sunken.core.util.NametagUtil;
 import net.sunken.core.util.TabListUtil;
@@ -23,6 +24,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -67,8 +69,17 @@ public class PlayerListener implements Listener {
         NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
 
         // Inventory
-        player.getInventory().setItem(0, Constants.ITEM_SELECTOR.make());
-        player.getInventory().setItem(8, Constants.ITEM_LOBBY.make());
+        player.getInventory().setItem(0, new ActionableElement(Constants.ITEM_SELECTOR.make(), Action.INTERACT, context -> {
+            Player observer = context.getObserver();
+            observer.sendMessage("selector");
+            return context;
+        }).getItem());
+
+        player.getInventory().setItem(8, new ActionableElement(Constants.ITEM_LOBBY.make(), Action.INTERACT, context -> {
+            Player observer = context.getObserver();
+            observer.sendMessage("lobby");
+            return context;
+        }).getItem());
     }
 
     @EventHandler(ignoreCancelled = true)
