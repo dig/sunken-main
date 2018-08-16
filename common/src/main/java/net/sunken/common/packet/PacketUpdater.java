@@ -1,13 +1,10 @@
 package net.sunken.common.packet;
 
-import net.sunken.common.Common;
-import net.sunken.common.server.ServerRedisHelper;
 import redis.clients.jedis.BinaryJedisPubSub;
 import redis.clients.jedis.Jedis;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class PacketUpdater {
 
