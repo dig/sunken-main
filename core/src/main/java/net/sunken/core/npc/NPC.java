@@ -132,7 +132,7 @@ public class NPC extends EntityPlayer {
         this.sendPacket(packet);
     }
 
-    public void sendPacket(Packet packet){
+    private void sendPacket(Packet packet){
         for(Player target : this.getViewerList()){
             PlayerConnection connection = ((CraftPlayer) target).getHandle().playerConnection;
             connection.sendPacket(packet);

@@ -2,9 +2,10 @@ package net.sunken.master;
 
 import lombok.Getter;
 import net.sunken.common.Common;
-import net.sunken.common.server.ServerCacheUpdater;
+import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
 import net.sunken.master.parkour.ParkourCache;
-import net.sunken.master.parkour.ParkourCacheUpdater;
+import net.sunken.master.parkour.ParkourCacheHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,9 +35,10 @@ public class Master {
     public void onEnable(){
         Common.getInstance().onCommonLoad(true);
 
+        // Register packets
+        PacketHandlerRegistry.registerHandler(new ParkourCacheUpdatePacket(), new ParkourCacheHandler());
+
         this.parkourCache = new ParkourCache();
-        ParkourCacheUpdater parkourCacheUpdater = new ParkourCacheUpdater(Common.getInstance().getRedis().getConnection());
-        parkourCacheUpdater.start();
     }
 
     public void onDisable(){
