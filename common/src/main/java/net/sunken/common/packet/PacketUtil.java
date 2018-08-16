@@ -12,7 +12,6 @@ public final class PacketUtil {
     public static void sendPacket(Packet packet) {
         AsyncHelper.executor().submit(() -> {
             Jedis jedis = redisConnection.getConnection();
-
             try {
                 jedis.publish(PacketListener.PACKET_CHANNEL, packet.toBytes());
             } catch (Exception e) {
