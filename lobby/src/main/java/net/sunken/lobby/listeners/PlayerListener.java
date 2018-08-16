@@ -2,16 +2,15 @@ package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.core.inventory.ItemBuilder;
+import net.sunken.core.inventory.element.ActionableElement;
 import net.sunken.core.util.NametagUtil;
 import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
 import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -50,12 +49,12 @@ public class PlayerListener implements Listener {
         );
         player.teleport(spawn);
 
-        // Reset player
+        // Reset
         player.getInventory().clear();
         player.getActivePotionEffects().clear();
         player.setGameMode(GameMode.ADVENTURE);
 
-        // Tab list
+        // Tab
         TabListUtil.sendTabTitle(player, Constants.TAB_TOP, Constants.TAB_BOTTOM);
 
         // Chat
@@ -63,9 +62,13 @@ public class PlayerListener implements Listener {
             player.sendMessage(MessageUtil.getCenteredMessage(Constants.JOIN_MESSAGES.get(i), MessageUtil.CENTER_PX));
         }
 
-        // Rank colours
+        // Rank
         player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
         NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
+
+        // Inventory
+        player.getInventory().setItem(0, Constants.ITEM_SELECTOR.make());
+        player.getInventory().setItem(8, Constants.ITEM_LOBBY.make());
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -106,15 +109,6 @@ public class PlayerListener implements Listener {
         Entity e = event.getEntity();
 
         if(e instanceof Player) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryMove(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-
-        if(player.getGameMode() != GameMode.CREATIVE){
             event.setCancelled(true);
         }
     }

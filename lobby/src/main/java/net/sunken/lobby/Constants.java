@@ -1,6 +1,8 @@
 package net.sunken.lobby;
 
+import net.sunken.core.inventory.ItemBuilder;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,5 +25,25 @@ public class Constants {
             " ",
             ChatColor.GRAY + "&m                               "
     );
+
+    public static final ItemBuilder ITEM_LOBBY = new ItemBuilder(Material.BOOK)
+            .lores(Arrays.asList(" ",
+                    ChatColor.GRAY + "Click me to open the lobby selector",
+                    ChatColor.GRAY + "which allows you to select what",
+                    ChatColor.GRAY + "lobby you want to go on!",
+                    " ",
+                    ChatColor.AQUA + "> Click to open!"))
+            .addNBTString("menu", "lobby")
+            .name(ChatColor.GREEN + "Lobby Selector");
+
+    public static final ItemBuilder ITEM_SELECTOR = new ItemBuilder(Material.COMPASS)
+            .lores(Arrays.asList(" ",
+                    ChatColor.GRAY + "Click me to open the minigame selector",
+                    ChatColor.GRAY + "which allows you to select what",
+                    ChatColor.GRAY + "minigame you want to play!",
+                    " ",
+                    ChatColor.AQUA + "> Click to open!"))
+            .addNBTString("menu", "selector")
+            .name(ChatColor.GOLD + "Minigame Selector");
 
 }

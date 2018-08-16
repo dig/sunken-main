@@ -1,5 +1,8 @@
 package net.sunken.core.inventory;
 
+import net.sunken.core.inventory.element.ActionableElement;
+import net.sunken.core.inventory.runnable.UIRunnable;
+import net.sunken.core.util.nbt.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -16,8 +19,8 @@ import java.util.Map;
 
 public class ItemBuilder {
 
-    private final ItemStack item;
-    private final ItemMeta itemM;
+    private ItemStack item;
+    private ItemMeta itemM;
 
     /**
      * Initialize item chainable via given Material parameter.
@@ -121,6 +124,18 @@ public class ItemBuilder {
             loresList.clear();
         }
         Collections.addAll(loresList, lores);
+        meta().setLore(loresList);
+        return this;
+    }
+
+    public ItemBuilder lores(final List<String> lores) {
+        List<String> loresList = meta().getLore();
+        if (loresList == null) {
+            loresList = new ArrayList<>();
+        } else {
+            loresList.clear();
+        }
+        loresList.addAll(lores);
         meta().setLore(loresList);
         return this;
     }
@@ -309,6 +324,29 @@ public class ItemBuilder {
             skullMeta.setOwner(name);
             make().setItemMeta(meta());
         }
+        return this;
+    }
+
+    /**
+     * Adds a NBT tag to the itemstack
+     *
+     * @param key
+     * @param value
+     * @return the current instance for chainable application
+     * @since 1.0
+     */
+
+    public ItemBuilder addNBTString(String key, String value){
+        NBTItem nbt = new NBTItem(item);
+        nbt.setString(key, value);
+        item = nbt.getItem();
+        return this;
+    }
+
+    public ItemBuilder addNBTInteger(String key, Integer value){
+        NBTItem nbt = new NBTItem(item);
+        nbt.setInteger(key, value);
+        item = nbt.getItem();
         return this;
     }
 
