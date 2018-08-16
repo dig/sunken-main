@@ -7,7 +7,6 @@ import net.sunken.core.util.nbt.NBTItem;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class Element {
 
@@ -18,7 +17,6 @@ public class Element {
 
     static {
         elementRegistry = CacheBuilder.newBuilder()
-                                      .expireAfterAccess(10, TimeUnit.MINUTES)
                                       .build();
     }
 
