@@ -17,5 +17,4 @@ public class ParkourRedisHelper {
     private ParkourRedisHelper() {
         throw new AssertionError("You must not attempt to instantiate this class.");
     }
-
 }

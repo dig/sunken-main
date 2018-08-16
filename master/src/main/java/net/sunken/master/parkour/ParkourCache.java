@@ -75,7 +75,5 @@ public class ParkourCache {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
         });
-
     }
-
 }

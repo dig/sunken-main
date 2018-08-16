@@ -13,6 +13,7 @@ import net.sunken.common.server.ServerChangeInformer;
 import net.sunken.common.server.ServerObject;
 import net.sunken.common.server.ServerObjectCache;
 import net.sunken.common.type.ServerType;
+import redis.clients.johm.JOhm;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -51,6 +52,8 @@ public class Common {
                 11640,
                 "***REMOVED***"
         );
+
+        JOhm.setPool(this.redis.getJedisPool());
 
         PacketListener packetListener = new PacketListener(redis.getConnection());
         packetListener.start();

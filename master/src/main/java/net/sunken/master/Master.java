@@ -3,7 +3,7 @@ package net.sunken.master;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
-import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
+import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
 
@@ -32,7 +32,7 @@ public class Master {
         }
     }
 
-    public void onEnable(){
+    private void onEnable(){
         Common.getInstance().onCommonLoad(true);
 
         // Register packets
@@ -48,5 +48,4 @@ public class Master {
     public static void main(String[] args) {
         new Master();
     }
-
 }

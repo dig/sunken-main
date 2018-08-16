@@ -2,10 +2,8 @@ package net.sunken.master.parkour;
 
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandler;
-import net.sunken.common.packet.custom.ParkourCacheUpdatePacket;
+import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
 import net.sunken.master.Master;
-
-import java.util.logging.Level;
 
 public class ParkourCacheHandler extends PacketHandler<ParkourCacheUpdatePacket> {
 
@@ -13,7 +11,7 @@ public class ParkourCacheHandler extends PacketHandler<ParkourCacheUpdatePacket>
     public void onReceive(ParkourCacheUpdatePacket packet) {
         Master.getInstance().getParkourCache().updateCache(packet.getId()).thenRun(() -> {
             Common.getInstance().getRedis().sendRedisMessage(ParkourRedisHelper.PARKOUR_CACHE_CHANNEL,
-                    ParkourRedisHelper.UPDATE_PARKOUR_LEADERBOARD);
+                                                             ParkourRedisHelper.UPDATE_PARKOUR_LEADERBOARD);
         });
     }
 }

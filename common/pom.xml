@@ -45,6 +45,7 @@
                                     <include>org.json:json</include>
                                     <include>com.google.code.findbugs:jsr305</include>
                                     <include>javax.inject:javax.inject</include>
+                                    <include>redis:johm</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -55,7 +56,25 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>johm-mvn-repo</id>
+            <url>https://raw.github.com/agrison/johm/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <dependency>
+            <groupId>redis</groupId>
+            <artifactId>johm</artifactId>
+            <version>0.6.7</version>
+            <type>jar</type>
+        </dependency>
+
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
