@@ -75,9 +75,9 @@ public class Common {
 
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
 
-        PartyService partyService = new RedisPartyService();
-        partyService.createParty(new PartyPlayer(UUID.randomUUID(), "LeaderName", ServerType.MAIN_LOBBY, PlayerRank.MODERATOR),
-                                 new PartyPlayer(UUID.randomUUID(), "InvitedName", ServerType.MAIN_LOBBY, PlayerRank.OWNER) );
+        // PartyService partyService = new RedisPartyService();
+        // partyService.createParty(new PartyPlayer(UUID.randomUUID(), "LeaderName", ServerType.MAIN_LOBBY, PlayerRank.MODERATOR),
+                                // new PartyPlayer(UUID.randomUUID(), "InvitedName", ServerType.MAIN_LOBBY, PlayerRank.OWNER) );
 
         this.loaded = true;
     }

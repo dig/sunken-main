@@ -3,6 +3,7 @@ package net.sunken.core.hologram;
 import lombok.Getter;
 import net.sunken.core.Core;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -21,11 +22,13 @@ public class Hologram {
 
     private ArrayList<LivingEntity> entities;
     private boolean spawned;
+    private double offsetY;
 
-    public Hologram(Location location, List<String> lines){
+    public Hologram(Location location, List<String> lines, double offsetY){
         this.location = location;
         this.lines = lines;
         this.spawned = false;
+        this.offsetY = offsetY;
 
         this.entities = new ArrayList<LivingEntity>();
         this.spawnEntities();
@@ -33,10 +36,15 @@ public class Hologram {
 
     private void spawnEntities(){
         if(this.lines.size() > 0 && !this.spawned){
-            double offsetY = (0.25 * this.lines.size());
+            Chunk chunk = this.location.getChunk();
+            if (chunk != null && !chunk.isLoaded()) {
+                chunk.load(true);
+            }
+
+            double offY = (offsetY * this.lines.size());
 
             for(String line : this.lines){
-                ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offsetY, 0), EntityType.ARMOR_STAND);
+                ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offY, 0), EntityType.ARMOR_STAND);
                 entity.setVisible(false);
                 entity.setCustomNameVisible(true);
                 entity.setSmall(true);
@@ -46,11 +54,27 @@ public class Hologram {
                 entity.setMetadata("Hologram", new FixedMetadataValue(Core.getPlugin(), true));
 
                 this.entities.add((LivingEntity) entity);
-                offsetY -= 0.25;
+                offY -= this.offsetY;
             }
 
             this.spawned = true;
         }
+    }
+
+    public void addLine(String line){
+        double offY = (offsetY * this.lines.size()) - (this.offsetY * (this.lines.size() + 1));
+
+        ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(this.location.clone().add(0, offY, 0), EntityType.ARMOR_STAND);
+        entity.setVisible(false);
+        entity.setCustomNameVisible(true);
+        entity.setSmall(true);
+        entity.setBasePlate(true);
+        entity.setGravity(false);
+        entity.setCustomName(ChatColor.translateAlternateColorCodes('&', line));
+        entity.setMetadata("Hologram", new FixedMetadataValue(Core.getPlugin(), true));
+
+        this.lines.add(line);
+        this.entities.add((LivingEntity) entity);
     }
 
     public void updateAll(){
@@ -91,6 +115,14 @@ public class Hologram {
             this.entities.get(index).remove();
             this.entities.remove(index);
         }
+    }
+
+    public String getLine(int index){
+        if((index + 1) <= this.lines.size()){
+            return this.lines.get(index);
+        }
+
+        return null;
     }
 
     public void teleport(Location location){

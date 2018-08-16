@@ -42,6 +42,7 @@ public class LobbyPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.parkourCache.cleanupParkours();
         Core.getInstance().onCoreDisable();
     }
 

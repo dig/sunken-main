@@ -9,17 +9,20 @@ import net.sunken.common.parkour.ParkourRedisHelper;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.common.server.ServerObject;
 import net.sunken.common.util.AsyncHelper;
+import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitRunnable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ScanParams;
 import redis.clients.jedis.ScanResult;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -37,7 +40,7 @@ public class ParkourCache {
         this.bestTimeCache = new HashMap<>();
 
         this.loadParkours();
-        this.updateBestTimes();
+        // this.updateBestTimes();
     }
 
     private void loadParkours(){
@@ -51,17 +54,31 @@ public class ParkourCache {
             Location end = this.parseCoordinates(parkour.getConfigurationSection("end"));
             Location resetPoint = this.parseCoordinates(parkour.getConfigurationSection("resetPoint"));
 
-            List<Location> checkpoints = new ArrayList<Location>();
+            List<Location> checkpoints = new ArrayList<>();
             for(String index : parkour.getConfigurationSection("checkpoints").getKeys(false)){
                 checkpoints.add(this.parseCoordinates(parkour.getConfigurationSection("checkpoints." + index)));
             }
 
-            ArrayList<Material> allowedMaterials = new ArrayList<Material>();
+            ArrayList<Material> allowedMaterials = new ArrayList<>();
             for(String matName : parkour.getStringList("allowedMaterials")){
                 allowedMaterials.add(Material.valueOf(matName));
             }
 
-            parkours.add(new Parkour(id, mainBlock, allowedMaterials, start, end, checkpoints, resetPoint, true));
+            if (parkour.contains("leaderboard") && parkour.contains("leaderboardPos")) {
+                boolean leaderboard = parkour.getBoolean("leaderboard");
+                Location leaderboardPos = this.parseCoordinates(parkour.getConfigurationSection("leaderboardPos"));
+
+                parkours.add(new Parkour(id, mainBlock, allowedMaterials, start, end, checkpoints, resetPoint, true,
+                        leaderboard, leaderboardPos));
+            } else {
+                parkours.add(new Parkour(id, mainBlock, allowedMaterials, start, end, checkpoints, resetPoint, true));
+            }
+        }
+    }
+
+    public void cleanupParkours(){
+        for(Parkour parkour : this.parkours){
+            parkour.cleanup();
         }
     }
 
@@ -108,11 +125,13 @@ public class ParkourCache {
             return sorted;
         }
 
-        return Arrays.asList();
+        return new ArrayList<>();
     }
 
     public void updateBestTimes(){
-        AsyncHelper.executor().submit(() -> {
+        Common.getLogger().log(Level.INFO, "updateBestTimes() finished");
+
+        CompletableFuture.runAsync(() -> {
             this.bestTimeCache = new HashMap<>();
 
             RedisConnection redisConnection = Common.getInstance().getRedis();
@@ -138,18 +157,34 @@ public class ParkourCache {
                     PlayerRank rank = PlayerRank.valueOf(rankStr);
                     Long time = Long.parseLong(timeStr);
 
-                    if (this.bestTimeCache.get(type) == null){
+                    if (this.bestTimeCache.get(type) == null) {
                         this.bestTimeCache.put(type, Sets.newLinkedHashSet());
                     }
                     this.bestTimeCache.get(type).add(new ParkourData(uuid, name, rank, type, time));
                 }
 
+                Common.getLogger().log(Level.INFO, "updateBestTimes() finished");
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
             }
+        }).thenRun(() -> {
+            Common.getLogger().log(Level.INFO, "starting to update parkours 1");
+
+            new BukkitRunnable(){
+
+                @Override
+                public void run(){
+                    Common.getLogger().log(Level.INFO, "starting to update parkours 2");
+
+                    ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
+                    for(Parkour parkour : cache.getParkours()){
+                        parkour.updateLeaderboard();
+                    }
+                }
+
+            }.runTask(LobbyPlugin.getInstance());
         });
     }
-
 }

@@ -31,6 +31,8 @@ public class PacketListener extends BinaryJedisPubSub {
 
             if (deserialized != null && handlers.containsKey(deserialized.getClass())) {
                 PacketHandler handler = handlers.get(deserialized.getClass());
+                Common.getLogger().log(Level.INFO, " onMessage() handler: " + deserialized.getClass());
+
                 handler.onReceive(deserialized);
             }
         }

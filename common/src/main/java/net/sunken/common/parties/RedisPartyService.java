@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import net.sunken.common.packet.PacketUtil;
 import redis.clients.johm.JOhm;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class RedisPartyService implements PartyService {
             return PartyCreateStatus.ALREADY_IN_PARTY;
         }
 
-        Party newParty = new Party(leader.getUUID(), ImmutableSet.of(leader, toInvite), System.currentTimeMillis());
+        Party newParty = new Party(leader.getUUID(), new HashSet<>(Arrays.asList(leader, toInvite)), System.currentTimeMillis());
         JOhm.save(newParty);
 
         PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(leader.getUUID(), toInvite.getUUID());

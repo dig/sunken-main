@@ -33,7 +33,6 @@ public class Constants {
                     ChatColor.GRAY + "lobby you want to go on!",
                     " ",
                     ChatColor.AQUA + "> Click to open!"))
-            .addNBTString("menu", "lobby")
             .name(ChatColor.GREEN + "Lobby Selector");
 
     public static final ItemBuilder ITEM_SELECTOR = new ItemBuilder(Material.COMPASS)
@@ -43,7 +42,6 @@ public class Constants {
                     ChatColor.GRAY + "minigame you want to play!",
                     " ",
                     ChatColor.AQUA + "> Click to open!"))
-            .addNBTString("menu", "selector")
             .name(ChatColor.GOLD + "Minigame Selector");
 
 }

@@ -2,6 +2,7 @@ package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
 import net.sunken.core.PageTestExample;
+import net.sunken.lobby.LobbyPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

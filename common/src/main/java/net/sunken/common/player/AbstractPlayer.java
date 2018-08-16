@@ -19,7 +19,7 @@ public abstract class AbstractPlayer {
 
     protected static Common common = Common.getInstance();
 
-    protected static final String UUID_FIELD = "creator";
+    protected static final String UUID_FIELD = "uuid";
     protected static final String NAME_FIELD = "name";
     protected static final String RANK_FIELD = "rank";
 

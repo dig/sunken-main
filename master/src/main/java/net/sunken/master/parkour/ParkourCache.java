@@ -69,7 +69,7 @@ public class ParkourCache {
                 while (iterator.hasNext()) {
                     Document next = iterator.next();
 
-                    String uuid = next.getString("creator");
+                    String uuid = next.getString("uuid");
                     String name = next.getString("name");
                     String rank = next.getString("rank");
                     Long time = Long.MAX_VALUE;
@@ -88,6 +88,8 @@ public class ParkourCache {
                             ParkourRedisHelper.PARKOUR_TYPE_KEY, id,
                             ParkourRedisHelper.PARKOUR_TIME_KEY, time + ""
                     ));
+
+                    Common.getLogger().log(Level.INFO, "Adding " + name + " with time " + time + " to redis");
                 }
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);

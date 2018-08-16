@@ -1,10 +1,15 @@
 package net.sunken.lobby.parkour;
 
 import lombok.Getter;
+import net.sunken.common.Common;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
+import net.sunken.common.player.PlayerRank;
+import net.sunken.core.hologram.Hologram;
 import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -13,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Parkour {
 
@@ -34,8 +40,12 @@ public class Parkour {
     @Getter
     private List<Location> checkpoints;
     private Location resetPoint;
+    private Location leaderboardPos;
 
     private boolean timed;
+    private boolean leaderboard;
+
+    private Hologram hologram;
 
     public Parkour (String id, Material mainBlock, ArrayList<Material> allowedMaterials,
                     Location start, Location end, List<Location> checkpoints,
@@ -53,6 +63,18 @@ public class Parkour {
         this.resetPoint = resetPoint;
 
         this.timed = timed;
+        this.leaderboard = false;
+    }
+
+    public Parkour (String id, Material mainBlock, ArrayList<Material> allowedMaterials,
+                    Location start, Location end, List<Location> checkpoints,
+                    Location resetPoint, boolean timed, boolean leaderboard,
+                    Location leaderboardPos){
+        this(id, mainBlock, allowedMaterials, start, end, checkpoints, resetPoint, timed);
+
+        this.leaderboard = leaderboard;
+        this.leaderboardPos = leaderboardPos;
+        this.hologram = null;
     }
 
     public void addPlayer(LobbyPlayer player){
@@ -100,6 +122,58 @@ public class Parkour {
 
             DecimalFormat df = new DecimalFormat("0.000");
             player.sendMessage("&aYou reached Checkpoint #" + (index + 1) + " in " + df.format(((double) time / 1000)) + " seconds.");
+        }
+    }
+
+    public void updateLeaderboard(){
+        if(this.leaderboard){
+            Common.getLogger().log(Level.INFO, "Updating leaderboard for " + this.id);
+            List<String> lines = new ArrayList<>();
+
+            lines.add(ChatColor.BLUE + "" + ChatColor.BOLD + "Parkour Leaderboard");
+
+            ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
+
+            int x = 1;
+            DecimalFormat df = new DecimalFormat("0.000");
+
+            if (cache.getBestTimes(this.id) != null) {
+                for(ParkourData ply : cache.getBestTimes(this.id)){
+                    PlayerRank rank = ply.getRank();
+                    ChatColor rankColor = ChatColor.valueOf(rank.getColour());
+
+                    lines.add(ChatColor.AQUA + Integer.toString(x) + ". "
+                            + rankColor + ply.getName()
+                            + ChatColor.GRAY + " - "
+                            + ChatColor.AQUA + df.format(((double) ply.getTime() / 1000)));
+
+                    x++;
+                }
+            }
+
+            if (this.hologram != null) {
+                x = 0;
+                for(String line : lines){
+                    if(!this.hologram.getLine(x).equals(line)){
+                        Common.getLogger().log(Level.INFO, "Updating line " + x + " text: " + line);
+                        this.hologram.updateLine(x, line);
+                    } else if (this.hologram.getLine(x) == null) {
+                        Common.getLogger().log(Level.INFO, "Adding line " + x + " text: " + line);
+
+                    }
+                    x++;
+                }
+            } else {
+                Common.getLogger().log(Level.INFO, "new Hologram()");
+
+                this.hologram = new Hologram(this.leaderboardPos, lines, 0.50);
+            }
+        }
+    }
+
+    public void cleanup(){
+        if(this.leaderboard && this.hologram != null){
+            this.hologram.removeAll();
         }
     }
 
