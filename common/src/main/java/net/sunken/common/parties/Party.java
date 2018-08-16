@@ -10,7 +10,7 @@ import java.util.UUID;
 @Model
 public class Party {
 
-    static final String LEADER_KEY = "leader";
+    static final String LEADER_KEY = "leaderUUID";
     static final String ALL_MEMBERS_KEY = "allMembers";
 
     @Id
