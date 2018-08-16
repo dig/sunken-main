@@ -78,11 +78,7 @@ public class PlayerListener implements Listener {
 
         player.getInventory().setItem(8, new ActionableElement(Constants.ITEM_LOBBY.make(), Action.INTERACT, context -> {
             Player observer = context.getObserver();
-
-            for(ParkourData data : LobbyPlugin.getInstance().getParkourCache().getBestTimes("test")){
-                observer.sendMessage(data.getUuid() + " - " + data.getName() + " - " + data.getTime());
-            }
-
+            observer.sendMessage("lobby");
             return context;
         }).getItem());
     }

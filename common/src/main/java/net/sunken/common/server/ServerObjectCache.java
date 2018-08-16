@@ -43,7 +43,9 @@ public class ServerObjectCache {
                 Set<ServerObject> updatedCache = Sets.newLinkedHashSet();
 
                 ScanParams params = new ScanParams();
+                params.count(100);
                 params.match(ServerRedisHelper.SERVER_STORAGE_KEY + ":*");
+
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 

@@ -120,7 +120,9 @@ public class ParkourCache {
 
             try {
                 ScanParams params = new ScanParams();
+                params.count(100);
                 params.match(ParkourRedisHelper.PARKOUR_STORAGE_KEY + ":*");
+
                 ScanResult<String> scanResult = jedis.scan("0", params);
                 List<String> keys = scanResult.getResult();
 
