@@ -7,6 +7,7 @@ import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
+import net.sunken.core.inventory.PageContainer;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
 import net.sunken.lobby.listeners.WorldListener;
@@ -14,6 +15,7 @@ import net.sunken.lobby.parkour.ParkourCache;
 import net.sunken.lobby.parkour.ParkourHandler;
 import net.sunken.lobby.parkour.ParkourListener;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +27,9 @@ public class LobbyPlugin extends JavaPlugin {
     private static LobbyPlugin instance;
 
     private ParkourCache parkourCache;
+
+    @Getter
+    private Inventory lobbyInventory;
 
     @Override
     public void onEnable() {
@@ -39,7 +44,8 @@ public class LobbyPlugin extends JavaPlugin {
 
         PacketHandlerRegistry.registerHandler(new ParkourLeaderboardUpdatePacket(), new ParkourHandler());
 
-        parkourCache = new ParkourCache(this.getConfig());
+        this.parkourCache = new ParkourCache(this.getConfig());
+        this.lobbyInventory = Bukkit.createInventory(null, 27, "Lobby Selector");
 
         this.registerEvents();
     }
