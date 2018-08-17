@@ -1,48 +1,36 @@
-package net.sunken.common.parties;
+package net.sunken.common.parties.data;
 
 import com.google.common.base.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.common.type.ServerType;
-import redis.clients.johm.Attribute;
-import redis.clients.johm.Id;
-import redis.clients.johm.Model;
 
 import java.util.UUID;
 
-@Model
 public class PartyPlayer {
 
-    @Id
     @Getter
     @Setter
     private Long id;
-    @Attribute
+    @Getter
     @Setter
-    private String uuid;
-    @Attribute
+    private UUID uniqueId;
     @Getter
     @Setter
     private String name;
-    @Attribute
     @Getter
     @Setter
     private ServerType serverType;
-    @Attribute
     @Getter
     @Setter
     private PlayerRank rank;
 
     public PartyPlayer(UUID uuid, String name, ServerType serverType, PlayerRank rank) {
-        this.uuid = uuid.toString();
+        this.uniqueId = uuid;
         this.name = name;
         this.serverType = serverType;
         this.rank = rank;
-    }
-
-    public UUID getUUID() {
-        return UUID.fromString(this.uuid);
     }
 
     @Override
@@ -51,11 +39,11 @@ public class PartyPlayer {
         if (obj == this) return true;
         if (obj.getClass() != getClass()) return false;
         PartyPlayer other = (PartyPlayer) obj;
-        return Objects.equal(this.getUUID(), other.getUUID());
+        return Objects.equal(this.uniqueId, other.uniqueId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.uuid);
+        return Objects.hashCode(this.uniqueId);
     }
 }

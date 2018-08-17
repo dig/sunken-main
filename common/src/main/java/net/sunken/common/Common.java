@@ -7,9 +7,9 @@ import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.packet.PacketListener;
-import net.sunken.common.parties.PartyPlayer;
-import net.sunken.common.parties.PartyService;
-import net.sunken.common.parties.RedisPartyService;
+import net.sunken.common.parties.data.PartyPlayer;
+import net.sunken.common.parties.service.PartyService;
+import net.sunken.common.parties.service.RedisPartyService;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.common.server.ServerCacheUpdater;
@@ -17,7 +17,6 @@ import net.sunken.common.server.ServerChangeInformer;
 import net.sunken.common.server.ServerObject;
 import net.sunken.common.server.ServerObjectCache;
 import net.sunken.common.type.ServerType;
-import redis.clients.johm.JOhm;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,8 +57,6 @@ public class Common {
                 "***REMOVED***"
         );
 
-        JOhm.setPool(this.redis.getJedisPool());
-
         PacketListener packetListener = new PacketListener(redis.getConnection());
         packetListener.start();
 
@@ -75,14 +72,15 @@ public class Common {
 
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
 
-        // PartyService partyService = new RedisPartyService();
-        // partyService.createParty(new PartyPlayer(UUID.randomUUID(), "LeaderName", ServerType.MAIN_LOBBY, PlayerRank.MODERATOR),
-                                // new PartyPlayer(UUID.randomUUID(), "InvitedName", ServerType.MAIN_LOBBY, PlayerRank.OWNER) );
+        PartyService partyService = new RedisPartyService(jedis);
+        partyService.createParty(
+                new PartyPlayer(UUID.randomUUID(), "LeaderName", ServerType.MAIN_LOBBY, PlayerRank.MODERATOR),
+                new PartyPlayer(UUID.randomUUID(), "InvitedName", ServerType.MAIN_LOBBY, PlayerRank.OWNER));
 
         this.loaded = true;
     }
 
-    public void onCommonLoad(boolean listenForServers, ServerType serverType, int maxPlayers, int serverPort){
+    public void onCommonLoad(boolean listenForServers, ServerType serverType, int maxPlayers, int serverPort) {
         this.onCommonLoad(listenForServers);
 
         // Add server to the network
@@ -99,14 +97,16 @@ public class Common {
 
     public ServerObjectCache getServerCache() {
         if (loaded && serverObjectCache == null) {
-            throw new UnsupportedOperationException("the server cache is unavailable, are you sure this is supported for the server type?");
+            throw new UnsupportedOperationException(
+                    "the server cache is unavailable, are you sure this is supported for the server type?");
         }
         return serverObjectCache;
     }
 
     public ServerChangeInformer getServerChangeInformer() {
         if (loaded && serverChangeInformer == null) {
-            throw new UnsupportedOperationException("the online informer is unavailable, are you sure this is supported for the server type?");
+            throw new UnsupportedOperationException(
+                    "the online informer is unavailable, are you sure this is supported for the server type?");
         }
         return serverChangeInformer;
     }

@@ -1,4 +1,4 @@
-package net.sunken.common.parties;
+package net.sunken.common.parties.service.status;
 
 public enum PartyCreateStatus {
 

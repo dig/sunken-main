@@ -1,4 +1,7 @@
-package net.sunken.common.parties;
+package net.sunken.common.parties.service;
+
+import net.sunken.common.parties.service.status.PartyCreateStatus;
+import net.sunken.common.parties.data.PartyPlayer;
 
 import java.util.UUID;
 

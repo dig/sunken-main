@@ -11,14 +11,13 @@ public class PacketListener {
     public static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
 
     private final Jedis subscriberJedis;
+
     public PacketListener(Jedis subscriberJedis) {
         this.subscriberJedis = subscriberJedis;
     }
 
     public void start() {
-        new Thread(() -> {
-            subscriberJedis.subscribe(new Listener(), PACKET_CHANNEL);
-        }).start();
+        new Thread(() -> subscriberJedis.subscribe(new Listener(), PACKET_CHANNEL)).start();
     }
 
     private class Listener extends BinaryJedisPubSub {
@@ -57,5 +56,4 @@ public class PacketListener {
         public void onPSubscribe(byte[] pattern, int subscribedChannels) {
         }
     }
-
 }

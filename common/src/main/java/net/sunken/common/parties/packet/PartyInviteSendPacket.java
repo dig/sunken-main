@@ -1,15 +1,11 @@
-package net.sunken.common.parties;
+package net.sunken.common.parties.packet;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.sunken.common.packet.Packet;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class PartyInviteSendPacket extends Packet {
 
     @Getter
@@ -18,4 +14,12 @@ public class PartyInviteSendPacket extends Packet {
     @Getter
     @Setter
     private UUID to;
+
+    public PartyInviteSendPacket(UUID creator, UUID to) {
+        this.creator = creator;
+        this.to = to;
+    }
+
+    public PartyInviteSendPacket() {
+    }
 }
