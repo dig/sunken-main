@@ -3,10 +3,12 @@ package net.sunken.common.parties.data;
 import com.google.common.base.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Set;
 import java.util.UUID;
 
+@ToString
 public class Party {
 
     @Getter

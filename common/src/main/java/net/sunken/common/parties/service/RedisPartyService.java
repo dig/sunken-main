@@ -28,6 +28,8 @@ public class RedisPartyService implements PartyService {
 
     @Override
     public Party getPartyByUUID(UUID uuid) {
+        Party party = null;
+
         Jedis jedis = pool.getResource();
         try {
             String partyKey = "party:" + uuid.toString();
@@ -60,7 +62,7 @@ public class RedisPartyService implements PartyService {
                 allMembers.add(member);
             }
 
-            return new Party(uuid,
+            party = new Party(uuid,
                              UUID.fromString(leaderUniqueIdStr),
                              allMembers,
                              Long.parseLong(createdAt));
@@ -69,11 +71,12 @@ public class RedisPartyService implements PartyService {
         } finally {
             pool.returnResource(jedis);
         }
-        return null;
+
+        return party;
     }
 
     @Override
-    public PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite) {
+    public PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite, UUID test) {
         Jedis jedis = pool.getResource();
         try {
             // check whether either player is in a party already, if so, deny the creation
@@ -89,10 +92,12 @@ public class RedisPartyService implements PartyService {
 
             // no party exists with either the inviter or invitee in it, go ahead and create it
 
-            String partyUUID = UUID.randomUUID().toString();
+            //String partyUUID = UUID.randomUUID().toString();
+            String partyUUID = test.toString();
             Transaction transaction = jedis.multi(); // start transaction
 
             // leader information
+            transaction.set("party:" + partyUUID + ":leader:" + leader.getUniqueId().toString(), "");
             transaction.set("party:" + partyUUID + ":leader", leader.getUniqueId().toString());
             // created at
             long now = System.currentTimeMillis();
