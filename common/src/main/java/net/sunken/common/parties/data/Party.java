@@ -9,8 +9,9 @@ import java.util.UUID;
 
 public class Party {
 
-    public static final String PARTY_KEY = "party:";
-
+    @Getter
+    @Setter
+    private UUID partyUUID;
     @Getter
     @Setter
     private UUID leaderUniqueId;
@@ -21,7 +22,12 @@ public class Party {
     @Setter
     private long createdAt;
 
-    public Party(UUID leaderUniqueId, Set<PartyPlayer> allMembers, long createdAt) {
+    public Party(UUID partyUUID,
+                 UUID leaderUniqueId,
+                 Set<PartyPlayer> allMembers,
+                 long createdAt) {
+
+        this.partyUUID = partyUUID;
         this.leaderUniqueId = leaderUniqueId;
         this.allMembers = allMembers;
         this.createdAt = createdAt;

@@ -1,14 +1,22 @@
 package net.sunken.common.parties.service;
 
+import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
+import net.sunken.common.parties.packet.PartyDisbandedPacket;
+import net.sunken.common.parties.packet.PartyInviteSendPacket;
+import net.sunken.common.parties.packet.PartyMemberLeftPacket;
 import net.sunken.common.parties.service.status.PartyCreateStatus;
+import net.sunken.common.player.PlayerRank;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ScanResult;
+import redis.clients.jedis.Transaction;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
+import static com.google.common.base.Preconditions.checkState;
 
 public class RedisPartyService implements PartyService {
 
@@ -16,6 +24,52 @@ public class RedisPartyService implements PartyService {
 
     public RedisPartyService(JedisPool pool) {
         this.pool = pool;
+    }
+
+    @Override
+    public Party getPartyByUUID(UUID uuid) {
+        Jedis jedis = pool.getResource();
+        try {
+            String partyKey = "party:" + uuid.toString();
+            checkState(jedis.exists(partyKey), "party with given UUID does not exist");
+
+            String leaderUniqueIdStr = jedis.get(partyKey + ":leader");
+            String createdAt = jedis.get(partyKey + ":created_at");
+
+            ScanResult<String> memberScan = jedis.scan(partyKey + ":members");
+            List<String> result = memberScan.getResult();
+            Set<PartyPlayer> allMembers = new HashSet<>();
+            for (String memberKey : result) {
+                Map<String, String> memberInformation = jedis.hgetAll(memberKey);
+                PartyPlayer member = new PartyPlayer();
+                memberInformation.forEach((field, value) -> {
+                    switch (field) {
+                        case "uuid":
+                            member.setUniqueId(UUID.fromString(value));
+                            break;
+                        case "name":
+                            member.setName(value);
+                            break;
+                        case "player_rank":
+                            member.setRank(PlayerRank.valueOf(value));
+                            break;
+                        default:
+                            assert false : "unknown field";
+                    }
+                });
+                allMembers.add(member);
+            }
+
+            return new Party(uuid,
+                             UUID.fromString(leaderUniqueIdStr),
+                             allMembers,
+                             Long.parseLong(createdAt));
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+        } finally {
+            pool.returnResource(jedis);
+        }
+        return null;
     }
 
     @Override
@@ -35,17 +89,22 @@ public class RedisPartyService implements PartyService {
 
             // no party exists with either the inviter or invitee in it, go ahead and create it
 
-            // party identifier
             String partyUUID = UUID.randomUUID().toString();
+            Transaction transaction = jedis.multi(); // start transaction
+
             // leader information
-            jedis.hmset("party:" + partyUUID + ":leader:" + leader.getUniqueId(), leader.toMap());
+            transaction.set("party:" + partyUUID + ":leader", leader.getUniqueId().toString());
             // created at
             long now = System.currentTimeMillis();
-            jedis.set("party:" + partyUUID + ":created_at", String.valueOf(now));
+            transaction.set("party:" + partyUUID + ":created_at", String.valueOf(now));
             // all members including leader themselves
-            jedis.hmset("party:" + partyUUID + ":members:" + leader.getUniqueId(), leader.toMap());
-            jedis.hmset("party:" + partyUUID + ":members:" + toInvite.getUniqueId(), toInvite.toMap());
+            transaction.hmset("party:" + partyUUID + ":members:" + leader.getUniqueId(), leader.toMap());
+            transaction.hmset("party:" + partyUUID + ":members:" + toInvite.getUniqueId(), toInvite.toMap());
 
+            transaction.exec(); // execute transaction
+
+            PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket();
+            PacketUtil.sendPacket(partyInviteSendPacket);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
         } finally {
@@ -60,11 +119,29 @@ public class RedisPartyService implements PartyService {
         Jedis jedis = pool.getResource();
         try {
             // was the party deleted as the player being a leader?
-            boolean deletedAsLeader = this.deletePartyFromQuery(jedis, "party:*:leader:" + leaving.toString());
+            // party UUID retrieved if the player leaving was a leader of a party
+            final UUID uuidAsLeader = this.getPartyUUIDFromQuery(jedis, "party:*:leader:" + leaving.toString());
+            if (uuidAsLeader != null) {
+                Party party = this.getPartyByUUID(uuidAsLeader);
+                long amountDeleted = jedis.del("party:" + party.getPartyUUID().toString());
+                if (amountDeleted > 0) {
+                    PartyDisbandedPacket partyDisbandedPacket = new PartyDisbandedPacket(party);
+                    PacketUtil.sendPacket(partyDisbandedPacket);
+                }
+                return;
+            }
 
             // player is not a party leader, may be a member?
-            if (!deletedAsLeader) {
-                this.deletePartyFromQuery(jedis, "party:*:members:" + leaving.toString());
+            final UUID uuidAsMember = this.getPartyUUIDFromQuery(jedis, "party:*:members:" + leaving.toString());
+            if (uuidAsMember != null) {
+                Party party = this.getPartyByUUID(uuidAsMember);
+                // delete the member from the party
+                long amountDeleted = jedis
+                        .del("party:" + party.getPartyUUID().toString() + ":members:" + leaving.toString());
+                if (amountDeleted > 0) {
+                    PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(leaving, party);
+                    PacketUtil.sendPacket(partyMemberLeftPacket);
+                }
             }
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
@@ -73,27 +150,18 @@ public class RedisPartyService implements PartyService {
         }
     }
 
-    /** Return whether the party was found from the query (e.g. scan query etc.) and deleted successfully */
-    private boolean deletePartyFromQuery(Jedis jedis, String query) {
+    /** Return the party UUID found from a wildcard query (e.g. scan query etc.) */
+    @Nullable
+    private UUID getPartyUUIDFromQuery(Jedis jedis, String query) {
         ScanResult<String> scan = jedis.scan(query);
         List<String> result = scan.getResult();
         if (result.size() > 0) {
             String first = result.get(0);
-            String partyKey = this.getPartyKeyFromQuery(first);
-            if (partyKey != null) {
-                jedis.del(first);
-                return true;
+            String[] split = first.split(":");
+            String partyUUID = split[1];
+            if (partyUUID != null) {
+                return UUID.fromString(partyUUID);
             }
-        }
-        return false;
-    }
-
-    /** Returns party:partyUUID from a string such as party:partyUUID:leader:leaderUUID */
-    @Nullable
-    private String getPartyKeyFromQuery(String query) {
-        String[] split = query.split(":");
-        if (split[0] != null && split[1] != null) {
-            return split[0] + ":" + split[1];
         }
         return null;
     }

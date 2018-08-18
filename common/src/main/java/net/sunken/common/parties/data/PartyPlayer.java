@@ -27,6 +27,9 @@ public class PartyPlayer {
         this.rank = rank;
     }
 
+    public PartyPlayer() {
+    }
+
     public Map<String, String> toMap() {
         Map<String, String> details = new HashMap<>();
         details.put("name",  name);
