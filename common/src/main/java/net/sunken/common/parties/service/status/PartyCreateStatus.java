@@ -2,6 +2,7 @@ package net.sunken.common.parties.service.status;
 
 public enum PartyCreateStatus {
 
-    ALREADY_IN_PARTY,
+    INVITER_ALREADY_IN_PARTY,
+    INVITEE_ALREADY_IN_PARTY,
     SUCCESS
 }

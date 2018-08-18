@@ -4,6 +4,6 @@ import net.sunken.common.packet.Packet;
 
 public class ParkourLeaderboardUpdatePacket extends Packet {
 
-    public ParkourLeaderboardUpdatePacket(){}
-
+    public ParkourLeaderboardUpdatePacket() {
+    }
 }

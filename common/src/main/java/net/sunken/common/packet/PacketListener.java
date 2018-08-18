@@ -28,7 +28,6 @@ public class PacketListener {
         public void onMessage(byte[] channel, byte[] message) {
             if (Arrays.equals(channel, PACKET_CHANNEL)) {
                 Packet deserialized = Packet.fromBytes(message);
-
                 if (deserialized != null && handlers.containsKey(deserialized.getClass())) {
                     PacketHandler handler = handlers.get(deserialized.getClass());
                     handler.onReceive(deserialized);

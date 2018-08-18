@@ -4,15 +4,13 @@ import com.google.common.base.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import net.sunken.common.player.PlayerRank;
-import net.sunken.common.type.ServerType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PartyPlayer {
 
-    @Getter
-    @Setter
-    private Long id;
     @Getter
     @Setter
     private UUID uniqueId;
@@ -21,16 +19,20 @@ public class PartyPlayer {
     private String name;
     @Getter
     @Setter
-    private ServerType serverType;
-    @Getter
-    @Setter
     private PlayerRank rank;
 
-    public PartyPlayer(UUID uuid, String name, ServerType serverType, PlayerRank rank) {
+    public PartyPlayer(UUID uuid, String name, PlayerRank rank) {
         this.uniqueId = uuid;
         this.name = name;
-        this.serverType = serverType;
         this.rank = rank;
+    }
+
+    public Map<String, String> toMap() {
+        Map<String, String> details = new HashMap<>();
+        details.put("name",  name);
+        details.put("uuid", uniqueId.toString());
+        details.put("player_rank", rank.name());
+        return details;
     }
 
     @Override

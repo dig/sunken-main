@@ -1,60 +1,100 @@
 package net.sunken.common.parties.service;
 
-import com.google.gson.Gson;
-import net.sunken.common.packet.PacketUtil;
-import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.packet.PartyDisbandedPacket;
-import net.sunken.common.parties.packet.PartyInviteSendPacket;
 import net.sunken.common.parties.service.status.PartyCreateStatus;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.ScanResult;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
 
 public class RedisPartyService implements PartyService {
 
-    private static final Gson GSON = new Gson();
+    private final JedisPool pool;
 
-    private final Jedis jedis;
-
-    public RedisPartyService(Jedis jedis) {
-        this.jedis = jedis;
+    public RedisPartyService(JedisPool pool) {
+        this.pool = pool;
     }
 
     @Override
     public PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite) {
-        boolean partyWithLeaderExists = this.jedis.exists(Party.PARTY_KEY + leader.getUniqueId().toString());
-        if (partyWithLeaderExists) {
-            return PartyCreateStatus.ALREADY_IN_PARTY;
+        Jedis jedis = pool.getResource();
+        try {
+            // check whether either player is in a party already, if so, deny the creation
+
+            boolean partyWithLeaderInExists = jedis.exists("party:*:members:" + leader.getUniqueId());
+            if (partyWithLeaderInExists) {
+                return PartyCreateStatus.INVITER_ALREADY_IN_PARTY;
+            }
+            boolean partyWithInviteeInExists = jedis.exists("party:*:members:" + leader.getUniqueId());
+            if (partyWithInviteeInExists) {
+                return PartyCreateStatus.INVITEE_ALREADY_IN_PARTY;
+            }
+
+            // no party exists with either the inviter or invitee in it, go ahead and create it
+
+            // party identifier
+            String partyUUID = UUID.randomUUID().toString();
+            // leader information
+            jedis.hmset("party:" + partyUUID + ":leader:" + leader.getUniqueId(), leader.toMap());
+            // created at
+            long now = System.currentTimeMillis();
+            jedis.set("party:" + partyUUID + ":created_at", String.valueOf(now));
+            // all members including leader themselves
+            jedis.hmset("party:" + partyUUID + ":members:" + leader.getUniqueId(), leader.toMap());
+            jedis.hmset("party:" + partyUUID + ":members:" + toInvite.getUniqueId(), toInvite.toMap());
+
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+        } finally {
+            pool.returnResource(jedis);
         }
-
-        Party newParty = new Party(leader.getUniqueId(), new HashSet<>(Arrays.asList(leader, toInvite)),
-                System.currentTimeMillis());
-        String partyAsJson = GSON.toJson(newParty);
-        // index by leader's unique ID
-        jedis.set(Party.PARTY_KEY + leader.getUniqueId().toString(), partyAsJson);
-
-        // send the party invite send packet
-        PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(leader.getUniqueId(),
-                toInvite.getUniqueId());
-        PacketUtil.sendPacket(partyInviteSendPacket);
-
+        // successful creation
         return PartyCreateStatus.SUCCESS;
     }
 
     @Override
     public void leaveParty(UUID leaving) {
-        // the player leaving the party is a party leader
-        boolean partyWithLeaderExists = this.jedis.exists(Party.PARTY_KEY + leaving.toString());
-        if (partyWithLeaderExists) {
-            jedis.del(Party.PARTY_KEY + leaving.toString());
-            PartyDisbandedPacket partyDisbandedPacket = new PartyDisbandedPacket();
-            PacketUtil.sendPacket(partyDisbandedPacket);
-            return;
-        }
+        Jedis jedis = pool.getResource();
+        try {
+            // was the party deleted as the player being a leader?
+            boolean deletedAsLeader = this.deletePartyFromQuery(jedis, "party:*:leader:" + leaving.toString());
 
-        
+            // player is not a party leader, may be a member?
+            if (!deletedAsLeader) {
+                this.deletePartyFromQuery(jedis, "party:*:members:" + leaving.toString());
+            }
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+        } finally {
+            pool.returnResource(jedis);
+        }
+    }
+
+    /** Return whether the party was found from the query (e.g. scan query etc.) and deleted successfully */
+    private boolean deletePartyFromQuery(Jedis jedis, String query) {
+        ScanResult<String> scan = jedis.scan(query);
+        List<String> result = scan.getResult();
+        if (result.size() > 0) {
+            String first = result.get(0);
+            String partyKey = this.getPartyKeyFromQuery(first);
+            if (partyKey != null) {
+                jedis.del(first);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Returns party:partyUUID from a string such as party:partyUUID:leader:leaderUUID */
+    @Nullable
+    private String getPartyKeyFromQuery(String query) {
+        String[] split = query.split(":");
+        if (split[0] != null && split[1] != null) {
+            return split[0] + ":" + split[1];
+        }
+        return null;
     }
 }
