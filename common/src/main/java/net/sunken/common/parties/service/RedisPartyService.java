@@ -128,19 +128,18 @@ public class RedisPartyService implements PartyService {
                     PartyDisbandedPacket partyDisbandedPacket = new PartyDisbandedPacket(party);
                     PacketUtil.sendPacket(partyDisbandedPacket);
                 }
-                return;
-            }
-
-            // player is not a party leader, may be a member?
-            final UUID uuidAsMember = this.getPartyUUIDFromQuery(jedis, "party:*:members:" + leaving.toString());
-            if (uuidAsMember != null) {
-                Party party = this.getPartyByUUID(uuidAsMember);
-                // delete the member from the party
-                long amountDeleted = jedis
-                        .del("party:" + party.getPartyUUID().toString() + ":members:" + leaving.toString());
-                if (amountDeleted > 0) {
-                    PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(leaving, party);
-                    PacketUtil.sendPacket(partyMemberLeftPacket);
+            } else {
+                // player is not a party leader, may be a member?
+                final UUID uuidAsMember = this.getPartyUUIDFromQuery(jedis, "party:*:members:" + leaving.toString());
+                if (uuidAsMember != null) {
+                    Party party = this.getPartyByUUID(uuidAsMember);
+                    // delete the member from the party
+                    long amountDeleted = jedis
+                            .del("party:" + party.getPartyUUID().toString() + ":members:" + leaving.toString());
+                    if (amountDeleted > 0) {
+                        PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(leaving, party);
+                        PacketUtil.sendPacket(partyMemberLeftPacket);
+                    }
                 }
             }
         } catch (Exception e) {
