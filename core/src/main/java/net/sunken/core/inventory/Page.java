@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.sunken.core.inventory.element.ActionableElement;
 import net.sunken.core.inventory.element.Element;
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +25,9 @@ public class Page {
     @Getter(value = AccessLevel.PACKAGE)
     private final Map<Integer, Element> elements;
 
+    @Getter
+    private Inventory inventory;
+
     private Page(String id,
                  String title,
                  int size,
@@ -32,6 +37,13 @@ public class Page {
         this.title = title;
         this.size = size;
         this.elements = elements;
+
+        this.inventory = Bukkit.createInventory(null, size, title);
+    }
+
+    public void updateInventory(){
+        this.inventory.clear();
+        elements.forEach((position, element) -> this.inventory.setItem(position, element.getItem()));
     }
 
     public static Builder builder(String id) {
