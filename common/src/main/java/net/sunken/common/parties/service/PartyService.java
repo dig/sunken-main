@@ -10,7 +10,7 @@ public interface PartyService {
 
     Party getPartyByUUID(UUID uuid);
 
-    PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite);
+    PartyCreateStatus createParty(PartyPlayer leader, PartyPlayer toInvite, UUID test);
 
     void leaveParty(UUID leaving);
 }
