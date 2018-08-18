@@ -158,9 +158,11 @@ public class RedisPartyService implements PartyService {
         if (result.size() > 0) {
             String first = result.get(0);
             String[] split = first.split(":");
-            String partyUUID = split[1];
-            if (partyUUID != null) {
-                return UUID.fromString(partyUUID);
+            if (1 < split.length) {
+                String partyUUID = split[1];
+                if (partyUUID != null) {
+                    return UUID.fromString(partyUUID);
+                }
             }
         }
         return null;
