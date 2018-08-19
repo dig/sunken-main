@@ -16,7 +16,7 @@ public class PartyCommand {
             min = 1,
             max = 1)
     @PlayerRankRequired(PlayerRank.ADMIN)
-    public void party(final CommandContext args, final CommandSender sender) {
+    public static void party(final CommandContext args, final CommandSender sender) {
         if (sender instanceof ProxiedPlayer) {
         }
     }

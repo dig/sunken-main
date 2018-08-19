@@ -164,7 +164,7 @@ public abstract class CommandsManager<T> {
         if (commands.containsKey(parent)) {
             map = commands.get(parent);
         } else {
-            map = new HashMap<String, Method>();
+            map = new HashMap<>();
             commands.put(parent, map);
         }
 

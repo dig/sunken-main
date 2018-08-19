@@ -22,7 +22,7 @@ public class LobbyCommand {
             min = 0,
             max = 0)
     @PlayerRankRequired(PlayerRank.USER)
-    public void lobby(final CommandContext args, final CommandSender sender) {
+    public static void lobby(final CommandContext args, final CommandSender sender) {
         if (sender instanceof ProxiedPlayer) {
             ProxiedPlayer player = (ProxiedPlayer) sender;
 

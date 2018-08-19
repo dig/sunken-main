@@ -60,7 +60,9 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
 
     private void setupCommands() {
         this.commands = new BungeeCommandsManager();
-        CommandRegistration registry = new CommandRegistration(this, this.getProxy().getPluginManager(), this.commands,
+        CommandRegistration registry = new CommandRegistration(this,
+                                                               this.getProxy().getPluginManager(),
+                                                               this.commands,
                                                                this);
         // register all commands
         registry.register(PartyCommand.class);
