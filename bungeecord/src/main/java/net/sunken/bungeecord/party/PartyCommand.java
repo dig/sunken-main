@@ -18,6 +18,8 @@ public class PartyCommand {
     @PlayerRankRequired(PlayerRank.ADMIN)
     public static void party(final CommandContext args, final CommandSender sender) {
         if (sender instanceof ProxiedPlayer) {
+            ProxiedPlayer player = (ProxiedPlayer) sender;
+            player.sendMessage("ye");
         }
     }
 }
