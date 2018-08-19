@@ -1,14 +1,7 @@
 package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
-import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.service.PartyService;
-import net.sunken.common.parties.service.RedisPartyService;
 import net.sunken.common.player.AbstractPlayer;
-import net.sunken.common.player.PlayerRank;
-import net.sunken.common.server.ServerObject;
-import net.sunken.common.type.ServerType;
-import net.sunken.core.inventory.ItemBuilder;
 import net.sunken.core.inventory.element.Action;
 import net.sunken.core.inventory.element.ActionableElement;
 import net.sunken.core.util.NametagUtil;
@@ -16,7 +9,6 @@ import net.sunken.core.util.TabListUtil;
 import net.sunken.core.util.chat.MessageUtil;
 import net.sunken.lobby.Constants;
 import net.sunken.lobby.LobbyPlugin;
-import net.sunken.lobby.parkour.ParkourData;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,16 +19,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 
 public class PlayerListener implements Listener {
 
@@ -87,7 +74,7 @@ public class PlayerListener implements Listener {
 
         player.getInventory().setItem(8, new ActionableElement(Constants.ITEM_LOBBY.make(), Action.INTERACT, context -> {
             Player observer = context.getObserver();
-            observer.openInventory(LobbyPlugin.getInstance().getLobbyInventory());
+
             return context;
         }).getItem());
     }

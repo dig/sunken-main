@@ -6,12 +6,14 @@ import net.sunken.common.achievements.NetworkFirstJoinAchievement;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
+import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.PacketListener;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.server.ServerCacheUpdater;
 import net.sunken.common.server.ServerChangeInformer;
-import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.server.ServerObjectCache;
+import net.sunken.common.server.packet.ServerCacheUpdatePacket;
 import net.sunken.common.type.ServerType;
 
 import java.util.Map;
@@ -60,8 +62,7 @@ public class Common {
         // Should the server keep track of other servers?
         if (listenForServers) {
             serverObjectCache = new ServerObjectCache(this.redis);
-            ServerCacheUpdater serverCacheUpdater = new ServerCacheUpdater(redis.getConnection(), serverObjectCache);
-            serverCacheUpdater.start();
+            PacketHandlerRegistry.registerHandler(new ServerCacheUpdatePacket(), new ServerCacheUpdater(this.serverObjectCache));
         }
         serverChangeInformer = new ServerChangeInformer(this.redis);
 

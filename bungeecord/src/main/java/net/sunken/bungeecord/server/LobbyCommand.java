@@ -8,7 +8,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.player.PlayerRank;
-import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
 import java.net.InetSocketAddress;

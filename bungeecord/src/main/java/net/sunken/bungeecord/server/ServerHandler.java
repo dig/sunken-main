@@ -1,7 +1,7 @@
 package net.sunken.bungeecord.server;
 
 import net.sunken.common.Common;
-import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
 import javax.annotation.Nullable;

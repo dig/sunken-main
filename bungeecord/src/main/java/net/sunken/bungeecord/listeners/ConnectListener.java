@@ -11,7 +11,7 @@ import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.Common;
-import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
 import java.io.ByteArrayInputStream;

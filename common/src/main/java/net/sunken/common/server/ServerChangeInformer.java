@@ -1,13 +1,12 @@
 package net.sunken.common.server;
 
 import com.google.common.collect.ImmutableMap;
-import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
+import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.server.data.ServerObject;
+import net.sunken.common.server.packet.ServerCacheUpdatePacket;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
-
-import static net.sunken.common.server.ServerRedisHelper.SERVER_CACHE_CHANNEL;
-import static net.sunken.common.server.ServerRedisHelper.UPDATE_SERVER_CACHE;
 
 public class ServerChangeInformer {
 
@@ -32,7 +31,8 @@ public class ServerChangeInformer {
                         .build();
 
                 jedis.hmset(ServerRedisHelper.SERVER_STORAGE_KEY + ":" + serverObject.getServerName(), serverKeys);
-                Common.getInstance().getRedis().sendRedisMessage(SERVER_CACHE_CHANNEL, UPDATE_SERVER_CACHE);
+
+                PacketUtil.sendPacket(new ServerCacheUpdatePacket());
             } catch (Exception e) {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
@@ -47,7 +47,7 @@ public class ServerChangeInformer {
         try {
             jedis.del(ServerRedisHelper.SERVER_STORAGE_KEY + ":" + serverObject.getServerName());
 
-            Common.getInstance().getRedis().sendRedisMessage(SERVER_CACHE_CHANNEL, UPDATE_SERVER_CACHE);
+            PacketUtil.sendPacket(new ServerCacheUpdatePacket());
         } catch (Exception e) {
             redisConnection.getJedisPool().returnBrokenResource(jedis);
         } finally {

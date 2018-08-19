@@ -12,9 +12,6 @@ public class ServerRedisHelper {
     public static final String SERVER_PORT_KEY = "port";
     public static final String SERVER_CREATED_KEY = "created";
 
-    public static final String SERVER_CACHE_CHANNEL = "server_cache";
-    public static final String UPDATE_SERVER_CACHE = "UPDATE_SERVER_CACHE";
-
     private ServerRedisHelper() {
         throw new AssertionError("You must not attempt to instantiate this class.");
     }

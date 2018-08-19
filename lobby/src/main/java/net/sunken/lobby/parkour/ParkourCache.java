@@ -1,14 +1,11 @@
 package net.sunken.lobby.parkour;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.parkour.ParkourRedisHelper;
 import net.sunken.common.player.PlayerRank;
-import net.sunken.common.server.ServerObject;
-import net.sunken.common.util.AsyncHelper;
 import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.Bukkit;
@@ -23,7 +20,6 @@ import redis.clients.jedis.ScanResult;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class ParkourCache {

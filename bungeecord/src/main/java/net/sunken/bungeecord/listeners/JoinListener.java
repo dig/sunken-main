@@ -16,15 +16,13 @@ import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.Common;
 import net.sunken.common.player.AbstractPlayer;
-import net.sunken.common.server.ServerObject;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JoinListener implements Listener {
 

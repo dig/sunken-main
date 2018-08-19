@@ -1,4 +1,4 @@
-package net.sunken.common.server;
+package net.sunken.common.server.data;
 
 import com.google.common.base.Objects;
 import lombok.Getter;
