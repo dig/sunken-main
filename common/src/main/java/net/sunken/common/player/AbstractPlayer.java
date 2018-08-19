@@ -2,8 +2,11 @@ package net.sunken.common.player;
 
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import lombok.Getter;
+import lombok.Setter;
 import net.sunken.common.Common;
+import net.sunken.common.ServerInstance;
 import net.sunken.common.achievements.Achievement;
 import net.sunken.common.achievements.AchievementRegistry;
 import net.sunken.common.database.DatabaseConstants;
@@ -22,6 +25,7 @@ public abstract class AbstractPlayer {
     protected static final String ACHIEVEMENTS_DONE_FIELD = "done";
 
     protected MongoCollection<Document> playerCollection;
+    @Getter
     protected Document playerDocument;
 
     protected String uuid;
@@ -40,10 +44,22 @@ public abstract class AbstractPlayer {
     @Getter
     protected Map<String, Achievement> achievements;
 
-    public AbstractPlayer(String uuid, String name, Document document, boolean firstJoin) {
+    public AbstractPlayer (String uuid, String name, Document document, boolean firstJoin) {
         this.uuid = uuid;
         this.name = name;
-        this.playerDocument = document;
+
+        this.playerCollection = Common.getInstance()
+                .getMongo()
+                .getConnection()
+                .getDatabase(DatabaseConstants.DATABASE_NAME)
+                .getCollection(DatabaseConstants.PLAYER_COLLECTION);
+
+        // Load from database if supplied none
+        if (document == null) {
+            this.playerDocument = this.playerCollection.find(Filters.eq(DatabaseConstants.PLAYER_UUID_FIELD, uuid)).first();
+        } else {
+            this.playerDocument = document;
+        }
 
         this.rank = PlayerRank.valueOf(this.playerDocument.getString(DatabaseConstants.PLAYER_RANK_FIELD));
         this.firstJoin = firstJoin;

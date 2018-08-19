@@ -11,11 +11,13 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
+import net.sunken.bungeecord.player.BungeePlayer;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.Common;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.common.player.packet.PlayerConnectPacket;
 import net.sunken.common.player.packet.PlayerJoinPacket;
@@ -27,20 +29,16 @@ import org.bson.Document;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class JoinListener implements Listener {
 
-
     private ArrayList<String> joined;
-    protected MongoCollection<Document> playerCollection;
 
     public JoinListener () {
         this.joined = new ArrayList<>();
-        this.playerCollection = Common.getInstance()
-                .getMongo()
-                .getConnection()
-                .getDatabase(DatabaseConstants.DATABASE_NAME)
-                .getCollection(DatabaseConstants.PLAYER_COLLECTION);
     }
 
     @EventHandler
@@ -65,8 +63,17 @@ public class JoinListener implements Listener {
     public void onFinalJoin(PostLoginEvent event) {
         ProxiedPlayer player = event.getPlayer();
 
-        // Get players document from Mongo
-        Document document = this.playerCollection.find(Filters.eq("uuid", player.getUniqueId().toString())).first();
+        // Correct collection for getting player data
+        MongoCollection<Document> playerCollection = Common.getInstance()
+                .getMongo()
+                .getConnection()
+                .getDatabase(DatabaseConstants.DATABASE_NAME)
+                .getCollection(DatabaseConstants.PLAYER_COLLECTION);
+
+        // Get player document
+        Document document = playerCollection.find(Filters.eq(DatabaseConstants.PLAYER_UUID_FIELD,
+                player.getUniqueId().toString())).first();
+        boolean firstJoin = false;
 
         if (document == null) {
             Document playerDocument = new Document(ImmutableMap.of(
@@ -75,12 +82,26 @@ public class JoinListener implements Listener {
                     DatabaseConstants.PLAYER_RANK_FIELD, PlayerRank.USER.toString(),
                     DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, new ArrayList<Document>()
             ));
-            this.playerCollection.insertOne(playerDocument);
+
+            playerCollection.insertOne(playerDocument);
+
             document = playerDocument;
+            firstJoin = true;
         }
 
         // Add player to the network
-        PacketUtil.sendPacket(new PlayerJoinPacket(player.getName(), player.getUniqueId(), document));
+        Common.getLogger().log(Level.INFO, "PlayerJoinPacket");
+        PacketUtil.sendPacket(new PlayerJoinPacket(player.getName(), player.getUniqueId(),
+                document, firstJoin));
+
+        // Add to local cache
+        BungeePlayer bungeePlayer = new BungeePlayer(player.getUniqueId().toString(), player.getName(),
+                document, firstJoin);
+
+        Common.getInstance()
+                .getDataManager()
+                .getOnlinePlayers()
+                .put(player.getUniqueId(), bungeePlayer);
     }
 
     @EventHandler
@@ -106,6 +127,7 @@ public class JoinListener implements Listener {
         }
 
         // Update our network because player is joining new server
+        Common.getLogger().log(Level.INFO, "PlayerConnectPacket");
         PacketUtil.sendPacket(new PlayerConnectPacket(player.getUniqueId(), event.getTarget().getName()));
     }
 
@@ -115,6 +137,15 @@ public class JoinListener implements Listener {
         joined.remove(player.getUniqueId().toString());
 
         // Remove player from our network
+        Common.getLogger().log(Level.INFO, "PlayerQuitPacket");
         PacketUtil.sendPacket(new PlayerQuitPacket(player.getName(), player.getUniqueId()));
+
+        // Remove player from local cache
+        Map<UUID, AbstractPlayer> players = Common.getInstance()
+                .getDataManager()
+                .getOnlinePlayers();
+
+        players.get(player.getUniqueId()).cleanup();
+        players.remove(player.getUniqueId());
     }
 }

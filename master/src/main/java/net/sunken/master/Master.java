@@ -4,8 +4,14 @@ import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
+import net.sunken.common.player.packet.PlayerConnectPacket;
+import net.sunken.common.player.packet.PlayerJoinPacket;
+import net.sunken.common.player.packet.PlayerQuitPacket;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
+import net.sunken.master.player.PlayerConnectHandler;
+import net.sunken.master.player.PlayerJoinHandler;
+import net.sunken.master.player.PlayerQuitHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +43,9 @@ public class Master {
 
         // Register packets
         PacketHandlerRegistry.registerHandler(ParkourCacheUpdatePacket.class, new ParkourCacheHandler());
+        PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
+        PacketHandlerRegistry.registerHandler(PlayerQuitPacket.class, new PlayerQuitHandler());
+        PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
 
         this.parkourCache = new ParkourCache();
     }

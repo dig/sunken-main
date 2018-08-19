@@ -15,11 +15,14 @@ public class PlayerJoinPacket extends Packet {
 
     @Getter
     private Document document;
+    @Getter
+    private boolean firstJoin;
 
-    public PlayerJoinPacket (String name, UUID uuid, Document document) {
+    public PlayerJoinPacket (String name, UUID uuid, Document document, boolean firstJoin) {
         this.name = name;
         this.uuid = uuid;
         this.document = document;
+        this.firstJoin = firstJoin;
     }
 
 }

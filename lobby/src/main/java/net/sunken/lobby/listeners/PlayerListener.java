@@ -24,14 +24,20 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+
         FileConfiguration config = LobbyPlugin.getInstance().getConfig();
         event.setJoinMessage("");
+
+        // Load player into local cache
+        LobbyPlayer lobbyPlayer = new LobbyPlayer(player.getUniqueId().toString(), player.getName(), null, false);
+        Common.getInstance().getDataManager().getOnlinePlayers().put(player.getUniqueId(), lobbyPlayer);
 
         // Set spawn
         Location spawn = new Location(
@@ -58,8 +64,8 @@ public class PlayerListener implements Listener {
         }
 
         // Rank
-        // player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
-        // NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
+        player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
+        NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
 
         // Inventory
         player.getInventory().setItem(0, new ActionableElement(Constants.ITEM_SELECTOR.make(), Action.INTERACT, context -> {
@@ -82,6 +88,14 @@ public class PlayerListener implements Listener {
 
         // Remove team created for nametag colour
         NametagUtil.changePlayerName(player, ChatColor.GRAY, NametagUtil.TeamAction.DESTROY);
+
+        // Remove player once they are gone
+        Map<UUID, AbstractPlayer> players = Common.getInstance()
+                .getDataManager()
+                .getOnlinePlayers();
+
+        players.get(player.getUniqueId()).cleanup();
+        players.remove(player.getUniqueId());
     }
 
     @EventHandler

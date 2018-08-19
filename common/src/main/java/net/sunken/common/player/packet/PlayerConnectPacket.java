@@ -2,6 +2,7 @@ package net.sunken.common.player.packet;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
+import org.bson.Document;
 
 import java.util.UUID;
 

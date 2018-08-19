@@ -2,6 +2,7 @@ package net.sunken.lobby.player;
 
 import com.google.common.collect.ImmutableMap;
 import net.sunken.common.Common;
+import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.player.AbstractPlayer;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -22,11 +23,8 @@ public class LobbyPlayer extends AbstractPlayer {
 
     private HashMap<String, Long> parkourTimes;
 
-    public LobbyPlayer(Player player){
-        super(
-                player.getUniqueId().toString(),
-                player.getName()
-        );
+    public LobbyPlayer(String uuid, String name, Document document, boolean firstJoin){
+        super (uuid, name, document, firstJoin);
 
         this.parkourTimes = new HashMap<>();
         this.loadParkourTimes();
@@ -88,7 +86,7 @@ public class LobbyPlayer extends AbstractPlayer {
         this.parkourTimes.put(id, time);
 
         Bson updateDocument = new Document("$set", new Document(PARKOUR_FIELD, parkours));
-        this.playerCollection.updateOne(new Document(UUID_FIELD, this.uuid), updateDocument);
+        this.playerCollection.updateOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, this.uuid), updateDocument);
     }
 
 }
