@@ -10,7 +10,6 @@ import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.PacketListener;
 import net.sunken.common.parties.service.PartyService;
 import net.sunken.common.parties.service.RedisPartyService;
-import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.server.ServerCacheUpdater;
 import net.sunken.common.server.ServerChangeInformer;
 import net.sunken.common.server.data.ServerObject;
@@ -18,8 +17,6 @@ import net.sunken.common.server.ServerObjectCache;
 import net.sunken.common.server.packet.ServerCacheUpdatePacket;
 import net.sunken.common.type.ServerType;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class Common {
@@ -36,17 +33,16 @@ public class Common {
     @Getter
     private RedisConnection redis;
 
+    @Getter
+    private DataManager dataManager;
+
     private ServerObjectCache serverObjectCache;
     private ServerChangeInformer serverChangeInformer;
-
-    /** Map of player UUIDs to their AbstractPlayer instance loaded from the database */
-    @Getter
-    private Map<String, AbstractPlayer> onlinePlayers;
 
     @Getter
     private PartyService partyService;
 
-    public void onCommonLoad(boolean listenForServers) {
+    public void onCommonLoad(boolean listenForServers, boolean fetchPlayerData) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
                 19802,
@@ -61,17 +57,17 @@ public class Common {
                 "***REMOVED***"
         );
 
+        this.dataManager = new DataManager(fetchPlayerData);
+
         PacketListener packetListener = new PacketListener(redis.getConnection());
         packetListener.start();
 
         // Should the server keep track of other servers?
         if (listenForServers) {
             serverObjectCache = new ServerObjectCache(this.redis);
-            PacketHandlerRegistry.registerHandler(new ServerCacheUpdatePacket(), new ServerCacheUpdater(this.serverObjectCache));
+            PacketHandlerRegistry.registerHandler(ServerCacheUpdatePacket.class, new ServerCacheUpdater(this.serverObjectCache));
         }
         serverChangeInformer = new ServerChangeInformer(this.redis);
-
-        this.onlinePlayers = new ConcurrentHashMap<>();
 
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
 
@@ -80,8 +76,9 @@ public class Common {
         this.loaded = true;
     }
 
-    public void onCommonLoad(boolean listenForServers, ServerType serverType, int maxPlayers, int serverPort) {
-        this.onCommonLoad(listenForServers);
+    public void onCommonLoad(boolean listenForServers, boolean fetchPlayerData,
+                             ServerType serverType, int maxPlayers, int serverPort) {
+        this.onCommonLoad(listenForServers, fetchPlayerData);
 
         // Add server to the network
         ServerInstance.setInstance(new ServerInstance(serverType, maxPlayers, 0, serverPort));

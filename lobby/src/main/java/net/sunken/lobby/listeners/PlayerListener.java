@@ -33,10 +33,6 @@ public class PlayerListener implements Listener {
         FileConfiguration config = LobbyPlugin.getInstance().getConfig();
         event.setJoinMessage("");
 
-        // Add to onlinePlayers
-        LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
-        Common.getInstance().getOnlinePlayers().put(player.getUniqueId().toString(), lobbyPlayer);
-
         // Set spawn
         Location spawn = new Location(
                 Bukkit.getWorld(config.getString("spawn.world")),
@@ -62,8 +58,8 @@ public class PlayerListener implements Listener {
         }
 
         // Rank
-        player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
-        NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
+        // player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
+        // NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
 
         // Inventory
         player.getInventory().setItem(0, new ActionableElement(Constants.ITEM_SELECTOR.make(), Action.INTERACT, context -> {
@@ -86,11 +82,6 @@ public class PlayerListener implements Listener {
 
         // Remove team created for nametag colour
         NametagUtil.changePlayerName(player, ChatColor.GRAY, NametagUtil.TeamAction.DESTROY);
-
-        // Remove player once they are gone
-        Map<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
-        players.get(player.getUniqueId().toString()).cleanup();
-        players.remove(player.getUniqueId().toString());
     }
 
     @EventHandler

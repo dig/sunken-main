@@ -47,15 +47,6 @@ public class JoinListener implements Listener {
     }
 
     @EventHandler
-    public void onOfficialJoin(PostLoginEvent event){
-        ProxiedPlayer player = event.getPlayer();
-
-        // Add to onlinePlayers
-        BungeePlayer bungeePlayer = new BungeePlayer(player.getUniqueId().toString(), player.getName());
-        Common.getInstance().getOnlinePlayers().put(player.getUniqueId().toString(), bungeePlayer);
-    }
-
-    @EventHandler
     public void onInitialJoin(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
@@ -82,10 +73,5 @@ public class JoinListener implements Listener {
     public void onDisconnect(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         joined.remove(player.getUniqueId().toString());
-
-        // Remove player once they are gone
-        Map<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
-        players.get(player.getUniqueId().toString()).cleanup();
-        players.remove(player.getUniqueId().toString());
     }
 }

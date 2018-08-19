@@ -18,7 +18,7 @@ public class ParkourListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event){
         Player player = event.getPlayer();
-        LobbyPlayer lobbyPlayer = (LobbyPlayer) Common.getInstance().getOnlinePlayers().get(player.getUniqueId().toString());
+        LobbyPlayer lobbyPlayer = (LobbyPlayer) Common.getInstance().getDataManager().getOnlinePlayers().get(player.getUniqueId());
 
         Block block = player.getLocation().clone().subtract(0, 1, 0).getBlock();
         ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
@@ -35,7 +35,7 @@ public class ParkourListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
         Player player = event.getPlayer();
-        LobbyPlayer lobbyPlayer = (LobbyPlayer) Common.getInstance().getOnlinePlayers().get(player.getUniqueId().toString());
+        LobbyPlayer lobbyPlayer = (LobbyPlayer) Common.getInstance().getDataManager().getOnlinePlayers().get(player.getUniqueId());
 
         Block block = event.getClickedBlock();
         ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
