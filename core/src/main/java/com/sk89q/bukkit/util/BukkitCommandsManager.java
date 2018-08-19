@@ -9,19 +9,20 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class BukkitCommandsManager extends CommandsManager<CommandSender> {
 
-    private static Map<String, AbstractPlayer> onlinePlayers;
+    private static Map<UUID, AbstractPlayer> onlinePlayers;
 
     static {
-        onlinePlayers = Common.getInstance().getOnlinePlayers();
+        onlinePlayers = Common.getInstance().getDataManager().getOnlinePlayers();
     }
 
     @Override
     public boolean hasRank(CommandSender sender, PlayerRank rank) {
         if (sender instanceof Player) {
-            AbstractPlayer player = onlinePlayers.get(((Player) sender).getUniqueId().toString());
+            AbstractPlayer player = onlinePlayers.get(((Player) sender).getUniqueId());
             return player.getRank().has(rank);
         } else return sender instanceof ConsoleCommandSender;
     }

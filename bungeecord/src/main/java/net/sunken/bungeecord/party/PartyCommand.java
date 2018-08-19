@@ -13,10 +13,11 @@ import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.player.PlayerRank;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class PartyCommand {
 
-    private static Map<String, AbstractPlayer> onlinePlayers = Common.getInstance().getOnlinePlayers();
+    private static Map<UUID, AbstractPlayer> onlinePlayers = Common.getInstance().getDataManager().getOnlinePlayers();
     private static PartyService partyService = Common.getInstance().getPartyService();
 
     @Command(

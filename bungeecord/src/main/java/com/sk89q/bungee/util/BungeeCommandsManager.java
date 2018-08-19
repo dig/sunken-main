@@ -9,19 +9,20 @@ import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.player.PlayerRank;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class BungeeCommandsManager extends CommandsManager<CommandSender> {
 
-    private static Map<String, AbstractPlayer> onlinePlayers;
+    private static Map<UUID, AbstractPlayer> onlinePlayers;
 
     static {
-        onlinePlayers = Common.getInstance().getOnlinePlayers();
+        onlinePlayers = Common.getInstance().getDataManager().getOnlinePlayers();
     }
 
     @Override
     public boolean hasRank(CommandSender sender, PlayerRank rank) {
         if (sender instanceof ProxiedPlayer) {
-            AbstractPlayer player = onlinePlayers.get(((ProxiedPlayer) sender).getUniqueId().toString());
+            AbstractPlayer player = onlinePlayers.get(((ProxiedPlayer) sender).getUniqueId());
             return player.getRank().has(rank);
         } else return sender instanceof ConsoleCommandSender;
     }

@@ -35,7 +35,7 @@ public class Master {
     }
 
     private void onEnable(){
-        Common.getInstance().onCommonLoad(true);
+        Common.getInstance().onCommonLoad(true, false);
 
         // Register packets
         PacketHandlerRegistry.registerHandler(new ParkourCacheUpdatePacket(), new ParkourCacheHandler());

@@ -42,7 +42,8 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         configHandler = new ConfigHandler(this, "config.yml");
 
         // Initialize common
-        Common.getInstance().onCommonLoad(true);
+        Common.getInstance().onCommonLoad(true, true);
+
         // Register events
         this.registerEvents();
 

@@ -39,7 +39,7 @@ public class LobbyPlugin extends JavaPlugin {
         instance = this;
 
         this.saveDefaultConfig();
-        Common.getInstance().onCommonLoad(true,
+        Common.getInstance().onCommonLoad(true, true,
                                           ServerType.valueOf(this.getConfig().getString("type")),
                                           Bukkit.getMaxPlayers(), Bukkit.getPort());
 

@@ -55,27 +55,26 @@ public class Core implements CommandExecutor {
         try {
             throw throwable;
         } catch (CommandPermissionsException e) {
-            sender.sendMessage(new TextComponent("You have no permission!"));
+            sender.sendMessage("You have no permission!");
         } catch (MissingNestedCommandException e) {
-            sender.sendMessage(new TextComponent(e.getUsage()));
+            sender.sendMessage(e.getUsage());
         } catch (CommandUsageException e) {
-            sender.sendMessage((new TextComponent(e.getMessage())));
-            sender.sendMessage(new TextComponent(e.getUsage()));
+            sender.sendMessage(e.getMessage());
+            sender.sendMessage(e.getUsage());
         } catch (CommandNumberFormatException e) {
-            sender.sendMessage(new TextComponent("Number expected, got " + e.getActualText() + " instead."));
+            sender.sendMessage("Number expected, got " + e.getActualText() + " instead.");
         } catch (PlayerNotHasRankException e) {
-            sender.sendMessage(new TextComponent(
-                    "You must be " + e.getRequired().getFriendlyName() + " to execute this command!"));
+            sender.sendMessage("You must be " + e.getRequired().getFriendlyName() + " to execute this command!");
         } catch (WrappedCommandException e) {
-            sender.sendMessage(new TextComponent(e.getMessage()));
+            sender.sendMessage(e.getMessage());
         } catch (CommandException e) {
             if (e.getMessage() != null) {
-                sender.sendMessage(new TextComponent(e.getMessage()));
+                sender.sendMessage(e.getMessage());
             } else {
-                sender.sendMessage(new TextComponent("Something went wrong!"));
+                sender.sendMessage("Something went wrong!");
             }
         } catch (Throwable e) {
-            sender.sendMessage(new TextComponent("Something went wrong!"));
+            sender.sendMessage("Something went wrong!");
         }
     }
 
