@@ -4,27 +4,31 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
+import net.sunken.bungeecord.player.BungeePlayer;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
+import net.sunken.common.Common;
+import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.server.ServerObject;
 import net.sunken.common.type.ServerType;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JoinListener implements Listener {
 
     private ArrayList<String> joined = new ArrayList<>();
-    private static Logger logger = BungeeMain.getInstance().getLogger();
 
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
@@ -45,6 +49,15 @@ public class JoinListener implements Listener {
     }
 
     @EventHandler
+    public void onOfficialJoin(PostLoginEvent event){
+        ProxiedPlayer player = event.getPlayer();
+
+        // Add to onlinePlayers
+        BungeePlayer bungeePlayer = new BungeePlayer(player.getUniqueId().toString(), player.getName());
+        Common.getInstance().getOnlinePlayers().put(player.getUniqueId().toString(), bungeePlayer);
+    }
+
+    @EventHandler
     public void onInitialJoin(ServerConnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
@@ -60,8 +73,6 @@ public class JoinListener implements Listener {
                         lobby.getServerName(),
                         false);
 
-                logger.log(Level.INFO, "Connecting " + player.getName() + " to lobby " + lobby.getServerName()
-                        + " (" + lobby.getServerIp() + ")");
                 event.setTarget(lobbyObj);
             } else {
                 event.setCancelled(true);
@@ -73,5 +84,10 @@ public class JoinListener implements Listener {
     public void onDisconnect(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         joined.remove(player.getUniqueId().toString());
+
+        // Remove player once they are gone
+        Map<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
+        players.get(player.getUniqueId().toString()).cleanup();
+        players.remove(player.getUniqueId().toString());
     }
 }

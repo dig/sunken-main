@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -45,7 +46,7 @@ public class PlayerListener implements Listener {
         FileConfiguration config = LobbyPlugin.getInstance().getConfig();
         event.setJoinMessage("");
 
-        // Add to hashmap
+        // Add to onlinePlayers
         LobbyPlayer lobbyPlayer = new LobbyPlayer(player);
         Common.getInstance().getOnlinePlayers().put(player.getUniqueId().toString(), lobbyPlayer);
 
@@ -89,14 +90,6 @@ public class PlayerListener implements Listener {
             observer.openInventory(LobbyPlugin.getInstance().getLobbyInventory());
             return context;
         }).getItem());
-
-        // Test party
-        PartyService partyService = new RedisPartyService();
-        /*PartyPlayer test = new PartyPlayer(UUID.randomUUID(), "test", PlayerRank.USER);
-        PartyPlayer test1 = new PartyPlayer(UUID.randomUUID(), "test1", PlayerRank.USER);
-        partyService.createParty(test, test1);*/
-
-        partyService.leaveParty(UUID.fromString("a2787bfa-2761-4bb6-a93f-3617149a1ee3"));
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -107,7 +100,8 @@ public class PlayerListener implements Listener {
         // Remove team created for nametag colour
         NametagUtil.changePlayerName(player, ChatColor.GRAY, NametagUtil.TeamAction.DESTROY);
 
-        ConcurrentHashMap<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
+        // Remove player once they are gone
+        Map<String, AbstractPlayer> players = Common.getInstance().getOnlinePlayers();
         players.get(player.getUniqueId().toString()).cleanup();
         players.remove(player.getUniqueId().toString());
     }

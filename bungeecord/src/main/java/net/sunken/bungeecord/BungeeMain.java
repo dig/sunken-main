@@ -18,6 +18,7 @@ import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
 import net.sunken.bungeecord.party.PartyCommand;
 import net.sunken.bungeecord.party.PartyInviteSendPacketHandler;
+import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parties.packet.PartyInviteSendPacket;
@@ -84,6 +85,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
                                                                this);
         // register all commands
         registry.register(PartyCommand.class);
+        registry.register(LobbyCommand.class);
     }
 
     @Override
