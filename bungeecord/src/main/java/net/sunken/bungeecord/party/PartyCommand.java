@@ -10,9 +10,9 @@ import net.sunken.common.player.PlayerRank;
 public class PartyCommand {
 
     @Command(
-            aliases = {"gserver"},
-            desc = "Global server teleport",
-            usage = "<server>",
+            aliases = {"party"},
+            desc = "Base party command",
+            usage = "",
             min = 1,
             max = 1)
     @PlayerRankRequired(PlayerRank.ADMIN)
