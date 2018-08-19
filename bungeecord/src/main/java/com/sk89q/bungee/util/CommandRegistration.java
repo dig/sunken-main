@@ -11,6 +11,7 @@ import javax.inject.Provider;
 import java.util.List;
 
 public class CommandRegistration {
+
     public CommandRegistration(Plugin plugin, PluginManager pluginManager, CommandsManager<?> commands, CommandExecutor<CommandSender> executor) {
         this.plugin = plugin;
         this.pluginManager = pluginManager;

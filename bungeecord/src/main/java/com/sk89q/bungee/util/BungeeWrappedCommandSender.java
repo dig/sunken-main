@@ -5,6 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import com.sk89q.minecraft.util.commands.WrappedCommandSender;
 
 public class BungeeWrappedCommandSender implements WrappedCommandSender {
+
     public BungeeWrappedCommandSender(CommandSender wrapped) {
         this.wrapped = wrapped;
     }

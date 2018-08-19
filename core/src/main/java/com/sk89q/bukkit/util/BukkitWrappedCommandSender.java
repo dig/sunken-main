@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.sk89q.minecraft.util.commands.WrappedCommandSender;
 
 public class BukkitWrappedCommandSender implements WrappedCommandSender {
+
     public BukkitWrappedCommandSender(CommandSender wrapped) {
         this.wrapped = wrapped;
     }

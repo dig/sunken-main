@@ -1,6 +1,7 @@
 package com.sk89q.minecraft.util.commands;
 
 public interface WrappedCommandSender {
+
     String getName();
 
     void sendMessage(String message);
