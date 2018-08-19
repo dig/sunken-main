@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ServerHandler {
@@ -27,11 +26,11 @@ public class ServerHandler {
         int middleFloor = (int) middle;
         ServerObject middleLobby = null;
 
-        for(int i = 0; i<sortedViaPlayerCount.size(); i++){
-            if(middleLobby == null && i >= middleFloor){
+        for (int i = 0; i < sortedViaPlayerCount.size(); i++) {
+            if (middleLobby == null && i >= middleFloor) {
                 ServerObject cur = sortedViaPlayerCount.get(i);
 
-                if(cur.getPlayerCount() < cur.getMaxPlayers()){
+                if (cur.getPlayerCount() < cur.getMaxPlayers()) {
                     middleLobby = cur;
                 }
             }

@@ -71,7 +71,6 @@ public class RedisPartyService implements PartyService {
                               allMembers,
                               Long.parseLong(createdAt));
         } catch (Exception e) {
-            e.printStackTrace();
             pool.returnBrokenResource(jedis);
         } finally {
             pool.returnResource(jedis);
@@ -160,7 +159,6 @@ public class RedisPartyService implements PartyService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             pool.returnBrokenResource(jedis);
         } finally {
             pool.returnResource(jedis);
