@@ -41,10 +41,6 @@ public class Master {
         PacketHandlerRegistry.registerHandler(new ParkourCacheUpdatePacket(), new ParkourCacheHandler());
 
         this.parkourCache = new ParkourCache();
-
-        Master.getInstance().getParkourCache().updateCache("test").thenRun(() -> {
-            PacketUtil.sendPacket(new ParkourLeaderboardUpdatePacket());
-        });
     }
 
     public void onDisable(){
