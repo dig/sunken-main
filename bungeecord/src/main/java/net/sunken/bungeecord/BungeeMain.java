@@ -24,7 +24,6 @@ import net.sunken.common.parties.packet.PartyInviteSendPacket;
 
 public class BungeeMain extends Plugin implements CommandExecutor<CommandSender> {
 
-
     private CommandsManager<CommandSender> commands;
 
     @Getter
