@@ -17,7 +17,10 @@ import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
 import net.sunken.bungeecord.party.PartyCommand;
+import net.sunken.bungeecord.party.PartyInviteSendPacketHandler;
 import net.sunken.common.Common;
+import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.parties.packet.PartyInviteSendPacket;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.player.PlayerRank;
 
@@ -38,6 +41,8 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
     @Override
     public void onEnable() {
         instance = this;
+
+        PacketHandlerRegistry.registerHandler(new PartyInviteSendPacket(), new PartyInviteSendPacketHandler());
 
         // Config Handler
         configHandler = new ConfigHandler(this, "config.yml");

@@ -109,7 +109,8 @@ public class RedisPartyService implements PartyService {
             transaction.hmset("party:" + partyUUID + ":members:" + toInvite.getUniqueId(), toInvite.toMap());
             transaction.exec(); // execute transaction
 
-            PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket();
+            PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(leader.getUniqueId(),
+                                                                                    toInvite.getUniqueId());
             PacketUtil.sendPacket(partyInviteSendPacket);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
