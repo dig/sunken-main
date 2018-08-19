@@ -137,6 +137,7 @@ public class RedisPartyService implements PartyService {
 
                 String partyKey = "party:" + party.getPartyUUID().toString();
                 jedis.del(partyKey + ":leader");
+                jedis.del(partyKey + ":leader:" + party.getLeaderUniqueId().toString());
                 jedis.del(partyKey + ":created_at");
 
                 for(PartyPlayer ply : party.getAllMembers()){
