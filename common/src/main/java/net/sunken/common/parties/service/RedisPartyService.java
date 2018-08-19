@@ -31,7 +31,6 @@ public class RedisPartyService implements PartyService {
 
         try {
             String partyKey = "party:" + uuid.toString();
-            checkState(jedis.exists(partyKey), "party with given UUID does not exist");
 
             String leaderUniqueIdStr = jedis.get(partyKey + ":leader");
             String createdAt = jedis.get(partyKey + ":created_at");
@@ -65,11 +64,12 @@ public class RedisPartyService implements PartyService {
                 allMembers.add(member);
             }
 
-            party = new Party(uuid,
+           party = new Party(uuid,
                              UUID.fromString(leaderUniqueIdStr),
                              allMembers,
                              Long.parseLong(createdAt));
         } catch (Exception e) {
+            e.printStackTrace();
             pool.returnBrokenResource(jedis);
         } finally {
             pool.returnResource(jedis);
