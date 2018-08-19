@@ -1,7 +1,11 @@
 package net.sunken.lobby.listeners;
 
 import net.sunken.common.Common;
+import net.sunken.common.parties.data.PartyPlayer;
+import net.sunken.common.parties.service.PartyService;
+import net.sunken.common.parties.service.RedisPartyService;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.player.PlayerRank;
 import net.sunken.common.server.ServerObject;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.inventory.ItemBuilder;
@@ -29,7 +33,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public class PlayerListener implements Listener {
 
@@ -83,6 +89,15 @@ public class PlayerListener implements Listener {
             observer.openInventory(LobbyPlugin.getInstance().getLobbyInventory());
             return context;
         }).getItem());
+
+        // Test party
+        PartyService partyService = new RedisPartyService();
+        /*PartyPlayer test = new PartyPlayer(UUID.randomUUID(), "test", PlayerRank.USER);
+        PartyPlayer test1 = new PartyPlayer(UUID.randomUUID(), "test1", PlayerRank.USER);
+        partyService.createParty(test, test1);*/
+
+
+        Common.getLogger().log(Level.INFO, partyService.getPartyByUUID(UUID.fromString("c3fd63b5-7eda-450f-b4c6-8e1746122bfd")).toString());
     }
 
     @EventHandler(ignoreCancelled = true)

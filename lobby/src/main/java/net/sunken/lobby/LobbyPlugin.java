@@ -53,17 +53,6 @@ public class LobbyPlugin extends JavaPlugin {
         this.lobbyInventory = Bukkit.createInventory(null, 27, "Lobby Selector");
 
         this.registerEvents();
-
-        // Test party
-        UUID party = UUID.randomUUID();
-
-        PartyService partyService = new RedisPartyService(Common.getInstance().getRedis().getJedisPool());
-        PartyPlayer test = new PartyPlayer(UUID.randomUUID(), "test", PlayerRank.USER);
-        PartyPlayer test1 = new PartyPlayer(UUID.randomUUID(), "test1", PlayerRank.USER);
-        partyService.createParty(test, test1, party);
-
-
-        Common.getLogger().log(Level.INFO, partyService.getPartyByUUID(party).toString());
     }
 
     @Override
