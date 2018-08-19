@@ -8,8 +8,6 @@ import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
 import net.sunken.core.inventory.Page;
 import net.sunken.core.inventory.PageContainer;
-import net.sunken.core.inventory.element.ActionableElement;
-import net.sunken.core.inventory.element.Element;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
 import net.sunken.lobby.listeners.WorldListener;
@@ -17,10 +15,6 @@ import net.sunken.lobby.parkour.ParkourCache;
 import net.sunken.lobby.parkour.ParkourHandler;
 import net.sunken.lobby.parkour.ParkourListener;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,7 +39,7 @@ public class LobbyPlugin extends JavaPlugin {
 
         Core.getInstance().onCoreLoad(this);
 
-        PacketHandlerRegistry.registerHandler(new ParkourLeaderboardUpdatePacket(), new ParkourHandler());
+        PacketHandlerRegistry.registerHandler(ParkourLeaderboardUpdatePacket.class, new ParkourHandler());
 
         this.parkourCache = new ParkourCache(this.getConfig());
 

@@ -14,8 +14,8 @@ public final class PacketHandlerRegistry {
         handlers = Maps.newHashMap();
     }
 
-    public static <T extends Packet> void registerHandler(T packet, PacketHandler<T> handler) {
-        handlers.put(packet.getClass(), handler);
+    public static <T extends Packet> void registerHandler(Class<T> packetClass, PacketHandler<T> handler) {
+        handlers.put(packetClass, handler);
     }
 
     private PacketHandlerRegistry() {

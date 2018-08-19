@@ -1,5 +1,7 @@
 package net.sunken.bungeecord.party;
 
+import com.imaginarycode.minecraft.redisbungee.RedisBungee;
+import com.imaginarycode.minecraft.redisbungee.RedisBungeeAPI;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 public class PartyCommand {
 
+    private static RedisBungeeAPI redisBungee = RedisBungee.getApi();
     private static Map<String, AbstractPlayer> onlinePlayers = Common.getInstance().getOnlinePlayers();
     private static PartyService partyService = Common.getInstance().getPartyService();
 
