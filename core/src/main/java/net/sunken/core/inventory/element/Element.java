@@ -19,16 +19,22 @@ public class Element {
         elementRegistry = CacheBuilder.newBuilder().build();
     }
 
+    private UUID uuid;
+
     @Getter
     protected ItemStack item;
 
     public Element(ItemStack item) {
         this.item = item;
 
-        UUID elementUUID = UUID.randomUUID();
+        uuid = UUID.randomUUID();
         NBTItem nbtItem = new NBTItem(this.item);
-        nbtItem.setString(ELEMENT_NBT_KEY, elementUUID.toString());
+        nbtItem.setString(ELEMENT_NBT_KEY, uuid.toString());
         this.item = nbtItem.getItem();
-        elementRegistry.put(elementUUID, this);
+        elementRegistry.put(uuid, this);
+    }
+
+    public void destroy(){
+        elementRegistry.invalidate(uuid);
     }
 }

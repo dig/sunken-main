@@ -42,24 +42,16 @@ public class ConnectListener implements Listener {
 
                     ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
                     if (target != null && target.isConnected()) {
-                        Set<ServerObject> servers = Common.getInstance().getServerCache().getCache();
+                        ServerObject serv = ServerHandler.getServer(server);
 
-                        List<ServerObject> serversList = servers.stream()
-                                .sorted(Comparator.comparing(ServerObject::getPlayerCount))
-                                .collect(Collectors.toList());
+                        if (serv != null) {
+                            ServerInfo serverObj = ProxyServer.getInstance().constructServerInfo(
+                                    serv.getServerName(),
+                                    new InetSocketAddress(serv.getServerIp(), serv.getServerPort()),
+                                    serv.getServerName(),
+                                    false);
 
-                        for(int i = 0; i < serversList.size(); i++){
-                            ServerObject serv = serversList.get(i);
-
-                            if(serv.getServerName().equals(server)){
-                                ServerInfo serverObj = ProxyServer.getInstance().constructServerInfo(
-                                        serv.getServerName(),
-                                        new InetSocketAddress(serv.getServerIp(), serv.getServerPort()),
-                                        serv.getServerName(),
-                                        false);
-
-                                target.connect(serverObj);
-                            }
+                            target.connect(serverObj);
                         }
                     }
                 } else if (channel.equals("type")) { // Sends player to a free server of that type
