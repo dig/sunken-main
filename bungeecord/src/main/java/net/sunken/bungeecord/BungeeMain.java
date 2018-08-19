@@ -1,5 +1,6 @@
 package net.sunken.bungeecord;
 
+import com.sk89q.bungee.util.BungeeCommandsManager;
 import com.sk89q.bungee.util.CommandExecutor;
 import com.sk89q.bungee.util.CommandRegistration;
 import com.sk89q.minecraft.util.commands.*;
@@ -7,10 +8,8 @@ import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.sunken.bungeecord.config.ConfigHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
@@ -22,14 +21,9 @@ import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parties.packet.PartyInviteSendPacket;
-import net.sunken.common.player.AbstractPlayer;
-import net.sunken.common.player.PlayerRank;
-
-import java.util.Map;
 
 public class BungeeMain extends Plugin implements CommandExecutor<CommandSender> {
 
-    private static Map<String, AbstractPlayer> onlinePlayers;
 
     private CommandsManager<CommandSender> commands;
 
@@ -50,8 +44,6 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
 
         // Initialize common
         Common.getInstance().onCommonLoad(true);
-        onlinePlayers = Common.getInstance().getOnlinePlayers();
-
         // Register events
         this.registerEvents();
 
@@ -67,20 +59,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
     }
 
     private void setupCommands() {
-        this.commands = new CommandsManager<CommandSender>() {
-            @Override
-            public boolean hasRank(CommandSender sender, PlayerRank rank) {
-                if (sender instanceof ProxiedPlayer) {
-                    AbstractPlayer player = onlinePlayers.get(((ProxiedPlayer) sender).getUniqueId().toString());
-                    return player.getRank() == rank;
-                } else return sender instanceof ConsoleCommandSender;
-            }
-
-            @Override
-            public boolean hasPermission(CommandSender sender, String perm) {
-                return sender instanceof ConsoleCommandSender || sender.hasPermission(perm);
-            }
-        };
+        this.commands = new BungeeCommandsManager();
         CommandRegistration registry = new CommandRegistration(this, this.getProxy().getPluginManager(), this.commands,
                                                                this);
         // register all commands
