@@ -26,16 +26,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
+import javax.inject.Provider;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 /**
  * @author zml2008
  */
 public class CommandsManagerRegistration extends CommandRegistration {
+
     protected CommandsManager<?> commands;
 
     public CommandsManagerRegistration(Plugin plugin, CommandsManager<?> commands) {

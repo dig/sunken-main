@@ -20,7 +20,6 @@ package com.sk89q.bukkit.util;
 
 import com.sk89q.minecraft.util.commands.CommandsManager;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.help.HelpTopicFactory;
@@ -31,6 +30,7 @@ import java.util.Map;
  * @author zml2008
  */
 public class DynamicPluginCommandHelpTopic extends HelpTopic {
+
     private final DynamicPluginCommand cmd;
 
     public DynamicPluginCommandHelpTopic(DynamicPluginCommand cmd) {

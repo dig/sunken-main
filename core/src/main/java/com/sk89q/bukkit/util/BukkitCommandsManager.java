@@ -22,7 +22,7 @@ public class BukkitCommandsManager extends CommandsManager<CommandSender> {
     public boolean hasRank(CommandSender sender, PlayerRank rank) {
         if (sender instanceof Player) {
             AbstractPlayer player = onlinePlayers.get(((Player) sender).getUniqueId().toString());
-            return player.getRank() == rank;
+            return player.getRank().ordinal() >= rank.ordinal();
         } else return sender instanceof ConsoleCommandSender;
     }
 

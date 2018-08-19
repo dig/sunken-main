@@ -19,13 +19,6 @@
 
 package com.sk89q.bukkit.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.Nullable;
-
 import com.sk89q.util.ReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -34,19 +27,23 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.Plugin;
 
+import javax.annotation.Nullable;
+import java.util.*;
+
 /**
  * @author zml2008
  */
 public class CommandRegistration {
 
     static {
-      Bukkit.getServer().getHelpMap().registerHelpTopicFactory(DynamicPluginCommand.class, new DynamicPluginCommandHelpTopic.Factory());
+        Bukkit.getServer().getHelpMap()
+                .registerHelpTopicFactory(DynamicPluginCommand.class, new DynamicPluginCommandHelpTopic.Factory());
     }
 
-	protected final Plugin plugin;
+    protected final Plugin plugin;
     protected final CommandExecutor executor;
     protected final TabCompleter completer;
-	private CommandMap fallbackCommands;
+    private CommandMap fallbackCommands;
 
     public CommandRegistration(Plugin plugin) {
         this(plugin, plugin, plugin);
@@ -70,7 +67,8 @@ public class CommandRegistration {
         for (CommandInfo command : registered) {
             DynamicPluginCommand cmd = new DynamicPluginCommand(command.getAliases(),
                                                                 command.getDesc(),
-                                                                "/" + command.getAliases()[0] + " " + command.getUsage(),
+                                                                "/" + command.getAliases()[0] + " " + command
+                                                                        .getUsage(),
                                                                 executor,
                                                                 completer,
                                                                 command.getRegisteredWith(),
@@ -88,9 +86,10 @@ public class CommandRegistration {
                 commandMap = fallbackCommands;
             } else {
                 Bukkit.getServer().getLogger().severe(plugin.getDescription().getName() +
-                        ": Could not retrieve server CommandMap, using fallback instead! Please report to http://redmine.sk89q.com");
+                                                              ": Could not retrieve server CommandMap, using fallback instead! Please report to http://redmine.sk89q.com");
                 fallbackCommands = commandMap = new SimpleCommandMap(Bukkit.getServer());
-                Bukkit.getServer().getPluginManager().registerEvents(new FallbackRegistrationListener(fallbackCommands), plugin);
+                Bukkit.getServer().getPluginManager()
+                        .registerEvents(new FallbackRegistrationListener(fallbackCommands), plugin);
             }
         }
         return commandMap;
@@ -104,7 +103,7 @@ public class CommandRegistration {
         if (knownCommands == null || aliases == null) {
             return false;
         }
-        for (Iterator<org.bukkit.command.Command> i = knownCommands.values().iterator(); i.hasNext();) {
+        for (Iterator<org.bukkit.command.Command> i = knownCommands.values().iterator(); i.hasNext(); ) {
             org.bukkit.command.Command cmd = i.next();
             if (cmd instanceof DynamicPluginCommand && ((DynamicPluginCommand) cmd).getExecutor().equals(executor)) {
                 i.remove();
