@@ -1,32 +1,47 @@
 package net.sunken.bungeecord.listeners;
 
+import com.google.common.collect.ImmutableMap;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.PreLoginEvent;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
-import net.sunken.bungeecord.player.BungeePlayer;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 import net.sunken.common.Common;
-import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.database.DatabaseConstants;
+import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.player.PlayerRank;
+import net.sunken.common.player.packet.PlayerConnectPacket;
+import net.sunken.common.player.packet.PlayerJoinPacket;
+import net.sunken.common.player.packet.PlayerQuitPacket;
 import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
+import org.bson.Document;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class JoinListener implements Listener {
 
-    private ArrayList<String> joined = new ArrayList<>();
+
+    private ArrayList<String> joined;
+    protected MongoCollection<Document> playerCollection;
+
+    public JoinListener () {
+        this.joined = new ArrayList<>();
+        this.playerCollection = Common.getInstance()
+                .getMongo()
+                .getConnection()
+                .getDatabase(DatabaseConstants.DATABASE_NAME)
+                .getCollection(DatabaseConstants.PLAYER_COLLECTION);
+    }
 
     @EventHandler
     public void onPreJoin(PreLoginEvent event) {
@@ -44,6 +59,28 @@ public class JoinListener implements Listener {
             event.setCancelReason(MessageUtil.stringToComponent(Constants.NO_LOBBY));
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onFinalJoin(PostLoginEvent event) {
+        ProxiedPlayer player = event.getPlayer();
+
+        // Get players document from Mongo
+        Document document = this.playerCollection.find(Filters.eq("uuid", player.getUniqueId().toString())).first();
+
+        if (document == null) {
+            Document playerDocument = new Document(ImmutableMap.of(
+                    DatabaseConstants.PLAYER_UUID_FIELD, player.getUniqueId().toString(),
+                    DatabaseConstants.PLAYER_NAME_FIELD, player.getName(),
+                    DatabaseConstants.PLAYER_RANK_FIELD, PlayerRank.USER.toString(),
+                    DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, new ArrayList<Document>()
+            ));
+            this.playerCollection.insertOne(playerDocument);
+            document = playerDocument;
+        }
+
+        // Add player to the network
+        PacketUtil.sendPacket(new PlayerJoinPacket(player.getName(), player.getUniqueId(), document));
     }
 
     @EventHandler
@@ -67,11 +104,17 @@ public class JoinListener implements Listener {
                 event.setCancelled(true);
             }
         }
+
+        // Update our network because player is joining new server
+        PacketUtil.sendPacket(new PlayerConnectPacket(player.getUniqueId(), event.getTarget().getName()));
     }
 
     @EventHandler
     public void onDisconnect(PlayerDisconnectEvent event) {
         ProxiedPlayer player = event.getPlayer();
         joined.remove(player.getUniqueId().toString());
+
+        // Remove player from our network
+        PacketUtil.sendPacket(new PlayerQuitPacket(player.getName(), player.getUniqueId()));
     }
 }
