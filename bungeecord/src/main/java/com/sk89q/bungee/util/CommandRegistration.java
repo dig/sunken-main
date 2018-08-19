@@ -1,15 +1,14 @@
 package com.sk89q.bungee.util;
 
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.inject.Provider;
-
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandsManager;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandsManager;
+import javax.annotation.Nullable;
+import javax.inject.Provider;
+import java.util.List;
 
 public class CommandRegistration {
     public CommandRegistration(Plugin plugin, PluginManager pluginManager, CommandsManager<?> commands, CommandExecutor<CommandSender> executor) {
@@ -28,7 +27,7 @@ public class CommandRegistration {
     }
 
     public boolean registerAll(List<Command> registered) {
-        for(Command command : registered) {
+        for (Command command : registered) {
             CommandWrapper wrapper = new CommandWrapper(this.executor, command.aliases()[0], command.aliases());
             this.pluginManager.registerCommand(this.plugin, wrapper);
         }

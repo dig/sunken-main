@@ -96,8 +96,7 @@ public class PlayerListener implements Listener {
         PartyPlayer test1 = new PartyPlayer(UUID.randomUUID(), "test1", PlayerRank.USER);
         partyService.createParty(test, test1);*/
 
-
-        Common.getLogger().log(Level.INFO, partyService.getPartyByUUID(UUID.fromString("c3fd63b5-7eda-450f-b4c6-8e1746122bfd")).toString());
+        partyService.leaveParty(UUID.fromString("a2787bfa-2761-4bb6-a93f-3617149a1ee3"));
     }
 
     @EventHandler(ignoreCancelled = true)

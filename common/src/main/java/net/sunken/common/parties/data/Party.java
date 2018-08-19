@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
 @ToString
-public class Party {
+public class Party implements Serializable {
 
     @Getter
     @Setter

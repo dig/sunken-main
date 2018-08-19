@@ -14,6 +14,7 @@ import net.sunken.common.server.ServerObject;
 import net.sunken.common.server.ServerObjectCache;
 import net.sunken.common.type.ServerType;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -34,8 +35,9 @@ public class Common {
     private ServerObjectCache serverObjectCache;
     private ServerChangeInformer serverChangeInformer;
 
+    /** Map of player UUIDs to their AbstractPlayer instance loaded from the database */
     @Getter
-    private ConcurrentHashMap<String, AbstractPlayer> onlinePlayers;
+    private Map<String, AbstractPlayer> onlinePlayers;
 
     public void onCommonLoad(boolean listenForServers) {
         this.mongo = new MongoConnection(

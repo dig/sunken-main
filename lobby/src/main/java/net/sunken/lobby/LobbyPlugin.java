@@ -2,16 +2,10 @@ package net.sunken.lobby;
 
 import lombok.Getter;
 import net.sunken.common.Common;
-import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
-import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.service.PartyService;
-import net.sunken.common.parties.service.RedisPartyService;
-import net.sunken.common.player.PlayerRank;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
-import net.sunken.core.inventory.PageContainer;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
 import net.sunken.lobby.listeners.WorldListener;
@@ -22,9 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.UUID;
-import java.util.logging.Level;
 
 public class LobbyPlugin extends JavaPlugin {
 
@@ -42,8 +33,8 @@ public class LobbyPlugin extends JavaPlugin {
 
         this.saveDefaultConfig();
         Common.getInstance().onCommonLoad(true,
-                ServerType.valueOf(this.getConfig().getString("type")),
-                Bukkit.getMaxPlayers(), Bukkit.getPort());
+                                          ServerType.valueOf(this.getConfig().getString("type")),
+                                          Bukkit.getMaxPlayers(), Bukkit.getPort());
 
         Core.getInstance().onCoreLoad(this);
 
@@ -69,7 +60,7 @@ public class LobbyPlugin extends JavaPlugin {
         pm.registerEvents(new ParkourListener(), this);
     }
 
-    public ParkourCache getParkourCache(){
+    public ParkourCache getParkourCache() {
         return this.parkourCache;
     }
 }

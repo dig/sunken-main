@@ -3,13 +3,16 @@ package net.sunken.common.parties.data;
 import com.google.common.base.Objects;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import net.sunken.common.player.PlayerRank;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PartyPlayer {
+@ToString
+public class PartyPlayer implements Serializable {
 
     @Getter
     @Setter

@@ -19,23 +19,20 @@
 
 package com.sk89q.minecraft.util.commands;
 
+import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
+import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import com.sk89q.util.StringUtil;
+import net.sunken.common.player.PlayerRank;
 
+import javax.annotation.Nullable;
+import javax.inject.Provider;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import javax.annotation.Nullable;
-import javax.inject.Provider;
 
 /**
  * Manager for handling commands. This allows you to easily process commands,
@@ -134,7 +131,7 @@ public abstract class CommandsManager<T> {
      * Register the methods of a class. This will automatically construct
      * instances as necessary.
      *
-     * @param cls the class to register
+     * @param cls    the class to register
      * @param parent the parent method
      * @return Commands Registered
      */
@@ -153,8 +150,8 @@ public abstract class CommandsManager<T> {
     /**
      * Register the methods of a class.
      *
-     * @param cls the class to register
-     * @param parent the parent method
+     * @param cls      the class to register
+     * @param parent   the parent method
      * @param provider provides instances of the command method, or null to use the {@link Injector}
      * @return a list of commands
      */
@@ -176,10 +173,11 @@ public abstract class CommandsManager<T> {
                 continue;
             }
 
-            if(!(Void.TYPE.equals(method.getReturnType()) ||
-                 List.class.isAssignableFrom(method.getReturnType()))) {
-                throw new CommandRegistrationException("Command method " + method.getDeclaringClass().getName() + "#" + method.getName() +
-                                                       " must return either void or List<String>");
+            if (!(Void.TYPE.equals(method.getReturnType()) ||
+                    List.class.isAssignableFrom(method.getReturnType()))) {
+                throw new CommandRegistrationException(
+                        "Command method " + method.getDeclaringClass().getName() + "#" + method.getName() +
+                                " must return either void or List<String>");
             }
 
             boolean isStatic = Modifier.isStatic(method.getModifiers());
@@ -193,13 +191,13 @@ public abstract class CommandsManager<T> {
 
             // We want to be able invoke with an instance
             if (!isStatic) {
-                if(provider == null && injector != null) {
+                if (provider == null && injector != null) {
                     // If we weren't given a Provider, try to get one from the Injector
                     provider = injector.getProviderOrNull(cls);
-                    if(provider == null) {
+                    if (provider == null) {
                         // If we can't get a provider, check if we have already instantiated the class
                         C instance = (C) instances.get(cls);
-                        if(instance == null) {
+                        if (instance == null) {
                             // If we haven't, do that now and save it
                             instance = (C) injector.getInstance(cls);
                             instances.put(cls, instance);
@@ -210,12 +208,12 @@ public abstract class CommandsManager<T> {
                     }
                 }
 
-                if(provider != null) {
+                if (provider != null) {
                     providers.put(method, provider);
                 } else {
                     String text = "Failed to get an instance/provider of " + cls.getName() +
-                                  " for command method " + method.getDeclaringClass().getName() + "#" + method.getName();
-                    if(injector == null) {
+                            " for command method " + method.getDeclaringClass().getName() + "#" + method.getName();
+                    if (injector == null) {
                         text += " (no Injector is available to create it)";
                     } else {
                         text += " (the Injector returned null when asked for one)";
@@ -248,7 +246,8 @@ public abstract class CommandsManager<T> {
                     final String key = alias.replaceAll("/", "");
                     String previous = helpMessages.put(key, helpMessage);
 
-                    if (previous != null && !previous.replaceAll("^/[^ ]+ ", "").equals(helpMessage.replaceAll("^/[^ ]+ ", ""))) {
+                    if (previous != null && !previous.replaceAll("^/[^ ]+ ", "")
+                            .equals(helpMessage.replaceAll("^/[^ ]+ ", ""))) {
                         helpMessages.put(key, previous + "\n\n" + helpMessage);
                     }
                 }
@@ -318,9 +317,9 @@ public abstract class CommandsManager<T> {
     /**
      * Get the usage string for a command.
      *
-     * @param args the arguments
+     * @param args  the arguments
      * @param level the depth of the command
-     * @param cmd the command annotation
+     * @param cmd   the command annotation
      * @return the usage string
      */
     protected String getUsage(String[] args, int level, Command cmd) {
@@ -366,8 +365,8 @@ public abstract class CommandsManager<T> {
     /**
      * Get the usage string for a nested command.
      *
-     * @param args the arguments
-     * @param level the depth of the command
+     * @param args   the arguments
+     * @param level  the depth of the command
      * @param method the parent method
      * @param player the player
      * @return the usage string
@@ -418,17 +417,17 @@ public abstract class CommandsManager<T> {
 
     private static boolean supportsCompletion(Method method) {
         return List.class.isAssignableFrom(method.getReturnType()) ||
-               Stream.of(method.getExceptionTypes())
-                     .anyMatch(SuggestException.class::isAssignableFrom);
+                Stream.of(method.getExceptionTypes())
+                        .anyMatch(SuggestException.class::isAssignableFrom);
     }
 
     /**
      * Attempt to execute a command. This version takes a separate command
      * name (for the root command) and then a list of following arguments.
      *
-     * @param cmd command to run
-     * @param args arguments
-     * @param player command source
+     * @param cmd        command to run
+     * @param args       arguments
+     * @param player     command source
      * @param methodArgs method arguments
      * @throws CommandException thrown when the command throws an error
      */
@@ -438,14 +437,15 @@ public abstract class CommandsManager<T> {
 
     /**
      * Attempt to complete a command.
-     *
+     * <p>
      * If null is returned, the server's default completion should be used.
      * Any non-null return should be used as the completion results, even if empty.
      */
-    public @Nullable List<String> complete(String cmd, String[] args, T player, Object... methodArgs) {
+    public @Nullable
+    List<String> complete(String cmd, String[] args, T player, Object... methodArgs) {
         try {
             return executeMethod(true, cmd, args, player, methodArgs);
-        } catch(CommandException e) {
+        } catch (CommandException e) {
             return Collections.emptyList();
         }
     }
@@ -463,16 +463,14 @@ public abstract class CommandsManager<T> {
     /**
      * Attempt to execute a command.
      *
-     * @param parent the parent method
+     * @param parent     the parent method
      * @param completing true if completing the command, false if executing
-     * @param args an array of arguments
-     * @param player the player
+     * @param args       an array of arguments
+     * @param player     the player
      * @param methodArgs the array of method arguments
-     * @param level the depth of the command
-     *
+     * @param level      the depth of the command
      * @return A list of completions, or null to use the server's default completion (player names).
-     *         Returning an empty list will prevent any completion from happening.
-     *
+     * Returning an empty list will prevent any completion from happening.
      * @throws CommandException thrown on a command error
      */
 
@@ -482,15 +480,15 @@ public abstract class CommandsManager<T> {
         final int argsCount = args.length - 1 - level;
         final Map<String, Method> map = commands.get(parent);
 
-        if(completing && argsCount == 0) {
+        if (completing && argsCount == 0) {
             // Completing with no args means the command itself is being completed.
             // Gather all matching commands, that the player has permission to run,
             // and return them as completion options. If a full command is being
             // completed, it will be returned alone, which will just advance the cursor.
             final List<String> children = new ArrayList<>();
-            for(Map.Entry<String, Method> entry : map.entrySet()) {
+            for (Map.Entry<String, Method> entry : map.entrySet()) {
                 final String child = entry.getKey();
-                if(child.toLowerCase().startsWith(cmdNameLower) && hasPermission(entry.getValue(), player)) {
+                if (child.toLowerCase().startsWith(cmdNameLower) && hasPermission(entry.getValue(), player)) {
                     children.add(child);
                 }
             }
@@ -503,11 +501,20 @@ public abstract class CommandsManager<T> {
                 throw new UnhandledCommandException();
             } else {
                 throw new MissingNestedCommandException("Unknown command: " + cmdName,
-                        getNestedUsage(args, level - 1, parent, player));
+                                                        getNestedUsage(args, level - 1, parent, player));
             }
         }
 
-        if(!hasPermission(method, player)) {
+        // checks whether the player has the PlayerRank needed
+        PlayerRankRequired playerRankRequired = method.getAnnotation(PlayerRankRequired.class);
+
+        if (playerRankRequired != null) {
+            if (!hasRank(player, playerRankRequired.value())) {
+                throw new PlayerNotHasRankException(playerRankRequired.value());
+            }
+        }
+
+        if (!hasPermission(method, player)) {
             throw new CommandPermissionsException();
         }
 
@@ -536,7 +543,7 @@ public abstract class CommandsManager<T> {
 
             // If the command method doesn't do completions, return null to indicate that
             // the default completion (player name) should be used.
-            if(completing && !supportsCompletion(method)) return null;
+            if (completing && !supportsCompletion(method)) return null;
 
             String[] newArgs = new String[args.length - level];
             System.arraycopy(args, level, newArgs, 0, args.length - level);
@@ -555,7 +562,7 @@ public abstract class CommandsManager<T> {
 
             CommandContext context = new CommandContext(newArgs, valueFlags, completing);
 
-            if(!completing) {
+            if (!completing) {
                 if (context.argsLength() < cmd.min()) {
                     throw new CommandUsageException("Too few arguments.", getUsage(args, level, cmd));
                 }
@@ -591,8 +598,9 @@ public abstract class CommandsManager<T> {
                 if (e.getCause() instanceof SuggestException && context.isSuggesting()) {
                     return ((SuggestException) e.getCause()).suggestions();
                 } else if (e.getCause() instanceof CommandException) {
-                    if(e.getCause() instanceof CommandUsageException) {
-                        ((CommandUsageException) e.getCause()).offerUsage(getUsage(args, argsCount, method.getAnnotation(Command.class)));
+                    if (e.getCause() instanceof CommandUsageException) {
+                        ((CommandUsageException) e.getCause())
+                                .offerUsage(getUsage(args, argsCount, method.getAnnotation(Command.class)));
                     }
                     throw (CommandException) e.getCause();
                 } else if (e.getCause() instanceof RuntimeException) {
@@ -603,6 +611,15 @@ public abstract class CommandsManager<T> {
             }
         }
     }
+
+    /**
+     * Returns whether a player has the PlayerRank.
+     *
+     * @param player the player
+     * @param rank   the PlayerRank
+     * @return true if player has PlayerRank
+     */
+    public abstract boolean hasRank(T player, PlayerRank rank);
 
     /**
      * Returns whether a player has access to a command.
@@ -629,7 +646,7 @@ public abstract class CommandsManager<T> {
     /**
      * Returns whether a player permission..
      *
-     * @param player the player
+     * @param player     the player
      * @param permission the permission
      * @return true if permission is granted
      */
