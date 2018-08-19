@@ -53,6 +53,11 @@
         </repository>
 
         <repository>
+            <id>md_5-snapshots</id>
+            <url>http://repo.md-5.net/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
             <id>data-local</id>
             <name>data</name>
             <url>file://${project.parent.basedir}/lib</url>
@@ -72,6 +77,13 @@
             <groupId>net.sunken</groupId>
             <artifactId>common</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.imaginarycode.minecraft</groupId>
+            <artifactId>RedisBungee</artifactId>
+            <version>0.3.6-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
