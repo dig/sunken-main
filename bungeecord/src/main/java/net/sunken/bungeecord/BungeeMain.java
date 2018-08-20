@@ -17,10 +17,12 @@ import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
 import net.sunken.bungeecord.party.PartyCommand;
 import net.sunken.bungeecord.party.PartyInviteSendPacketHandler;
+import net.sunken.bungeecord.party.PartyInviteValidatePacketHandler;
 import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parties.packet.PartyInviteSendPacket;
+import net.sunken.common.parties.packet.PartyInviteValidatePacket;
 
 public class BungeeMain extends Plugin implements CommandExecutor<CommandSender> {
 
@@ -37,6 +39,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         instance = this;
 
         PacketHandlerRegistry.registerHandler(PartyInviteSendPacket.class, new PartyInviteSendPacketHandler());
+        PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
 
         // Config Handler
         configHandler = new ConfigHandler(this, "config.yml");
@@ -61,9 +64,9 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
     private void setupCommands() {
         this.commands = new BungeeCommandsManager();
         CommandRegistration registry = new CommandRegistration(this,
-                                                               this.getProxy().getPluginManager(),
-                                                               this.commands,
-                                                               this);
+                this.getProxy().getPluginManager(),
+                this.commands,
+                this);
         // register all commands
         registry.register(PartyCommand.class);
         registry.register(LobbyCommand.class);

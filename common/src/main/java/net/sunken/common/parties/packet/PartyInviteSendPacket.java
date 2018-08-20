@@ -5,18 +5,19 @@ import net.sunken.common.packet.Packet;
 
 import java.util.UUID;
 
+/**
+ * Sent when a player does /party (player) indicating
+ * a party request was sent.
+ */
 public class PartyInviteSendPacket extends Packet {
 
     @Getter
     private UUID creator;
     @Getter
-    private UUID to;
+    private String toInvite;
 
-    public PartyInviteSendPacket(UUID creator, UUID to) {
+    public PartyInviteSendPacket(UUID creator, String toInvite) {
         this.creator = creator;
-        this.to = to;
-    }
-
-    public PartyInviteSendPacket() {
+        this.toInvite = toInvite;
     }
 }

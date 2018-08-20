@@ -3,7 +3,7 @@ package net.sunken.lobby;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandlerRegistry;
-import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
+import net.sunken.common.parkour.ParkourLeaderboardUpdatePacket;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
 import net.sunken.core.inventory.Page;

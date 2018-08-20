@@ -6,6 +6,7 @@ import net.sunken.common.parties.data.Party;
 
 import java.util.UUID;
 
+/** Packet sent when a member (NOT LEADER) leaves a party */
 public class PartyMemberLeftPacket extends Packet {
 
     @Getter

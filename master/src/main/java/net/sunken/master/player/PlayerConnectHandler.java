@@ -12,7 +12,6 @@ public class PlayerConnectHandler extends PacketHandler<PlayerConnectPacket> {
                 .getDataManager()
                 .getOnlinePlayers()
                 .get(packet.getUuid());
-
         masterPlayer.setServerName(packet.getServerName());
     }
 }

@@ -5,9 +5,9 @@ import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.PartyDisbandedPacket;
-import net.sunken.common.parties.packet.PartyInviteSendPacket;
 import net.sunken.common.parties.packet.PartyMemberLeftPacket;
 import net.sunken.common.parties.service.status.PartyCreateStatus;
+import net.sunken.common.parties.service.status.PartyInviteStatus;
 import net.sunken.common.player.PlayerRank;
 import redis.clients.jedis.*;
 
@@ -20,6 +20,30 @@ public class RedisPartyService implements PartyService {
 
     public RedisPartyService(RedisConnection redisConnection) {
         this.redisConnection = redisConnection;
+    }
+
+    @Override
+    public PartyInviteStatus validateInviteRequest(UUID creator, UUID invitee) {
+        JedisPool pool = redisConnection.getJedisPool();
+        Jedis jedis = pool.getResource();
+        try {
+            // check whether either player is in a party already, if so, deny the creation //
+
+            boolean partyWithLeaderInExists = jedis.exists("party:*:members:" + creator);
+            if (partyWithLeaderInExists) {
+                return PartyInviteStatus.INVITER_ALREADY_IN_PARTY;
+            }
+            boolean partyWithInviteeInExists = jedis.exists("party:*:members:" + invitee);
+            if (partyWithInviteeInExists) {
+                return PartyInviteStatus.INVITEE_ALREADY_IN_PARTY;
+            }
+        } catch (Exception e) {
+            pool.returnBrokenResource(jedis);
+            return PartyInviteStatus.FAILED;
+        } finally {
+            pool.returnResource(jedis);
+        }
+        return PartyInviteStatus.SUCCESS;
     }
 
     @Override
@@ -67,9 +91,9 @@ public class RedisPartyService implements PartyService {
 
             // create the Party object out of the information obtained from Redis
             party = new Party(uuid,
-                              UUID.fromString(leaderUniqueIdStr),
-                              allMembers,
-                              Long.parseLong(createdAt));
+                    UUID.fromString(leaderUniqueIdStr),
+                    allMembers,
+                    Long.parseLong(createdAt));
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
         } finally {
@@ -83,19 +107,6 @@ public class RedisPartyService implements PartyService {
         JedisPool pool = redisConnection.getJedisPool();
         Jedis jedis = pool.getResource();
         try {
-            // check whether either player is in a party already, if so, deny the creation //
-
-            boolean partyWithLeaderInExists = jedis.exists("party:*:members:" + leader.getUniqueId());
-            if (partyWithLeaderInExists) {
-                return PartyCreateStatus.INVITER_ALREADY_IN_PARTY;
-            }
-            boolean partyWithInviteeInExists = jedis.exists("party:*:members:" + leader.getUniqueId());
-            if (partyWithInviteeInExists) {
-                return PartyCreateStatus.INVITEE_ALREADY_IN_PARTY;
-            }
-
-            // no party exists with either the inviter or invitee in it, go ahead and create it //
-
             String partyUUID = UUID.randomUUID().toString();
             Transaction transaction = jedis.multi(); // start transaction
             // leader information
@@ -108,12 +119,9 @@ public class RedisPartyService implements PartyService {
             transaction.hmset("party:" + partyUUID + ":members:" + leader.getUniqueId(), leader.toMap());
             transaction.hmset("party:" + partyUUID + ":members:" + toInvite.getUniqueId(), toInvite.toMap());
             transaction.exec(); // execute transaction
-
-            PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(leader.getUniqueId(),
-                                                                                    toInvite.getUniqueId());
-            PacketUtil.sendPacket(partyInviteSendPacket);
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
+            return PartyCreateStatus.FAILED;
         } finally {
             pool.returnResource(jedis);
         }

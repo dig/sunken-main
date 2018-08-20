@@ -12,15 +12,18 @@ public class PartyInviteSendPacketHandler extends PacketHandler<PartyInviteSendP
 
     @Override
     public void onReceive(PartyInviteSendPacket packet) {
-        UUID creatorUUID = packet.getCreator();
-        UUID toUUID = packet.getTo();
+        UUID creator = packet.getCreator();
+        String toInvite = packet.getToInvite();
 
-        ProxiedPlayer creator = ProxyServer.getInstance().getPlayer(creatorUUID);
-        ProxiedPlayer invitee = ProxyServer.getInstance().getPlayer(toUUID);
+        ProxiedPlayer creatorPlayer = ProxyServer.getInstance().getPlayer(creator);
+        ProxiedPlayer inviteePlayer = ProxyServer.getInstance().getPlayer(toInvite);
 
-        if (creator != null && invitee != null) {
-            creator.sendMessage(new TextComponent("You sent a party invite to " + invitee.getName()));
-            invitee.sendMessage(new TextComponent("You received a party invite from " + creator.getName()));
+        if (creatorPlayer != null) {
+            creatorPlayer.sendMessage(new TextComponent("You sent a party invite to " + inviteePlayer.getName()));
+        }
+
+        if (inviteePlayer != null) {
+            inviteePlayer.sendMessage(new TextComponent("You received a party invite from " + creatorPlayer.getName()));
         }
     }
 }

@@ -9,10 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DataManager {
 
-    /* Name, UUID, names are stored in lowercase */
+    /** Name, UUID; Names are stored in lowercase */
     @Getter
     private Map<String, UUID> nameToUUID;
-
     @Getter
     private Map<UUID, AbstractPlayer> onlinePlayers;
 
@@ -22,8 +21,6 @@ public class DataManager {
 
         // Fetch from master here...
         if (fetchPlayerData) {
-
         }
     }
-
 }

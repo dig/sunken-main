@@ -7,10 +7,11 @@ import org.bson.Document;
 
 public class MasterPlayer extends AbstractPlayer {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String serverName;
 
-    public MasterPlayer (String uuid, String name, Document document, boolean firstJoin) {
+    public MasterPlayer(String uuid, String name, Document document, boolean firstJoin) {
         super(uuid, name, document, firstJoin);
     }
 

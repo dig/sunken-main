@@ -1,15 +1,13 @@
 package net.sunken.lobby.parkour;
 
 import lombok.Getter;
-import net.sunken.common.Common;
 import net.sunken.common.packet.PacketUtil;
-import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
+import net.sunken.common.parkour.ParkourCacheUpdatePacket;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.core.hologram.Hologram;
 import net.sunken.lobby.LobbyPlugin;
 import net.sunken.lobby.player.LobbyPlayer;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -18,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class Parkour {
 

@@ -10,7 +10,6 @@ public class PlayerJoinHandler extends PacketHandler<PlayerJoinPacket> {
     public void onReceive(PlayerJoinPacket packet) {
         MasterPlayer masterPlayer = new MasterPlayer(packet.getUuid().toString(), packet.getName(),
                 packet.getDocument(), packet.isFirstJoin());
-
         Common.getInstance()
                 .getDataManager()
                 .getOnlinePlayers()

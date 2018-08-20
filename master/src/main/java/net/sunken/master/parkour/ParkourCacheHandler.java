@@ -3,8 +3,8 @@ package net.sunken.master.parkour;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
-import net.sunken.common.packet.packets.ParkourCacheUpdatePacket;
-import net.sunken.common.packet.packets.ParkourLeaderboardUpdatePacket;
+import net.sunken.common.parkour.ParkourCacheUpdatePacket;
+import net.sunken.common.parkour.ParkourLeaderboardUpdatePacket;
 import net.sunken.master.Master;
 
 import java.util.logging.Level;
