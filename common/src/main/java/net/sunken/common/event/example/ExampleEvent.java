@@ -1,4 +1,6 @@
 package net.sunken.common.event.example;
 
-public class ExampleEvent {
+import net.sunken.common.event.SunkenEvent;
+
+public class ExampleEvent extends SunkenEvent {
 }

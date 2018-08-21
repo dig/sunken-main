@@ -1,4 +1,5 @@
 package net.sunken.common.event;
 
-public class SunkenListener {
+/** Marker interface for the common-based event system */
+public interface SunkenListener {
 }

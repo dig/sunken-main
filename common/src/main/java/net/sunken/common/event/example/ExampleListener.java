@@ -1,4 +1,12 @@
-package net.sunken.common.event;
+package net.sunken.common.event.example;
 
-public class ExampleListener {
+import net.sunken.common.event.ListensToEvent;
+import net.sunken.common.event.SunkenListener;
+
+public class ExampleListener implements SunkenListener {
+
+    @ListensToEvent
+    public void onExample(ExampleEvent e) {
+        System.out.println("hi");
+    }
 }
