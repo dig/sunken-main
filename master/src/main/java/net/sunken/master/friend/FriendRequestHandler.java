@@ -36,9 +36,17 @@ public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
 
         FriendStatus status = FriendStatus.INVALID_PLAYER;
         if (toInvite != null) {
-            if (friendManager.getFriendInvites().getIfPresent(creator) == null) {
-                friendManager.getFriendInvites().put(creator, toInvite);
-                status = FriendStatus.INVITE_SENT;
+            boolean alreadyInvited = friendManager.getFriendInvites().containsEntry(creator, toInvite);
+
+            if (!alreadyInvited) {
+                int totalInvites = friendManager.getFriendInvites().get(creator).size();
+
+                if (totalInvites < 10) {
+                    friendManager.getFriendInvites().put(creator, toInvite);
+                    status = FriendStatus.INVITE_SENT;
+                } else {
+                    status = FriendStatus.INVITE_LIMIT;
+                }
             } else {
                 status = FriendStatus.ALREADY_INVITED;
             }

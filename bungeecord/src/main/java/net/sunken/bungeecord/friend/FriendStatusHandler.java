@@ -32,9 +32,17 @@ public class FriendStatusHandler extends PacketHandler<FriendStatusPacket> {
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You already have a pending friend request to " + packet.getToInvite() + "!"));
                 }
-            case DENY_INVITE:
+            case INVITE_LIMIT:
+                if (creatorPlayer != null) {
+                    creatorPlayer.sendMessage(new TextComponent("You have hit the pending friend request limit!"));
+                }
+            case INVITE_NOT_ALLOWED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You cannot friend request this player!"));
+                }
+            case INVITE_DENY:
+                if (creatorPlayer != null) {
+                    creatorPlayer.sendMessage(new TextComponent(packet.getToInvite() + " has denied your friend request."));
                 }
             case PLAYER_ADDED:
                 if (creatorPlayer != null) {

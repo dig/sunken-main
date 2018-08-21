@@ -1,25 +1,18 @@
 package net.sunken.master.friend;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import lombok.Getter;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class FriendManager {
 
-    /*
-        Need to rethink how I am going to store friend invites as this method
-        will not allow duplicates.
-     */
     @Getter
-    private Cache<UUID, UUID> friendInvites;
+    private Multimap<UUID, UUID> friendInvites;
 
     public FriendManager () {
-        this.friendInvites = CacheBuilder.newBuilder()
-                .expireAfterWrite(5, TimeUnit.MINUTES)
-                .build();
+        this.friendInvites = ArrayListMultimap.create();
     }
 
 }
