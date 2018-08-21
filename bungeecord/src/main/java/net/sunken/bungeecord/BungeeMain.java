@@ -11,6 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.config.ConfigHandler;
+import net.sunken.bungeecord.friend.FriendStatusHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
@@ -19,6 +20,7 @@ import net.sunken.bungeecord.party.PartyCommand;
 import net.sunken.bungeecord.party.PartyInviteValidatePacketHandler;
 import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
+import net.sunken.common.friend.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parties.packet.PartyInviteValidatePacket;
 
@@ -37,6 +39,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         instance = this;
 
         PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
+        PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
 
         // Config Handler
         configHandler = new ConfigHandler(this, "config.yml");

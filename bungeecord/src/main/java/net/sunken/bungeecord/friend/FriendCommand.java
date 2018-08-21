@@ -5,6 +5,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.sunken.common.friend.FriendRequestPacket;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.packet.PartyInviteSendPacket;
 import net.sunken.common.player.PlayerRank;
@@ -24,10 +25,13 @@ public class FriendCommand {
             ProxiedPlayer player = (ProxiedPlayer) sender;
             String firstArg = args.getString(0);
 
+            // check through sub-commands //
+            // ...
 
+            // not a sub-command, process a friend invite //
 
-            PartyInviteSendPacket partyInviteSendPacket = new PartyInviteSendPacket(player.getUniqueId(), firstArg);
-            PacketUtil.sendPacket(partyInviteSendPacket);
+            FriendRequestPacket friendRequestPacket = new FriendRequestPacket(player.getUniqueId(), firstArg);
+            PacketUtil.sendPacket(friendRequestPacket);
         }
     }
 
