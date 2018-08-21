@@ -15,12 +15,8 @@ public class DataManager {
     @Getter
     private Map<UUID, AbstractPlayer> onlinePlayers;
 
-    public DataManager (boolean fetchPlayerData){
+    public DataManager (){
         this.nameToUUID = new ConcurrentHashMap<>();
         this.onlinePlayers = new ConcurrentHashMap<>();
-
-        // Fetch from master here...
-        if (fetchPlayerData) {
-        }
     }
 }

@@ -4,10 +4,6 @@ import lombok.Getter;
 
 public enum PlayerRank {
 
-    /**
-     * The order of these must not change! Commands use the ordinal of this enum
-     * to check whether their rank.ordinal() >= required.ordinal()
-     */
     USER(0, "GRAY", "USER"),
     MODERATOR(5, "BLUE", "MODERATOR"),
     ADMIN(8, "RED", "ADMIN"),

@@ -11,6 +11,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.config.ConfigHandler;
+import net.sunken.bungeecord.friend.FriendAcceptStatusHandler;
+import net.sunken.bungeecord.friend.FriendCommand;
+import net.sunken.bungeecord.friend.FriendStatusHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
@@ -19,6 +22,8 @@ import net.sunken.bungeecord.party.PartyCommand;
 import net.sunken.bungeecord.party.PartyInviteValidatePacketHandler;
 import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
+import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
+import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parties.packet.PartyInviteValidatePacket;
 
@@ -37,12 +42,14 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         instance = this;
 
         PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
+        PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
+        PacketHandlerRegistry.registerHandler(FriendAcceptStatusPacket.class, new FriendAcceptStatusHandler());
 
         // Config Handler
         configHandler = new ConfigHandler(this, "config.yml");
 
         // Initialize common
-        Common.getInstance().onCommonLoad(true, true);
+        Common.getInstance().onCommonLoad(true);
 
         // Register events
         this.registerEvents();
@@ -67,6 +74,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         // register all commands
         registry.register(PartyCommand.class);
         registry.register(LobbyCommand.class);
+        registry.register(FriendCommand.class);
     }
 
     @Override

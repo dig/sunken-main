@@ -32,7 +32,7 @@ public class PartyInviteSendPacketHandler extends PacketHandler<PartyInviteSendP
         String toInviteName = packet.getToInvite();
 
         AbstractPlayer creatorPlayer = onlinePlayers.get(creator);
-        UUID toInvite = dataManager.getNameToUUID().get(toInviteName);
+        UUID toInvite = dataManager.getNameToUUID().get(toInviteName.toLowerCase());
         AbstractPlayer toInvitePlayer = null;
         if (toInvite != null) {
             toInvitePlayer = onlinePlayers.get(toInvite);
