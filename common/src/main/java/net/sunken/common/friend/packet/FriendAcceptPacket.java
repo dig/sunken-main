@@ -1,4 +1,4 @@
-package net.sunken.common.friend;
+package net.sunken.common.friend.packet;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
@@ -12,9 +12,13 @@ public class FriendAcceptPacket extends Packet {
     @Getter
     private String target;
 
-    public FriendAcceptPacket (UUID creator, String target) {
+    @Getter
+    private boolean deny;
+
+    public FriendAcceptPacket (UUID creator, String target, boolean deny) {
         this.creator = creator;
         this.target = target;
+        this.deny = deny;
     }
 
 }

@@ -2,9 +2,14 @@ package net.sunken.master.friend;
 
 import net.sunken.common.Common;
 import net.sunken.common.DataManager;
-import net.sunken.common.friend.FriendAcceptPacket;
+import net.sunken.common.friend.packet.FriendAcceptPacket;
+import net.sunken.common.friend.data.FriendStatus;
+import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
+import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandler;
+import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;
+import net.sunken.common.util.PlayerDetail;
 import net.sunken.master.Master;
 
 import java.util.Map;
@@ -26,6 +31,32 @@ public class FriendAcceptHandler extends PacketHandler<FriendAcceptPacket> {
     public void onReceive(FriendAcceptPacket packet) {
         UUID creator = packet.getCreator();
         String targetName = packet.getTarget();
+
+        UUID target = dataManager.getNameToUUID().get(targetName.toLowerCase());
+        String creatorName = onlinePlayers.get(creator).getName();
+
+        FriendStatus status = FriendStatus.INVALID_PLAYER;
+        if (target != null) {
+            boolean hasInvited = friendManager.getFriendInvites().containsEntry(target, creator);
+
+            if (hasInvited) {
+                friendManager.getFriendInvites().remove(target, creator);
+
+                if (!packet.isDeny()) {
+                    // TODO: Update friends list for both players
+
+                    status = FriendStatus.PLAYER_ADDED;
+                } else {
+                    status = FriendStatus.INVITE_DENY;
+                }
+            } else {
+                status = FriendStatus.INVITE_NOT_FOUND;
+            }
+        }
+
+        PacketUtil.sendPacket(new FriendAcceptStatusPacket(
+                new PlayerDetail(creator, creatorName),
+                packet.getTarget(), status));
     }
 
 }

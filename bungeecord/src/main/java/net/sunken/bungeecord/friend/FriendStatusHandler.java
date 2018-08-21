@@ -3,7 +3,7 @@ package net.sunken.bungeecord.friend;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.sunken.common.friend.FriendStatusPacket;
+import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.util.PlayerDetail;
 
@@ -34,22 +34,11 @@ public class FriendStatusHandler extends PacketHandler<FriendStatusPacket> {
                 }
             case INVITE_LIMIT:
                 if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("You have hit the pending friend request limit!"));
+                    creatorPlayer.sendMessage(new TextComponent("You have hit the outgoing friend request limit!"));
                 }
             case INVITE_NOT_ALLOWED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You cannot friend request this player!"));
-                }
-            case INVITE_DENY:
-                if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent(packet.getToInvite() + " has denied your friend request."));
-                }
-            case PLAYER_ADDED:
-                if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("You are now friends with " + packet.getToInvite() + "!"));
-                }
-                if (invitedPlayer != null) {
-                    invitedPlayer.sendMessage(new TextComponent("You are now friends with " + creator.name + "!"));
                 }
             default:
                 assert false : "unknown field";

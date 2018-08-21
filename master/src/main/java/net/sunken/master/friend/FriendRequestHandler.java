@@ -2,9 +2,9 @@ package net.sunken.master.friend;
 
 import net.sunken.common.Common;
 import net.sunken.common.DataManager;
-import net.sunken.common.friend.FriendRequestPacket;
-import net.sunken.common.friend.FriendStatus;
-import net.sunken.common.friend.FriendStatusPacket;
+import net.sunken.common.friend.packet.FriendRequestPacket;
+import net.sunken.common.friend.data.FriendStatus;
+import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;

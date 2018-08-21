@@ -1,4 +1,4 @@
-package net.sunken.common.friend;
+package net.sunken.common.friend.packet;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;

@@ -2,8 +2,8 @@ package net.sunken.master;
 
 import lombok.Getter;
 import net.sunken.common.Common;
-import net.sunken.common.friend.FriendAcceptPacket;
-import net.sunken.common.friend.FriendRequestPacket;
+import net.sunken.common.friend.packet.FriendAcceptPacket;
+import net.sunken.common.friend.packet.FriendRequestPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourCacheUpdatePacket;
 import net.sunken.common.parties.packet.PartyInviteSendPacket;

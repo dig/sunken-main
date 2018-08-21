@@ -1,4 +1,4 @@
-package net.sunken.common.friend;
+package net.sunken.common.friend.data;
 
 public enum FriendStatus {
 
@@ -7,6 +7,8 @@ public enum FriendStatus {
     ALREADY_INVITED,
     INVITE_LIMIT,
     INVITE_NOT_ALLOWED,
+
+    INVITE_NOT_FOUND,
     INVITE_DENY,
     PLAYER_ADDED
 
