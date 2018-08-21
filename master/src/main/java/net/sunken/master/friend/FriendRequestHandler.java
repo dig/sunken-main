@@ -11,6 +11,7 @@ import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.util.PlayerDetail;
 import net.sunken.master.Master;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,7 +40,12 @@ public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
             boolean alreadyInvited = friendManager.getFriendInvites().containsEntry(creator, toInvite);
 
             if (!alreadyInvited) {
-                int totalInvites = friendManager.getFriendInvites().get(creator).size();
+                int totalInvites = 0;
+
+                Collection<UUID> creatorInvites = friendManager.getFriendInvites().get(creator);
+                if (creatorInvites != null) {
+                    totalInvites = creatorInvites.size();
+                }
 
                 if (totalInvites < 10) {
                     friendManager.getFriendInvites().put(creator, toInvite);
