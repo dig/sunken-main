@@ -16,15 +16,16 @@ public class Minigame {
         instance = plugin;
 
         // Add server to network and load utils
-        Common.getInstance().onCommonLoad(false, true,
+        Common.getInstance().onCommonLoad(
+                false,
+                true,
                 ServerType.valueOf(plugin.getConfig().getString("type")),
-                Bukkit.getMaxPlayers(), Bukkit.getPort());
-
+                Bukkit.getMaxPlayers(),
+                Bukkit.getPort());
         Core.getInstance().onCoreLoad(plugin);
     }
 
     public void onMinigameDisable() {
         Core.getInstance().onCoreDisable();
     }
-
 }
