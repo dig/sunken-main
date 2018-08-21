@@ -19,6 +19,9 @@
 
 package com.sk89q.minecraft.util.commands;
 
+import com.sk89q.minecraft.util.commands.cooldowns.ActiveCooldown;
+import com.sk89q.minecraft.util.commands.cooldowns.Cooldown;
+import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import com.sk89q.util.StringUtil;
@@ -30,6 +33,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -501,7 +505,7 @@ public abstract class CommandsManager<T> {
                 throw new UnhandledCommandException();
             } else {
                 throw new MissingNestedCommandException("Unknown command: " + cmdName,
-                                                        getNestedUsage(args, level - 1, parent, player));
+                        getNestedUsage(args, level - 1, parent, player));
             }
         }
 
@@ -531,7 +535,7 @@ public abstract class CommandsManager<T> {
         if (nestedAnnot != null && (argsCount > 0 || nestedAnnot.executeBody())) {
             if (argsCount == 0) {
                 throw new MissingNestedCommandException("Sub-command required.",
-                                                        getNestedUsage(args, level, method, player));
+                        getNestedUsage(args, level, method, player));
             } else {
                 return executeMethod(method, completing, args, player, methodArgs, level + 1);
             }
@@ -540,6 +544,41 @@ public abstract class CommandsManager<T> {
             return executeMethod(parent, completing, aCmd.value(), player, methodArgs, level);
         } else {
             Command cmd = method.getAnnotation(Command.class);
+
+            // check whether this particular command has a cooldown
+            Cooldown cooldown = method.getAnnotation(Cooldown.class);
+
+            if (cooldown != null) {
+                String[] commands = cooldown.commands();
+                int value = cooldown.value();
+                TimeUnit unit = cooldown.unit();
+
+                boolean hasActiveCooldown = false;
+
+                Collection<ActiveCooldown> activeCooldowns = this.getCooldowns(player);
+                if (activeCooldowns != null) {
+                    for (ActiveCooldown activeCooldown : activeCooldowns) {
+                        if (Arrays.equals(activeCooldown.getCommands(), commands)) {
+                            // there is a cooldown present for this command
+                            hasActiveCooldown = true;
+
+                            long startedAt = activeCooldown.getCooldownStartAt();
+                            long timeDeltaMillis = System.currentTimeMillis() - startedAt;
+                            if (timeDeltaMillis < unit.toMillis(value)) {
+                                throw new OnCooldownException(
+                                        value,
+                                        TimeUnit.MILLISECONDS.convert(timeDeltaMillis, unit), unit);
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasActiveCooldown) {
+                    ActiveCooldown newCooldown = new ActiveCooldown(commands, System.currentTimeMillis());
+                    this.addCooldown(player, newCooldown);
+                }
+            }
 
             // If the command method doesn't do completions, return null to indicate that
             // the default completion (player name) should be used.
@@ -611,6 +650,23 @@ public abstract class CommandsManager<T> {
             }
         }
     }
+
+    /**
+     * Get the active cooldowns for a player.
+     *
+     * @param player the player
+     * @return a collection of {@link ActiveCooldown}s
+     */
+    @Nullable
+    public abstract Collection<ActiveCooldown> getCooldowns(T player);
+
+    /**
+     * Add a cooldown for the player.
+     *
+     * @param player   the player
+     * @param cooldown the {@link ActiveCooldown}
+     */
+    public abstract void addCooldown(T player, ActiveCooldown cooldown);
 
     /**
      * Returns whether a player has the PlayerRank.
