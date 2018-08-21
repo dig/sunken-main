@@ -2,6 +2,7 @@ package net.sunken.master;
 
 import lombok.Getter;
 import net.sunken.common.Common;
+import net.sunken.common.friend.FriendAcceptPacket;
 import net.sunken.common.friend.FriendRequestPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourCacheUpdatePacket;
@@ -9,6 +10,7 @@ import net.sunken.common.parties.packet.PartyInviteSendPacket;
 import net.sunken.common.player.packet.PlayerConnectPacket;
 import net.sunken.common.player.packet.PlayerJoinPacket;
 import net.sunken.common.player.packet.PlayerQuitPacket;
+import net.sunken.master.friend.FriendAcceptHandler;
 import net.sunken.master.friend.FriendManager;
 import net.sunken.master.friend.FriendRequestHandler;
 import net.sunken.master.parkour.ParkourCache;
@@ -55,6 +57,7 @@ public class Master {
         PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
         PacketHandlerRegistry.registerHandler(PartyInviteSendPacket.class, new PartyInviteSendPacketHandler());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
+        PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
 
         this.friendManager = new FriendManager();
         this.parkourCache = new ParkourCache();

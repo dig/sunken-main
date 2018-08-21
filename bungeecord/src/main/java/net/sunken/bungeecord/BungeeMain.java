@@ -11,6 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.config.ConfigHandler;
+import net.sunken.bungeecord.friend.FriendCommand;
 import net.sunken.bungeecord.friend.FriendStatusHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
@@ -70,6 +71,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         // register all commands
         registry.register(PartyCommand.class);
         registry.register(LobbyCommand.class);
+        registry.register(FriendCommand.class);
     }
 
     @Override

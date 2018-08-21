@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 public class FriendManager {
 
+    /*
+        Need to rethink how I am going to store friend invites as this method
+        will not allow duplicates.
+     */
     @Getter
     private Cache<UUID, UUID> friendInvites;
 
