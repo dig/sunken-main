@@ -3,6 +3,7 @@ package net.sunken.core;
 import com.sk89q.bukkit.util.BukkitCommandsManager;
 import com.sk89q.bukkit.util.CommandRegistration;
 import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.sunken.core.hologram.HologramInteractListener;
@@ -64,6 +65,8 @@ public class Core implements CommandExecutor {
             sender.sendMessage("Number expected, got " + e.getActualText() + " instead.");
         } catch (PlayerNotHasRankException e) {
             sender.sendMessage("You must be " + e.getRequired().getFriendlyName() + " to execute this command!");
+        } catch (OnCooldownException e) {
+            sender.sendMessage("You are on a cooldown!");
         } catch (WrappedCommandException e) {
             sender.sendMessage(e.getMessage());
         } catch (CommandException e) {

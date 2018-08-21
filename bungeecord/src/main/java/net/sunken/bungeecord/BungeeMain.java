@@ -4,6 +4,7 @@ import com.sk89q.bungee.util.BungeeCommandsManager;
 import com.sk89q.bungee.util.CommandExecutor;
 import com.sk89q.bungee.util.CommandRegistration;
 import com.sk89q.minecraft.util.commands.*;
+import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.md_5.bungee.api.CommandSender;
@@ -101,6 +102,8 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         } catch (PlayerNotHasRankException e) {
             sender.sendMessage(new TextComponent(
                     "You must be " + e.getRequired().getFriendlyName() + " to execute this command!"));
+        } catch (OnCooldownException e) {
+            sender.sendMessage(new TextComponent("You are on a cooldown!"));
         } catch (WrappedCommandException e) {
             sender.sendMessage(new TextComponent(e.getMessage()));
         } catch (CommandException e) {
