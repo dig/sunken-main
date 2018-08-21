@@ -22,7 +22,7 @@ public class PartyInviteValidatePacketHandler extends PacketHandler<PartyInviteV
         switch (inviteStatus) {
             case SUCCESS:
                 if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("You invited " + creator.name + " to a party!"));
+                    creatorPlayer.sendMessage(new TextComponent("You invited " + toInvite.name + " to a party!"));
                 }
                 if (toInvitePlayer != null) {
                     toInvitePlayer.sendMessage(new TextComponent("You received an invite from " + creator.name));

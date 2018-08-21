@@ -1,13 +1,22 @@
 package net.sunken.bungeecord.friend;
 
+import com.sk89q.minecraft.util.commands.Command;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.sunken.common.Common;
+import net.sunken.common.DataManager;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.util.PlayerDetail;
 
 public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusPacket> {
+
+    private static DataManager dataManager;
+
+    static {
+        dataManager = Common.getInstance().getDataManager();
+    }
 
     @Override
     public void onReceive(FriendAcceptStatusPacket packet) {
@@ -33,9 +42,11 @@ public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusP
             case PLAYER_ADDED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You are now friends with " + packet.getTarget() + "!"));
+                    dataManager.getOnlinePlayers().get(creatorPlayer.getUniqueId()).refreshFriends();
                 }
                 if (invitedPlayer != null) {
                     invitedPlayer.sendMessage(new TextComponent("You are now friends with " + creator.name + "!"));
+                    dataManager.getOnlinePlayers().get(invitedPlayer.getUniqueId()).refreshFriends();
                 }
                 break;
             default:
