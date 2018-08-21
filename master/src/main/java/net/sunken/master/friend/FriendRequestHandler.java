@@ -10,10 +10,12 @@ import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.util.PlayerDetail;
 import net.sunken.master.Master;
+import net.sunken.master.player.MasterPlayer;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
 
@@ -37,9 +39,13 @@ public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
 
         FriendStatus status = FriendStatus.INVALID_PLAYER;
         if (toInvite != null) {
-            boolean alreadyInvited = friendManager.getFriendInvites().containsEntry(creator, toInvite);
+            MasterPlayer creatorPlayer = (MasterPlayer) onlinePlayers.get(creator);
 
-            if (!alreadyInvited) {
+            boolean needsToAccept = friendManager.getFriendInvites().containsEntry(toInvite, creator);
+            boolean alreadyInvited = friendManager.getFriendInvites().containsEntry(creator, toInvite);
+            boolean isFriends = creatorPlayer.isFriends(toInvite);
+
+            if (!alreadyInvited && !needsToAccept && !isFriends) {
                 int totalInvites = 0;
 
                 Collection<UUID> creatorInvites = friendManager.getFriendInvites().get(creator);
@@ -53,6 +59,10 @@ public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
                 } else {
                     status = FriendStatus.INVITE_LIMIT;
                 }
+            } else if (isFriends) {
+                status = FriendStatus.ALREADY_FRIENDS;
+            } else if (needsToAccept) {
+                status = FriendStatus.INVITE_PENDING;
             } else {
                 status = FriendStatus.ALREADY_INVITED;
             }

@@ -50,6 +50,9 @@ public class Master {
     private void onEnable(){
         Common.getInstance().onCommonLoad(true);
 
+        this.friendManager = new FriendManager();
+        this.parkourCache = new ParkourCache();
+
         // Register packets
         PacketHandlerRegistry.registerHandler(ParkourCacheUpdatePacket.class, new ParkourCacheHandler());
         PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
@@ -58,9 +61,6 @@ public class Master {
         PacketHandlerRegistry.registerHandler(PartyInviteSendPacket.class, new PartyInviteSendPacketHandler());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
-
-        this.friendManager = new FriendManager();
-        this.parkourCache = new ParkourCache();
     }
 
     public void onDisable(){

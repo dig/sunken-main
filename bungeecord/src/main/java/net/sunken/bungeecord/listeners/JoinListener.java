@@ -126,9 +126,11 @@ public class JoinListener implements Listener {
             }
         }
 
-        // Update our network because player is joining new server
-        Common.getLogger().log(Level.INFO, "PlayerConnectPacket");
-        PacketUtil.sendPacket(new PlayerConnectPacket(player.getUniqueId(), event.getTarget().getName()));
+        if (!event.isCancelled() && event.getTarget() != null) {
+            // Update our network because player is joining new server
+            Common.getLogger().log(Level.INFO, "PlayerConnectPacket");
+            PacketUtil.sendPacket(new PlayerConnectPacket(player.getUniqueId(), event.getTarget().getName()));
+        }
     }
 
     @EventHandler

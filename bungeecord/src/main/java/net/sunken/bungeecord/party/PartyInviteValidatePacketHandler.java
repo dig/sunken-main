@@ -27,6 +27,7 @@ public class PartyInviteValidatePacketHandler extends PacketHandler<PartyInviteV
                 if (toInvitePlayer != null) {
                     toInvitePlayer.sendMessage(new TextComponent("You received an invite from " + creator.name));
                 }
+                break;
             case FAILED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("Could not send party request..."));
