@@ -42,7 +42,7 @@ public class Common {
     @Getter
     private PartyService partyService;
 
-    public void onCommonLoad(boolean listenForServers, boolean fetchPlayerData) {
+    public void onCommonLoad(boolean listenForServers) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
                 19802,
@@ -57,7 +57,7 @@ public class Common {
                 "***REMOVED***"
         );
 
-        this.dataManager = new DataManager(fetchPlayerData);
+        this.dataManager = new DataManager();
 
         PacketListener packetListener = new PacketListener(redis.getConnection());
         packetListener.start();
@@ -76,9 +76,9 @@ public class Common {
         this.loaded = true;
     }
 
-    public void onCommonLoad(boolean listenForServers, boolean fetchPlayerData,
+    public void onCommonLoad(boolean listenForServers,
                              ServerType serverType, int maxPlayers, int serverPort) {
-        this.onCommonLoad(listenForServers, fetchPlayerData);
+        this.onCommonLoad(listenForServers);
 
         // Add server to the network
         ServerInstance.setInstance(new ServerInstance(serverType, maxPlayers, 0, serverPort));
