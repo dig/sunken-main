@@ -42,10 +42,6 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
     public void onEnable() {
         instance = this;
 
-        PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
-        PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
-        PacketHandlerRegistry.registerHandler(FriendAcceptStatusPacket.class, new FriendAcceptStatusHandler());
-
         // Config Handler
         configHandler = new ConfigHandler(this, "config.yml");
 
@@ -54,6 +50,11 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
 
         // Register events
         this.registerEvents();
+
+        // Register packet handlers
+        PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
+        PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
+        PacketHandlerRegistry.registerHandler(FriendAcceptStatusPacket.class, new FriendAcceptStatusHandler());
 
         // Get information about running servers
         Common.getInstance().getServerCache().updateCache();

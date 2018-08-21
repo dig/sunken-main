@@ -142,6 +142,11 @@ public abstract class AbstractPlayer {
         }
     }
 
+    public void refreshFriends() {
+        this.friendsLoaded = false;
+        this.loadFriendsCache();
+    }
+
     public void addFriend(ObjectId objId) {
         List<ObjectId> friendObjects = new ArrayList<>();
 
@@ -178,8 +183,7 @@ public abstract class AbstractPlayer {
             playerDocument.put(DatabaseConstants.PLAYER_FRIENDS_FIELD, friendObjects);
             playerCollection.replaceOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid), playerDocument);
 
-            this.friendsLoaded = false;
-            this.loadFriendsCache();
+            this.refreshFriends();
         }
     }
 
