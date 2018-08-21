@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.packet;
+package net.sunken.common.packet;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
