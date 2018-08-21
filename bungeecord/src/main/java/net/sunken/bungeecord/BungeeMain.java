@@ -35,7 +35,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
     @Override
     public void onEnable() {
         instance = this;
-        
+
         PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
 
         // Config Handler

@@ -38,8 +38,8 @@ public class PartyInviteValidatePacketHandler extends PacketHandler<PartyInviteV
                 }
                 break;
             case INVITEE_ALREADY_IN_PARTY:
-                if (toInvitePlayer != null) {
-                    toInvitePlayer.sendMessage(new TextComponent("That player is already in a party!"));
+                if (creatorPlayer != null) {
+                    creatorPlayer.sendMessage(new TextComponent("That player is already in a party!"));
                 }
                 break;
             default:
