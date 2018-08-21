@@ -9,6 +9,7 @@ public final class DatabaseConstants {
     public static final String PLAYER_NAME_FIELD = "name";
     public static final String PLAYER_RANK_FIELD = "rank";
     public static final String PLAYER_ACHIEVEMENTS_FIELD = "achievements";
+    public static final String PLAYER_FRIENDS_FIELD = "friends";
 
     private DatabaseConstants() {
     }

@@ -21,6 +21,7 @@ public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusP
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("Could not find a friend request from '" + packet.getTarget() + "'."));
                 }
+                break;
             case INVITE_DENY:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You have denied " + packet.getTarget() + " friend request."));
@@ -28,6 +29,7 @@ public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusP
                 if (invitedPlayer != null) {
                     invitedPlayer.sendMessage(new TextComponent(creator.name + " has denied your friend request."));
                 }
+                break;
             case PLAYER_ADDED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You are now friends with " + packet.getTarget() + "!"));
@@ -35,6 +37,7 @@ public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusP
                 if (invitedPlayer != null) {
                     invitedPlayer.sendMessage(new TextComponent("You are now friends with " + creator.name + "!"));
                 }
+                break;
             default:
                 assert false : "unknown field";
         }
