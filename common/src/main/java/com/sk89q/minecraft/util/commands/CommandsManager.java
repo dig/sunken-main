@@ -529,7 +529,7 @@ public abstract class CommandsManager<T> {
         // e.g.:
         //  - /cmd - @NestedCommand(executeBody = true) will go into the else loop and execute code in that method
         //  - /cmd <arg1> <arg2> - @NestedCommand(executeBody = true) will always go to the nested command class
-        //  - /cmd <arg1> - @NestedCommand(executeBody = false) will always go to the nested command class not matter the args
+        //  - /cmd <arg1> - @NestedCommand(executeBody = false) will always go to the nested command class no matter the args
         final NestedCommand nestedAnnot = method.getAnnotation(NestedCommand.class);
 
         if (nestedAnnot != null && (argsCount > 0 || nestedAnnot.executeBody())) {
@@ -567,7 +567,8 @@ public abstract class CommandsManager<T> {
                             if (timeDeltaMillis < unit.toMillis(value)) {
                                 throw new OnCooldownException(
                                         value,
-                                        TimeUnit.MILLISECONDS.convert(timeDeltaMillis, unit), unit);
+                                        TimeUnit.MILLISECONDS.convert(timeDeltaMillis, unit),
+                                        unit);
                             }
                             break;
                         }
@@ -590,7 +591,7 @@ public abstract class CommandsManager<T> {
             final Set<Character> valueFlags = new HashSet<>();
 
             char[] flags = cmd.flags().toCharArray();
-            Set<Character> newFlags = new HashSet<Character>();
+            Set<Character> newFlags = new HashSet<>();
             for (int i = 0; i < flags.length; ++i) {
                 if (flags.length > i + 1 && flags[i + 1] == ':') {
                     valueFlags.add(flags[i]);

@@ -19,7 +19,7 @@ import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
-import net.sunken.bungeecord.party.PartyCommand;
+import net.sunken.bungeecord.party.command.PartyCommand;
 import net.sunken.bungeecord.party.PartyCreatePacketHandler;
 import net.sunken.bungeecord.party.PartyInviteExpiredPacketHandler;
 import net.sunken.bungeecord.party.PartyInviteValidatePacketHandler;
