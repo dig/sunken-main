@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;
 
+/** Keps track of pending invites and their expiration */
 public final class PartyInviteManager {
 
     private static final Tuple2<Long, TimeUnit> INVITE_EXPIRY_TIME;
