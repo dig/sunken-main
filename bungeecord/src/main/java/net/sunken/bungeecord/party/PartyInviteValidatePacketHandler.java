@@ -43,6 +43,11 @@ public class PartyInviteValidatePacketHandler extends PacketHandler<PartyInviteV
                     creatorPlayer.sendMessage(new TextComponent("That player is already in a party!"));
                 }
                 break;
+            case INVITE_ALREADY_PENDING:
+                if (creatorPlayer != null) {
+                    creatorPlayer.sendMessage(new TextComponent("You already have an invite pending!"));
+                }
+                break;
             default:
                 assert false : "unknown field";
         }

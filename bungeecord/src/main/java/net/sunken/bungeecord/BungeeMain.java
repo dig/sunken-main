@@ -19,6 +19,7 @@ import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
+import net.sunken.bungeecord.packet.PartyInviteExpiredHandler;
 import net.sunken.bungeecord.party.PartyCommand;
 import net.sunken.bungeecord.party.PartyInviteValidatePacketHandler;
 import net.sunken.bungeecord.server.LobbyCommand;
@@ -26,6 +27,7 @@ import net.sunken.common.Common;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
 import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.parties.packet.PartyInviteExpiredPacket;
 import net.sunken.common.parties.packet.PartyInviteValidatePacket;
 
 public class BungeeMain extends Plugin implements CommandExecutor<CommandSender> {
@@ -55,6 +57,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         PacketHandlerRegistry.registerHandler(PartyInviteValidatePacket.class, new PartyInviteValidatePacketHandler());
         PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptStatusPacket.class, new FriendAcceptStatusHandler());
+        PacketHandlerRegistry.registerHandler(PartyInviteExpiredPacket.class, new PartyInviteExpiredHandler());
 
         // Get information about running servers
         Common.getInstance().getServerCache().updateCache();

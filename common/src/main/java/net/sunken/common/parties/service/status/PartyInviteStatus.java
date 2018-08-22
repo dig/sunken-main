@@ -6,4 +6,5 @@ public enum PartyInviteStatus {
     FAILED,
     INVITER_ALREADY_IN_PARTY,
     INVITEE_ALREADY_IN_PARTY,
+    INVITE_ALREADY_PENDING,
 }

@@ -49,7 +49,6 @@ public class FriendCommand {
 
                     player.sendMessage(new TextComponent("- " + rankColour + name));
                 }
-
             } else if (firstArg.equalsIgnoreCase("accept") && args.argsLength() == 2) {
                 FriendAcceptPacket friendAcceptPacket = new FriendAcceptPacket(player.getUniqueId(), args.getString(1), false);
                 PacketUtil.sendPacket(friendAcceptPacket);

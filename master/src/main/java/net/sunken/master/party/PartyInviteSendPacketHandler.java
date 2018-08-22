@@ -40,6 +40,15 @@ public class PartyInviteSendPacketHandler extends PacketHandler<PartyInviteSendP
 
         if (creatorPlayer != null && toInvite != null) {
             PartyInviteStatus partyInviteStatus = partyService.validateInviteRequest(creator, toInvite);
+            // make sure after the standard validation checks have ran, there isn't
+            // an invite already pending by the user to the same person
+            if (PartyInviteManager.hasInvited(creator, toInvite)) {
+                partyInviteStatus = PartyInviteStatus.INVITE_ALREADY_PENDING;
+            }
+            // success, add the invite
+            if (partyInviteStatus == PartyInviteStatus.SUCCESS) {
+                PartyInviteManager.addInvite(creator, toInvite, toInvitePlayer.getName());
+            }
             PartyInviteValidatePacket partyInviteValidatePacket = new PartyInviteValidatePacket(
                     new PlayerDetail(creatorPlayer.getUUID(), creatorPlayer.getName()),
                     new PlayerDetail(toInvitePlayer.getUUID(), toInvitePlayer.getName()),
