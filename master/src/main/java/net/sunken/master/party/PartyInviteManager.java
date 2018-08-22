@@ -37,8 +37,8 @@ public final class PartyInviteManager {
                             PartyInviteExpiredPacket partyInviteExpiredPacket = new PartyInviteExpiredPacket(
                                     from, toName);
                             PacketUtil.sendPacket(partyInviteExpiredPacket);
-                            expiryTasks.remove(key);
                         }
+                        expiryTasks.remove(key);
                         return null;
                     },
                     INVITE_EXPIRY_TIME.a,

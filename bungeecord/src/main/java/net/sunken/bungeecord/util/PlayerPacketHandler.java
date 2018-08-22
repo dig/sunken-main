@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.packet;
+package net.sunken.bungeecord.util;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
