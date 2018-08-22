@@ -20,6 +20,12 @@ public class JoinQuitListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
+        ArenaState arenaState = minigame.getArena().getState();
+        if (arenaState != ArenaState.LOBBY) {
+            e.disallow(PlayerLoginEvent.Result.KICK_OTHER, "The minigame is already in progress.");
+            return;
+        }
+
         MinigameInfo mgInfo = minigame.getInformation();
 
         int currentPlayers = Bukkit.getOnlinePlayers().size();
