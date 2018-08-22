@@ -14,6 +14,8 @@ import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkState;
+
 public final class PartyInviteManager {
 
     private static final Tuple2<Long, TimeUnit> INVITE_EXPIRY_TIME;
@@ -26,14 +28,9 @@ public final class PartyInviteManager {
     }
 
     public static void addInvite(UUID from, UUID to, String toName) {
+        checkState(!hasInvited(from, to), "player has already been invited");
         Tuple2<UUID, UUID> key = new Tuple2<>(from, to);
-        if (!invites.put(from, to)) {
-            ScheduledFuture<Void> expiryTask = expiryTasks.get(key);
-            if (expiryTask != null) {
-                expiryTask.cancel(true);
-                expiryTasks.remove(key);
-            }
-        } else {
+        if (invites.put(from, to)) {
             ScheduledFuture<Void> expiryTask = ScheduleHelper.executor().schedule(
                     () -> {
                         if (invites.remove(from, to)) {
