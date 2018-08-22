@@ -1,6 +1,7 @@
-package net.sunken.minigameapi;
+package net.sunken.minigameapi.event;
 
 import lombok.Getter;
+import net.sunken.minigameapi.ArenaState;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
