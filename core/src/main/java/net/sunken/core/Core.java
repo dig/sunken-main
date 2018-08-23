@@ -2,12 +2,14 @@ package net.sunken.core;
 
 import com.sk89q.bukkit.util.BukkitCommandsManager;
 import com.sk89q.bukkit.util.CommandRegistration;
+import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.sunken.core.hologram.HologramInteractListener;
 import net.sunken.core.inventory.element.ElementListener;
+import net.sunken.core.model.ModelCommand;
 import net.sunken.core.npc.NPCListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -27,6 +29,7 @@ public class Core implements CommandExecutor {
 
     public void onCoreLoad(Plugin plugin) {
         Core.plugin = plugin;
+
         this.registerEvents();
         this.setupCommands(plugin);
     }
@@ -36,8 +39,10 @@ public class Core implements CommandExecutor {
 
     private void setupCommands(Plugin plugin) {
         this.commands = new BukkitCommandsManager();
-        CommandRegistration registry = new CommandRegistration(plugin, this);
+        CommandsManagerRegistration registry = new CommandsManagerRegistration(plugin, this.commands);
+
         // register all commands
+        registry.register(ModelCommand.class);
     }
 
     @Override
