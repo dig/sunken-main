@@ -210,7 +210,6 @@ public class ScoreboardUtil {
     public void send(Player... players) {
         for (Player p : players) {
             p.setScoreboard(scoreboard);
-            boards.put(p.getUniqueId().toString(), this);
         }
     }
 
@@ -241,16 +240,6 @@ public class ScoreboardUtil {
             return (OfflinePlayer) craftOfflinePlayer;
         } catch (Throwable t) { // Fallback if fail
             return Bukkit.getOfflinePlayer(name);
-        }
-    }
-
-    public static Map<String, ScoreboardUtil> boards = new HashMap<>();
-
-    public static ScoreboardUtil getCachedScoreboard(Player p) {
-        if (boards.containsKey(p.getUniqueId().toString())) {
-            return boards.get(p.getUniqueId().toString());
-        } else {
-            return null;
         }
     }
 
