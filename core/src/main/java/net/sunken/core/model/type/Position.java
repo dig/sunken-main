@@ -1,7 +1,9 @@
 package net.sunken.core.model.type;
 
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 public class Position {
 
     @Getter

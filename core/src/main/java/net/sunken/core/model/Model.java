@@ -7,8 +7,11 @@ import net.sunken.core.model.type.Structure;
 import net.sunken.core.model.type.StructureSize;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
 
@@ -40,27 +43,40 @@ public class Model {
             this.spawned = true;
 
             for (Structure structure : this.container.getStructures()) {
+                LivingEntity entity = null;
+
                 if (structure.getSize() == StructureSize.LARGE
                         || structure.getSize() == StructureSize.MEDIUM) {
-                    ArmorStand entity = this.spawnArmorstand(structure);
+                    ArmorStand ent = this.spawnArmorstand(structure);
+                    entity = (LivingEntity) ent;
                 } else {
                     // TODO: Handle villager support (StructureSize.SMALL)
                 }
 
-                // TODO: Add block to head
+                Material material = null;
+                String matRaw = structure.getMaterial();
+
+                if (container.getConversion().containsKey(matRaw)) {
+                    material = Material.valueOf(container.getConversion().get(matRaw).toUpperCase());
+                } else {
+                    material = Material.valueOf(matRaw);
+                }
+
+                ItemStack head = new ItemStack(material, 1);
+                entity.getEquipment().setHelmet(head);
             }
         }
     }
 
     private ArmorStand spawnArmorstand(Structure structure) {
-        Location pos = this.location.add(structure.getPosition().getX(),
+        Location pos = this.location.clone().add(structure.getPosition().getX(),
                 structure.getPosition().getY(),
                 structure.getPosition().getZ());
 
         ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(pos, EntityType.ARMOR_STAND);
         entity.setVisible(structure.isVisible());
-        entity.setCustomNameVisible(true);
-        entity.setBasePlate(true);
+        entity.setCustomNameVisible(false);
+        entity.setBasePlate(false);
         entity.setGravity(false);
         entity.setCustomName(ChatColor.DARK_GRAY + UUID.randomUUID().toString());
         entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));

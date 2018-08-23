@@ -18,7 +18,6 @@ public class ModelCommand {
             usage = "/model <name>",
             min = 1,
             max = 1)
-    @PlayerRankRequired(PlayerRank.DEVELOPER)
     public static void servers(final CommandContext args, final CommandSender sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;

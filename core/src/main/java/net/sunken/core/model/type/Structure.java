@@ -8,7 +8,7 @@ import java.util.Map;
 public class Structure {
 
     @Getter
-    private Material material;
+    private String material;
     @Getter
     private StructureSize size;
     @Getter
@@ -20,7 +20,7 @@ public class Structure {
     @Getter
     private Map<String, Position> pose;
 
-    public Structure(Material material, StructureSize size, boolean visible, Position position, Map<String, Position> pose){
+    public Structure(String material, StructureSize size, boolean visible, Position position, Map<String, Position> pose){
         this.material = material;
         this.size = size;
         this.visible = visible;
