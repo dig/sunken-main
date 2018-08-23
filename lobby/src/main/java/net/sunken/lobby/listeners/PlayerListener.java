@@ -58,6 +58,9 @@ public class PlayerListener implements Listener {
         // Tab
         TabListUtil.sendTabTitle(player, Constants.TAB_TOP, Constants.TAB_BOTTOM);
 
+        // Scoreboard
+        lobbyPlayer.updateScoreboard();
+
         // Chat
         for(int i = 0; i<Constants.JOIN_MESSAGES.size(); i++){
             player.sendMessage(MessageUtil.getCenteredMessage(Constants.JOIN_MESSAGES.get(i), MessageUtil.CENTER_PX));

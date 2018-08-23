@@ -36,6 +36,20 @@ public class ServerObjectCache {
         return sortedServers;
     }
 
+    public int getServerNumber(ServerObject serverObject){
+        List<ServerObject> servers = this.getCache(serverObject.getServerType());
+
+        int index = 1;
+        for (ServerObject serverObj : servers) {
+            if (serverObj.equals(serverObject)) {
+                return index;
+            }
+
+            index++;
+        }
+
+        return -1;
+    }
 
     public void updateCache() {
         AsyncHelper.executor().submit(() -> {

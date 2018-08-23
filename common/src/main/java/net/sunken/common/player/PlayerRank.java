@@ -4,11 +4,11 @@ import lombok.Getter;
 
 public enum PlayerRank {
 
-    USER(0, "GRAY", "USER"),
-    MODERATOR(5, "BLUE", "MODERATOR"),
-    ADMIN(8, "RED", "ADMIN"),
-    DEVELOPER(9, "YELLOW", "DEVELOPER"),
-    OWNER(10, "DARK_RED", "OWNER");
+    USER(0, "GRAY", "Member"),
+    MODERATOR(5, "BLUE", "Moderator"),
+    ADMIN(8, "RED", "Admin"),
+    DEVELOPER(9, "YELLOW", "Developer"),
+    OWNER(10, "DARK_RED", "Owner");
 
     @Getter
     private int index;
