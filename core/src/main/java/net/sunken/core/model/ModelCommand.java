@@ -12,12 +12,15 @@ import java.io.File;
 
 public class ModelCommand {
 
+    public static Model test = null;
+
     @Command(
             aliases = {"model"},
             desc = "Spawn a custom model.",
             usage = "/model <name>",
             min = 1,
-            max = 1)
+            max = 2)
+    @PlayerRankRequired(PlayerRank.DEVELOPER)
     public static void servers(final CommandContext args, final CommandSender sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -25,13 +28,18 @@ public class ModelCommand {
             String name = args.getString(0);
             File file = new File(Core.getPlugin().getDataFolder(), "model" + File.separator + name + ".sunken");
 
-            if (file.exists()) {
-                ModelContainer container = new ModelContainer(file.getAbsolutePath());
-                Model model = new Model(container, player.getLocation());
-
-                player.sendMessage("Model spawned on your location!");
+            if (name.equalsIgnoreCase("rotation")) {
+                test.setRotation(player.getLocation().getYaw());
             } else {
-                player.sendMessage("No model found.");
+                if (file.exists()) {
+                    ModelContainer container = new ModelContainer(file.getAbsolutePath());
+                    Model model = new Model(container, player.getLocation());
+                    test = model;
+
+                    player.sendMessage("Model spawned on your location!");
+                } else {
+                    player.sendMessage("No model found.");
+                }
             }
         }
     }

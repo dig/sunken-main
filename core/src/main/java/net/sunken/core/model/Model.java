@@ -5,6 +5,7 @@ import net.sunken.core.Core;
 import net.sunken.core.model.type.Position;
 import net.sunken.core.model.type.Structure;
 import net.sunken.core.model.type.StructureSize;
+import net.sunken.core.util.EntityUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +16,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
 
+import javax.swing.text.html.ListView;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class Model {
@@ -26,6 +31,9 @@ public class Model {
     @Getter
     private boolean spawned;
 
+    @Getter
+    private Map<Structure, LivingEntity> entities;
+
     public Model (ModelContainer container, Location location) {
         if (!container.isLoaded()) {
             return;
@@ -34,6 +42,7 @@ public class Model {
         this.container = container;
         this.location = location;
         this.spawned = false;
+        this.entities = new HashMap<>();
 
         this.spawn();
     }
@@ -53,6 +62,8 @@ public class Model {
                     // TODO: Handle villager support (StructureSize.SMALL)
                 }
 
+                this.entities.put(structure, entity);
+
                 Material material = null;
                 String matRaw = structure.getMaterial();
 
@@ -68,10 +79,50 @@ public class Model {
         }
     }
 
+    public void setRotation(float yaw) {
+        if (yaw != this.location.getYaw()) {
+            this.location.setYaw(yaw);
+
+            double radYaw = Math.toRadians(yaw);
+            double cosRad = Math.cos(radYaw);
+            double sinRad = Math.sin(radYaw);
+
+            for (Structure structure : this.entities.keySet()) {
+                LivingEntity entity = this.entities.get(structure);
+                Position position = structure.getPosition();
+
+                double x = (position.getX() * cosRad) - (position.getZ() * sinRad);
+                double z = (position.getX() * sinRad) + (position.getZ() * cosRad);
+
+                Location set = this.location.clone().add(x, position.getY(), z);
+                set.setPitch(0);
+                // TODO: Add a global rotation to container
+
+                double offsetY = 0;
+                switch (structure.getSize()) {
+                    case SMALL:
+                        offsetY = -0.065;
+                        break;
+                    case MEDIUM:
+                        offsetY = -0.07;
+                        break;
+                    case LARGE:
+                        offsetY = -0.05;
+                        break;
+                }
+
+                set.setY((this.location.getY() - offsetY) + position.getY());
+                EntityUtil.setLocation(entity, set);
+            }
+        }
+    }
+
     private ArmorStand spawnArmorstand(Structure structure) {
         Location pos = this.location.clone().add(structure.getPosition().getX(),
                 structure.getPosition().getY(),
                 structure.getPosition().getZ());
+        pos.setYaw(0);
+        pos.setPitch(0);
 
         ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(pos, EntityType.ARMOR_STAND);
         entity.setVisible(structure.isVisible());
