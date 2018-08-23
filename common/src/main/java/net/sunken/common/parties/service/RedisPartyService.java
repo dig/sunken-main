@@ -26,16 +26,26 @@ public class RedisPartyService implements PartyService {
     public PartyInviteStatus validateInviteRequest(UUID creator, UUID invitee) {
         JedisPool pool = redisConnection.getJedisPool();
         Jedis jedis = pool.getResource();
+        PartyInviteStatus status = null;
         try {
             // check whether either player is in a party already, if so, deny the creation //
 
-            boolean partyWithLeaderInExists = jedis.exists("party:*:members:" + creator);
-            if (partyWithLeaderInExists) {
-                return PartyInviteStatus.INVITER_ALREADY_IN_PARTY;
+            // see if a party exists with the creator as a leader
+            ScanParams leaderPartyParams = new ScanParams();
+            leaderPartyParams.count(20);
+            leaderPartyParams.match("party:*:members:" + creator);
+            ScanResult<String> leaderPartyScan = jedis.scan("0", leaderPartyParams);
+            if (leaderPartyScan.getResult().size() > 0) {
+                status = PartyInviteStatus.INVITER_ALREADY_IN_PARTY;
             }
-            boolean partyWithInviteeInExists = jedis.exists("party:*:members:" + invitee);
-            if (partyWithInviteeInExists) {
-                return PartyInviteStatus.INVITEE_ALREADY_IN_PARTY;
+
+            // no party as leader, check if the creator is a member in one
+            ScanParams memberPartyParams = new ScanParams();
+            memberPartyParams.count(20);
+            memberPartyParams.match("party:*:members:" + invitee);
+            ScanResult<String> memberPartyScan = jedis.scan("0", leaderPartyParams);
+            if (memberPartyScan.getResult().size() > 0) {
+                status = PartyInviteStatus.INVITEE_ALREADY_IN_PARTY;
             }
         } catch (Exception e) {
             pool.returnBrokenResource(jedis);
@@ -43,7 +53,7 @@ public class RedisPartyService implements PartyService {
         } finally {
             pool.returnResource(jedis);
         }
-        return PartyInviteStatus.SUCCESS;
+        return status == null ? PartyInviteStatus.SUCCESS : status;
     }
 
     @Override
