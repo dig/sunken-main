@@ -8,6 +8,9 @@ import java.util.Map;
 public class Structure {
 
     @Getter
+    private String fileName;
+
+    @Getter
     private String material;
     @Getter
     private StructureSize size;
@@ -20,7 +23,8 @@ public class Structure {
     @Getter
     private Map<String, Position> pose;
 
-    public Structure(String material, StructureSize size, boolean visible, Position position, Map<String, Position> pose){
+    public Structure(String fileName, String material, StructureSize size, boolean visible, Position position, Map<String, Position> pose){
+        this.fileName = fileName;
         this.material = material;
         this.size = size;
         this.visible = visible;

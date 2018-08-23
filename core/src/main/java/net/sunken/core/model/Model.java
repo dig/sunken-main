@@ -1,7 +1,9 @@
 package net.sunken.core.model;
 
 import lombok.Getter;
+import net.sunken.common.Common;
 import net.sunken.core.Core;
+import net.sunken.core.model.type.Animation;
 import net.sunken.core.model.type.Position;
 import net.sunken.core.model.type.Structure;
 import net.sunken.core.model.type.StructureSize;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Model {
 
@@ -79,16 +82,16 @@ public class Model {
         }
     }
 
-    public void setRotation(float yaw) {
-        if (yaw != this.location.getYaw()) {
-            this.location.setYaw(yaw);
+    public void updateEntity(Structure updated) {
+        double radYaw = Math.toRadians(this.location.getYaw());
+        double cosRad = Math.cos(radYaw);
+        double sinRad = Math.sin(radYaw);
 
-            double radYaw = Math.toRadians(yaw);
-            double cosRad = Math.cos(radYaw);
-            double sinRad = Math.sin(radYaw);
+        for (Structure structure : this.entities.keySet()) {
+            LivingEntity entity = this.entities.get(structure);
 
-            for (Structure structure : this.entities.keySet()) {
-                LivingEntity entity = this.entities.get(structure);
+            if (structure.getFileName().equals(updated.getFileName())) {
+                structure = updated;
                 Position position = structure.getPosition();
 
                 double x = (position.getX() * cosRad) - (position.getZ() * sinRad);
@@ -111,10 +114,70 @@ public class Model {
                         break;
                 }
 
+                if (entity instanceof ArmorStand) {
+                    ArmorStand armorEnt = (ArmorStand) entity;
+
+                    if (structure.getPose().size() > 0) {
+                        for (String type : structure.getPose().keySet()) {
+                            Position value = structure.getPose().get(type);
+                            EulerAngle angle = new EulerAngle(Math.toRadians(value.getX()),
+                                    Math.toRadians(value.getY()), Math.toRadians(value.getZ()));
+
+                            switch (type){
+                                case "Head":
+                                    armorEnt.setHeadPose(angle);
+                                    break;
+                                case "Body":
+                                    armorEnt.setBodyPose(angle);
+                                    break;
+                                case "RightArm":
+                                    armorEnt.setRightArmPose(angle);
+                                    break;
+                                case "LeftArm":
+                                    armorEnt.setLeftArmPose(angle);
+                                    break;
+                                case "RightLeg":
+                                    armorEnt.setRightLegPose(angle);
+                                    break;
+                                case "LeftLeg":
+                                    armorEnt.setLeftLegPose(angle);
+                                    break;
+                                default:
+                                    assert false : "unknown field";
+                            }
+                        }
+                    }
+                }
+
                 set.setY((this.location.getY() - offsetY) + position.getY());
                 EntityUtil.setLocation(entity, set);
             }
         }
+    }
+
+    public void setRotation(float yaw) {
+        if (yaw != this.location.getYaw()) {
+            this.location.setYaw(yaw);
+
+            for (Structure structure : this.entities.keySet()) {
+                LivingEntity entity = this.entities.get(structure);
+                this.updateEntity(structure);
+            }
+        }
+    }
+
+    public boolean playAnimation(String animationName) {
+        if (this.container.getAnimations().containsKey(animationName)) {
+            Common.getLogger().log(Level.INFO, "Starting animation " + animationName);
+
+            Animation animation = this.container.getAnimations().get(animationName);
+            AnimationTask task = new AnimationTask(animation, this);
+            task.start();
+
+            return true;
+        }
+
+        return false;
     }
 
     private ArmorStand spawnArmorstand(Structure structure) {

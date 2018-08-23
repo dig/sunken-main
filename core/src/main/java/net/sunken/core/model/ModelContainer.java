@@ -2,9 +2,7 @@ package net.sunken.core.model;
 
 import lombok.Getter;
 import net.sunken.common.Common;
-import net.sunken.core.model.type.Position;
-import net.sunken.core.model.type.Structure;
-import net.sunken.core.model.type.StructureSize;
+import net.sunken.core.model.type.*;
 import org.bukkit.Material;
 import org.yaml.snakeyaml.Yaml;
 
@@ -40,6 +38,8 @@ public class ModelContainer {
     private Map<String, String> conversion;
     @Getter
     private List<Structure> structures;
+    @Getter
+    private Map<String, Animation> animations;
 
     public ModelContainer(String path) {
         this.path = path;
@@ -59,6 +59,7 @@ public class ModelContainer {
         Common.getLogger().log(Level.INFO, "Loading " + this.path);
         this.conversion = new HashMap<>();
         this.structures = new ArrayList<>();
+        this.animations = new HashMap<>();
 
         try (ZipFile zipFile = new ZipFile(file.toPath().toString())) {
             Enumeration zipEntries = zipFile.entries();
@@ -87,41 +88,46 @@ public class ModelContainer {
                         }
                     } else if (fileName.startsWith("structure/")) {
                         fileName = fileName.replaceAll("structure/", "");
+                        fileName = fileName.replaceAll(".yml", "");
+
                         Common.getLogger().log(Level.INFO, "Loading structure " + fileName);
+                        this.structures.add(this.getStructure(fileName, result));
+                    } else if (fileName.startsWith("animation/")) {
+                        String[] path = fileName.split("/");
 
-                        String matRaw = ((String) result.get("material")).toUpperCase();
+                        if (path.length == 4) {
+                            String animationName = path[1];
+                            int frameNum = Integer.parseInt(path[2]);
+                            fileName = path[3].replaceAll(".yml", "");
 
-                        StructureSize size = StructureSize.valueOf((String) result.get("size"));
-                        boolean visible = (boolean) result.get("visible");
+                            if (!this.animations.containsKey(animationName)) {
+                                this.animations.put(animationName, new Animation(animationName));
+                            }
 
-                        Map<String, Object> location = (Map<String, Object>) result.get("location");
-                        Position position = new Position(
-                                ((double) location.get("x")),
-                                ((double) location.get("y")),
-                                ((double) location.get("z"))
-                        );
+                            Animation anim = this.animations.get(animationName);
+                            if (fileName.equalsIgnoreCase("frame")) {
+                                Common.getLogger().log(Level.INFO, "Loading animaton frame " + frameNum + " for " + animationName);
 
-                        Map<String, Position> pose = new HashMap<>();
-                        if (result.containsKey("pose")) {
-                            Map<String, Object> poseCfg = (Map<String, Object>) result.get("pose");
+                                int wait = (int) result.get("wait");
+                                if (anim.getFrames().containsKey(frameNum)) {
+                                    anim.getFrames().get(frameNum).setWait(wait);
+                                } else {
+                                    anim.getFrames().put(frameNum, new Frame(wait));
+                                }
+                            } else {
+                                Common.getLogger().log(Level.INFO, "Loading animation structure " + fileName + " for " + animationName);
 
-                            for (String type : POSES) {
-                                if (poseCfg.containsKey(type)) {
-                                    Map<String, Object> singlePose = (Map<String, Object>) poseCfg.get(type);
-
-                                    Position pos = new Position(
-                                            ((double) singlePose.get("x")),
-                                            ((double) singlePose.get("y")),
-                                            ((double) singlePose.get("z"))
-                                    );
-
-                                    pose.put(type, pos);
+                                Structure structure = this.getStructure(fileName, result);
+                                if (anim.getFrames().containsKey(frameNum)) {
+                                    Frame frame = anim.getFrames().get(frameNum);
+                                    frame.getStructures().add(structure);
+                                } else {
+                                    Frame frame = new Frame(500);
+                                    frame.getStructures().add(structure);
+                                    anim.getFrames().put(frameNum, frame);
                                 }
                             }
                         }
-
-                        Structure structure = new Structure(matRaw, size, visible, position, pose);
-                        this.structures.add(structure);
                     }
                 }
             }
@@ -129,6 +135,41 @@ public class ModelContainer {
             Common.getLogger().log(Level.INFO, "Container loaded!");
             this.loaded = true;
         }
+    }
+
+    private Structure getStructure(String fileName, Map<String, Object> yml) {
+        String matRaw = ((String) yml.get("material")).toUpperCase();
+        StructureSize size = StructureSize.valueOf((String) yml.get("size"));
+        boolean visible = (boolean) yml.get("visible");
+
+        Map<String, Object> location = (Map<String, Object>) yml.get("location");
+        Position position = new Position(
+                ((double) location.get("x")),
+                ((double) location.get("y")),
+                ((double) location.get("z"))
+        );
+
+        Map<String, Position> pose = new HashMap<>();
+        if (yml.containsKey("pose")) {
+            Map<String, Object> poseCfg = (Map<String, Object>) yml.get("pose");
+
+            for (String type : POSES) {
+                if (poseCfg.containsKey(type)) {
+                    Map<String, Object> singlePose = (Map<String, Object>) poseCfg.get(type);
+
+                    Position pos = new Position(
+                            ((double) singlePose.get("x")),
+                            ((double) singlePose.get("y")),
+                            ((double) singlePose.get("z"))
+                    );
+
+                    pose.put(type, pos);
+                }
+            }
+        }
+
+        Structure structure = new Structure(fileName, matRaw, size, visible, position, pose);
+        return structure;
     }
 
 }
