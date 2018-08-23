@@ -5,13 +5,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.packet.PartyCreatePacket;
+import net.sunken.common.parties.packet.PartyCreatedPacket;
 import net.sunken.common.parties.service.status.PartyCreateStatus;
 
-public class PartyCreatePacketHandler extends PacketHandler<PartyCreatePacket> {
+public class PartyCreatedHandler extends PacketHandler<PartyCreatedPacket> {
 
     @Override
-    public void onReceive(PartyCreatePacket packet) {
+    public void onReceive(PartyCreatedPacket packet) {
         PartyPlayer creator = packet.getCreator();
         PartyPlayer invitee = packet.getInvitee();
         PartyCreateStatus createStatus = packet.getCreateStatus();
@@ -23,7 +23,7 @@ public class PartyCreatePacketHandler extends PacketHandler<PartyCreatePacket> {
             case SUCCESS:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(
-                            new TextComponent("You created a party with" + invitee.getName() + "!"));
+                            new TextComponent("You created a party with " + invitee.getName() + "!"));
                 }
                 if (toInvitePlayer != null) {
                     toInvitePlayer.sendMessage(
@@ -36,7 +36,6 @@ public class PartyCreatePacketHandler extends PacketHandler<PartyCreatePacket> {
                 }
                 break;
             default:
-                assert false : "unknown field";
         }
     }
 }

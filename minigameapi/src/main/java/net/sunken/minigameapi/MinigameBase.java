@@ -18,9 +18,9 @@ public abstract class MinigameBase {
     private final Arena arena;
 
     MinigameBase(JavaPlugin plugin,
-                        MinigameInfo information,
-                        Lobby lobby,
-                        Arena arena) {
+                 MinigameInfo information,
+                 Lobby lobby,
+                 Arena arena) {
         this.plugin = plugin;
         this.information = information;
         this.lobby = lobby;

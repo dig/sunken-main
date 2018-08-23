@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.packet.PartyInviteExpiredPacket;
+import net.sunken.common.util.PlayerDetail;
 import net.sunken.common.util.ScheduleHelper;
 import net.sunken.common.util.Tuple2;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;
 
-/** Keps track of pending invites and their expiration */
+/** Keeps track of pending invites and their expiration */
 public final class PartyInviteManager {
 
     private static final Tuple2<Long, TimeUnit> INVITE_EXPIRY_TIME;
@@ -28,15 +29,15 @@ public final class PartyInviteManager {
         INVITE_EXPIRY_TIME = new Tuple2<>(60L, TimeUnit.SECONDS);
     }
 
-    public static void addInvite(UUID from, UUID to, String toName) {
-        checkState(!hasInvited(from, to), "player has already been invited");
-        Tuple2<UUID, UUID> key = new Tuple2<>(from, to);
-        if (invites.put(from, to)) {
+    public static void addInvite(PlayerDetail inviter, PlayerDetail invitee) {
+        checkState(!isInvitePresent(inviter.uuid, invitee.uuid), "player has already been invited");
+        Tuple2<UUID, UUID> key = new Tuple2<>(inviter.uuid, invitee.uuid);
+        if (invites.put(inviter.uuid, invitee.uuid)) {
             ScheduledFuture<Void> expiryTask = ScheduleHelper.executor().schedule(
                     () -> {
-                        if (invites.remove(from, to)) {
+                        if (invites.remove(inviter.uuid, invitee.uuid)) {
                             PartyInviteExpiredPacket partyInviteExpiredPacket = new PartyInviteExpiredPacket(
-                                    from, toName);
+                                    inviter, invitee);
                             PacketUtil.sendPacket(partyInviteExpiredPacket);
                         }
                         expiryTasks.remove(key);
@@ -48,7 +49,7 @@ public final class PartyInviteManager {
         }
     }
 
-    public static boolean hasInvited(UUID from, UUID toInvite) {
+    public static boolean isInvitePresent(UUID from, UUID toInvite) {
         return invites.containsEntry(from, toInvite);
     }
 

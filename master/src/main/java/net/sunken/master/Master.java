@@ -15,7 +15,7 @@ import net.sunken.master.friend.FriendManager;
 import net.sunken.master.friend.FriendRequestHandler;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
-import net.sunken.master.party.PartyInviteRequestHandler;
+import net.sunken.master.party.PartyInviteRequestHub;
 import net.sunken.master.player.PlayerConnectHandler;
 import net.sunken.master.player.PlayerJoinHandler;
 import net.sunken.master.player.PlayerQuitHandler;
@@ -58,7 +58,7 @@ public class Master {
         PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
         PacketHandlerRegistry.registerHandler(PlayerQuitPacket.class, new PlayerQuitHandler());
         PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
-        PacketHandlerRegistry.registerHandler(PartyInviteSendPacket.class, new PartyInviteRequestHandler());
+        PacketHandlerRegistry.registerHandler(PartyInviteSendPacket.class, new PartyInviteRequestHub());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
     }

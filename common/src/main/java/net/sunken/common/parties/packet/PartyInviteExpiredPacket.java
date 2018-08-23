@@ -1,17 +1,18 @@
 package net.sunken.common.parties.packet;
 
 import lombok.Getter;
-import net.sunken.common.packet.PlayerPacket;
+import net.sunken.common.packet.Packet;
+import net.sunken.common.util.PlayerDetail;
 
-import java.util.UUID;
-
-public class PartyInviteExpiredPacket extends PlayerPacket {
+public class PartyInviteExpiredPacket extends Packet {
 
     @Getter
-    private final String attemptedInviteName;
+    private final PlayerDetail inviter;
+    @Getter
+    private final PlayerDetail invitee;
 
-    public PartyInviteExpiredPacket(UUID playerTargeted, String attemptedInviteName) {
-        super(playerTargeted);
-        this.attemptedInviteName = attemptedInviteName;
+    public PartyInviteExpiredPacket(PlayerDetail inviter, PlayerDetail invitee) {
+        this.inviter = inviter;
+        this.invitee = invitee;
     }
 }

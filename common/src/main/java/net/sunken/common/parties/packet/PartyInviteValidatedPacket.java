@@ -6,11 +6,11 @@ import net.sunken.common.parties.service.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 
 /**
- * Sent when Master attempts to validate a party invite request,
+ * Sent when Master has validated a party invite request,
  * this is then handled on the relevant BungeeCord(s) to send
  * messages based on the {@link PartyInviteStatus}
  */
-public class PartyInviteValidatePacket extends Packet {
+public class PartyInviteValidatedPacket extends Packet {
 
     @Getter
     private final PlayerDetail creator;
@@ -19,9 +19,9 @@ public class PartyInviteValidatePacket extends Packet {
     @Getter
     private final PartyInviteStatus partyInviteStatus;
 
-    public PartyInviteValidatePacket(PlayerDetail creator,
-                                     PlayerDetail toInvite,
-                                     PartyInviteStatus partyInviteStatus) {
+    public PartyInviteValidatedPacket(PlayerDetail creator,
+                                      PlayerDetail toInvite,
+                                      PartyInviteStatus partyInviteStatus) {
         this.creator = creator;
         this.toInvite = toInvite;
         this.partyInviteStatus = partyInviteStatus;

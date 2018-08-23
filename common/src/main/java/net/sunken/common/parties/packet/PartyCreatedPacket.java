@@ -5,7 +5,7 @@ import net.sunken.common.packet.Packet;
 import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.service.status.PartyCreateStatus;
 
-public class PartyCreatePacket extends Packet {
+public class PartyCreatedPacket extends Packet {
 
     @Getter
     private final PartyPlayer creator;
@@ -14,7 +14,7 @@ public class PartyCreatePacket extends Packet {
     @Getter
     private final PartyCreateStatus createStatus;
 
-    public PartyCreatePacket(PartyPlayer creator, PartyPlayer invitee, PartyCreateStatus createStatus) {
+    public PartyCreatedPacket(PartyPlayer creator, PartyPlayer invitee, PartyCreateStatus createStatus) {
         this.creator = creator;
         this.invitee = invitee;
         this.createStatus = createStatus;

@@ -4,14 +4,14 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketHandler;
-import net.sunken.common.parties.packet.PartyInviteValidatePacket;
+import net.sunken.common.parties.packet.PartyInviteValidatedPacket;
 import net.sunken.common.parties.service.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 
-public class PartyInviteValidatePacketHandler extends PacketHandler<PartyInviteValidatePacket> {
+public class PartyInviteValidateHandler extends PacketHandler<PartyInviteValidatedPacket> {
 
     @Override
-    public void onReceive(PartyInviteValidatePacket packet) {
+    public void onReceive(PartyInviteValidatedPacket packet) {
         PlayerDetail creator = packet.getCreator();
         PlayerDetail toInvite = packet.getToInvite();
         PartyInviteStatus inviteStatus = packet.getPartyInviteStatus();
