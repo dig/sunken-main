@@ -19,7 +19,7 @@ import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
-import net.sunken.bungeecord.party.command.PartyCommand;
+import net.sunken.bungeecord.party.PartyCommands;
 import net.sunken.bungeecord.party.PartyCreatedHandler;
 import net.sunken.bungeecord.party.PartyInviteExpiredHandler;
 import net.sunken.bungeecord.party.PartyInviteValidateHandler;
@@ -80,7 +80,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
                 this.commands,
                 this);
         // register all commands
-        registry.register(PartyCommand.class);
+        registry.register(PartyCommands.Parent.class);
         registry.register(LobbyCommand.class);
         registry.register(FriendCommand.class);
     }

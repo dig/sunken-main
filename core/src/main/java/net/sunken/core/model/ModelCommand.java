@@ -21,7 +21,7 @@ public class ModelCommand {
             min = 1,
             max = 2)
     @PlayerRankRequired(PlayerRank.DEVELOPER)
-    public static void servers(final CommandContext args, final CommandSender sender) {
+    public static void model(final CommandContext args, final CommandSender sender) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 

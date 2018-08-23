@@ -30,7 +30,7 @@ public class PartyInviteValidateHandler extends PacketHandler<PartyInviteValidat
                 break;
             case FAILED:
                 if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("Could not send party request..."));
+                    creatorPlayer.sendMessage(new TextComponent("Could not send party request!"));
                 }
                 break;
             case INVITER_ALREADY_IN_PARTY:

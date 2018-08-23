@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.party.command;
+package net.sunken.bungeecord.party;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
