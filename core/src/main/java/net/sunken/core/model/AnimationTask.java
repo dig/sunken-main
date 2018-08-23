@@ -38,6 +38,10 @@ public class AnimationTask extends BukkitRunnable {
 
         if (frame < animation.getFrames().size()) {
             this.start();
+        } else {
+            for (Structure structure : model.getContainer().getStructures()) {
+                model.updateEntity(structure);
+            }
         }
     }
 

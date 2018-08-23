@@ -42,7 +42,7 @@ public class ModelCommand {
         Model selected = selection.getIfPresent(player.getUniqueId());
 
         if (selected != null) {
-            String animationName = args.getString(1);
+            String animationName = args0;
 
             if (selected.getContainer().getAnimations().containsKey(animationName)) {
                 selected.playAnimation(animationName);
@@ -109,6 +109,7 @@ public class ModelCommand {
             ModelContainer container = new ModelContainer(file.getAbsolutePath());
             Model model = new Model(container, player.getLocation());
 
+            selection.put(player.getUniqueId(), model);
             player.sendMessage("Model spawned on your location!");
         } else {
             player.sendMessage("Could not find model file.");
