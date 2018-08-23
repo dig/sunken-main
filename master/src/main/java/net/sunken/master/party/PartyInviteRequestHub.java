@@ -51,6 +51,8 @@ public class PartyInviteRequestHub extends PacketHandler<PartyInviteSendPacket> 
             // check to see whether the person being invited has already
             // sent a request to the creator in which case, create the party
             if (PartyInviteManager.isInvitePresent(toInvite, creator)) {
+                PartyInviteManager.removeInvite(toInvite, creator);
+
                 PartyPlayer leader = new PartyPlayer(creator, creatorPlayer.getName(), creatorPlayer.getRank());
                 PartyPlayer invitee = new PartyPlayer(toInvite, toInvitePlayer.getName(), toInvitePlayer.getRank());
                 PartyCreateStatus createStatus = partyService.createParty(leader, invitee);

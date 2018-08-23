@@ -53,6 +53,10 @@ public final class PartyInviteManager {
         return invites.containsEntry(from, toInvite);
     }
 
+    public static void removeInvite(UUID from, UUID to) {
+        invites.remove(from, to);
+    }
+
     private PartyInviteManager() {
     }
 }

@@ -10,7 +10,6 @@ import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
-import net.sunken.common.Common;
 import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
@@ -18,10 +17,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ConnectListener implements Listener {
 
