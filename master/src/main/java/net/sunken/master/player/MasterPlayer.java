@@ -13,6 +13,7 @@ public class MasterPlayer extends AbstractPlayer {
 
     public MasterPlayer(String uuid, String name, Document document, boolean firstJoin) {
         super(uuid, name, document, firstJoin);
+        this.serverName = null;
     }
 
 }
