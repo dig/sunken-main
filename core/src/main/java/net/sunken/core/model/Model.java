@@ -3,11 +3,9 @@ package net.sunken.core.model;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.core.Core;
-import net.sunken.core.model.type.Animation;
-import net.sunken.core.model.type.Position;
-import net.sunken.core.model.type.Structure;
-import net.sunken.core.model.type.StructureSize;
+import net.sunken.core.model.type.*;
 import net.sunken.core.util.EntityUtil;
+import net.sunken.core.util.SkullUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -80,6 +78,11 @@ public class Model {
                 }
 
                 ItemStack head = new ItemStack(material, 1);
+                if (material.equals(Material.PLAYER_HEAD) && structure.getHead() != null) {
+                    Head opt = structure.getHead();
+                    head = SkullUtil.addTexture(head, opt.getId(), opt.getTexture());
+                }
+
                 entity.getEquipment().setHelmet(head);
             }
 

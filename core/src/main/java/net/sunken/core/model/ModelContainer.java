@@ -175,7 +175,13 @@ public class ModelContainer {
             }
         }
 
-        Structure structure = new Structure(fileName, matRaw, size, visible, position, rotation, pose);
+        Head head = null;
+        if (yml.containsKey("skull")) {
+            Map<String, Object> skull = (Map<String, Object>) yml.get("skull");
+            head = new Head((String) skull.get("id"), (String) skull.get("texture"));
+        }
+
+        Structure structure = new Structure(fileName, matRaw, size, visible, position, rotation, pose, head);
         return structure;
     }
 
