@@ -10,6 +10,12 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Manages the creation, deletion and searching of parties.
+ * The {@link net.sunken.common.parties.data.Party} references
+ * are mutable and so modifying a party must be done by first
+ * getting its instance.
+ */
 public final class PartyManager {
 
     /** leader UUID -> party */

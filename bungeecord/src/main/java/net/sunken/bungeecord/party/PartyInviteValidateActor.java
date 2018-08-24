@@ -8,6 +8,7 @@ import net.sunken.common.parties.packet.changes.PartyInviteValidatedPacket;
 import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 
+/** Act on an invite validation packet */
 public class PartyInviteValidateActor extends PacketHandler<PartyInviteValidatedPacket> {
 
     @Override

@@ -10,6 +10,7 @@ import net.sunken.common.parties.packet.changes.PartyMemberJoinedPacket;
 
 import java.util.Set;
 
+/** Act on a party member addition packet */
 public class PartyMemberAddActor extends PacketHandler<PartyMemberJoinedPacket> {
 
     @Override

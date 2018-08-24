@@ -7,6 +7,7 @@ import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.parties.packet.changes.PartyInviteExpiredPacket;
 import net.sunken.common.util.PlayerDetail;
 
+/** Act on an invite expired packet */
 public class PartyInviteExpiredActor extends PacketHandler<PartyInviteExpiredPacket> {
 
     @Override

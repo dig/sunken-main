@@ -11,6 +11,7 @@ import net.sunken.common.parties.packet.request.PartyInviteRequestPacket;
 import net.sunken.common.parties.packet.request.PartyLeaveRequestPacket;
 import net.sunken.common.player.PlayerRank;
 
+/** All the party commands */
 public class PartyCommands {
 
     @Command(

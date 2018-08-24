@@ -8,6 +8,7 @@ import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.changes.PartyCreatedPacket;
 import net.sunken.common.parties.status.PartyCreateStatus;
 
+/** Act on a party creation packet */
 public class PartyCreatedActor extends PacketHandler<PartyCreatedPacket> {
 
     @Override

@@ -11,6 +11,12 @@ import net.sunken.common.parties.packet.request.PartyLeaveRequestPacket;
 
 import java.util.UUID;
 
+/**
+ * The leave hub. This will receive oncoming leave request packets
+ * and decide what to do with each case i.e. if the player is a leader,
+ * disband; if the player is a member, simply leave the party. Has
+ * sanity checks.
+ */
 public class PartyLeaveHub extends PacketHandler<PartyLeaveRequestPacket> {
 
     @Override

@@ -1,5 +1,6 @@
 package net.sunken.common.parties.status;
 
+/** Party invite statuses */
 public enum PartyInviteStatus {
 
     SUCCESS,
