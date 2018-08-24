@@ -8,7 +8,9 @@ import com.sk89q.minecraft.util.commands.NestedCommand;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.core.Core;
+import net.sunken.core.util.EntityUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -67,6 +69,32 @@ public class ModelCommand {
 
         if (selected != null) {
             player.sendMessage(selected.getContainer().getAnimations().keySet().toString());
+        }
+    }
+
+    @Command(
+            aliases = {"rawrotation"},
+            desc = "Rotation test command.",
+            usage = "",
+            min = 2,
+            max = 2)
+    public static void test(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof Player)) return;
+
+        Player player = (Player) sender;
+        Model selected = selection.getIfPresent(player.getUniqueId());
+
+        String yaw = args.getString(0);
+        String pitch = args.getString(1);
+
+        if (selected != null) {
+            for (LivingEntity entity : selected.getEntities().values()) {
+                EntityUtil.setYaw(entity, Float.parseFloat(yaw));
+                EntityUtil.setPitch(entity, Float.parseFloat(pitch));
+            }
+
+            player.sendMessage("yaw: " + yaw + " pitch: " + pitch);
+
         }
     }
 

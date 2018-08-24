@@ -19,16 +19,19 @@ public class Structure {
 
     @Getter
     private Position position;
+    @Getter
+    private Rotation rotation;
 
     @Getter
     private Map<String, Position> pose;
 
-    public Structure(String fileName, String material, StructureSize size, boolean visible, Position position, Map<String, Position> pose){
+    public Structure(String fileName, String material, StructureSize size, boolean visible, Position position, Rotation rotation, Map<String, Position> pose){
         this.fileName = fileName;
         this.material = material;
         this.size = size;
         this.visible = visible;
         this.position = position;
+        this.rotation = rotation;
         this.pose = pose;
     }
 
