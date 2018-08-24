@@ -7,7 +7,7 @@ import net.sunken.common.parties.packet.MustBeInPartyPacket;
 import net.sunken.common.parties.packet.MustBeLeaderPacket;
 import net.sunken.common.parties.packet.changes.PartyDisbandedPacket;
 import net.sunken.common.parties.packet.changes.PartyMemberLeftPacket;
-import net.sunken.common.parties.packet.request.PartyLeaveRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyLeaveRequestPacket;
 
 import java.util.UUID;
 
@@ -17,10 +17,10 @@ import java.util.UUID;
  * disband; if the player is a member, simply leave the party. Has
  * sanity checks.
  */
-public class PartyLeaveHub extends PacketHandler<PartyLeaveRequestPacket> {
+public class PartyLeaveHub extends PacketHandler<MPartyLeaveRequestPacket> {
 
     @Override
-    public void onReceive(PartyLeaveRequestPacket packet) {
+    public void onReceive(MPartyLeaveRequestPacket packet) {
         UUID leaverUUID = packet.getLeaver();
 
         boolean isSuccessfulLeave = false;

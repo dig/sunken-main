@@ -6,8 +6,8 @@ import net.sunken.common.friend.packet.FriendAcceptPacket;
 import net.sunken.common.friend.packet.FriendRequestPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourCacheUpdatePacket;
-import net.sunken.common.parties.packet.request.PartyInviteRequestPacket;
-import net.sunken.common.parties.packet.request.PartyLeaveRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyInviteRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyLeaveRequestPacket;
 import net.sunken.common.player.packet.PlayerConnectPacket;
 import net.sunken.common.player.packet.PlayerJoinPacket;
 import net.sunken.common.player.packet.PlayerQuitPacket;
@@ -18,6 +18,7 @@ import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
 import net.sunken.master.party.PartyInviteRequestHub;
 import net.sunken.master.party.PartyLeaveHub;
+import net.sunken.master.party.PartyListHandler;
 import net.sunken.master.player.PlayerConnectHandler;
 import net.sunken.master.player.PlayerJoinHandler;
 import net.sunken.master.player.PlayerQuitHandler;
@@ -49,7 +50,7 @@ public class Master {
         }
     }
 
-    private void onEnable(){
+    private void onEnable() {
         Common.getInstance().onCommonLoad(true);
 
         this.friendManager = new FriendManager();
@@ -58,15 +59,16 @@ public class Master {
         // Register packets
         PacketHandlerRegistry.registerHandler(ParkourCacheUpdatePacket.class, new ParkourCacheHandler());
         PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
-        PacketHandlerRegistry.registerHandler(PartyLeaveRequestPacket.class, new PartyLeaveHub());
+        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyLeaveHub());
         PacketHandlerRegistry.registerHandler(PlayerQuitPacket.class, new PlayerQuitHandler());
         PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
-        PacketHandlerRegistry.registerHandler(PartyInviteRequestPacket.class, new PartyInviteRequestHub());
+        PacketHandlerRegistry.registerHandler(MPartyInviteRequestPacket.class, new PartyInviteRequestHub());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
+        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyListHandler());
     }
 
-    public void onDisable(){
+    public void onDisable() {
         Common.getInstance().onCommonDisable();
     }
 

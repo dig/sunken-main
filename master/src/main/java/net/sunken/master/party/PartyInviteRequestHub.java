@@ -10,7 +10,7 @@ import net.sunken.common.parties.packet.MustBeLeaderPacket;
 import net.sunken.common.parties.packet.changes.PartyCreatedPacket;
 import net.sunken.common.parties.packet.changes.PartyInviteValidatedPacket;
 import net.sunken.common.parties.packet.changes.PartyMemberJoinedPacket;
-import net.sunken.common.parties.packet.request.PartyInviteRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyInviteRequestPacket;
 import net.sunken.common.parties.status.PartyCreateStatus;
 import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.player.AbstractPlayer;
@@ -23,7 +23,7 @@ import java.util.UUID;
  * When a request to send an invite is received i.e. /party (player), this
  * handler decides what to do next. It acts as a hub for invites requests.
  */
-public class PartyInviteRequestHub extends PacketHandler<PartyInviteRequestPacket> {
+public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPacket> {
 
     private static DataManager dataManager;
     private static Map<UUID, AbstractPlayer> onlinePlayers;
@@ -34,7 +34,7 @@ public class PartyInviteRequestHub extends PacketHandler<PartyInviteRequestPacke
     }
 
     @Override
-    public void onReceive(PartyInviteRequestPacket packet) {
+    public void onReceive(MPartyInviteRequestPacket packet) {
         UUID creator = packet.getCreator();
         UUID invitee = dataManager.getNameToUUID().get(packet.getInvitee().toLowerCase());
 

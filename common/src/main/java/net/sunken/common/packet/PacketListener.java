@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PacketListener {
 
-    public static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
+    static final byte[] PACKET_CHANNEL = "SUNKEN_PACKET_CHANNEL".getBytes();
 
     private final Jedis subscriberJedis;
 
@@ -20,6 +20,7 @@ public class PacketListener {
         new Thread(() -> subscriberJedis.subscribe(new Listener(), PACKET_CHANNEL)).start();
     }
 
+    /** The publish/subscribe client */
     private class Listener extends BinaryJedisPubSub {
 
         private Map<Class<? extends Packet>, PacketHandler> handlers = PacketHandlerRegistry.getHandlers();

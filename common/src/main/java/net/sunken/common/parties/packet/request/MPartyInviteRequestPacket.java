@@ -9,14 +9,14 @@ import java.util.UUID;
  * Sent when a player does /party (player) indicating
  * a party request was sent.
  */
-public class PartyInviteRequestPacket extends Packet {
+public class MPartyInviteRequestPacket extends Packet {
 
     @Getter
     private UUID creator;
     @Getter
     private String invitee;
 
-    public PartyInviteRequestPacket(UUID creator, String invitee) {
+    public MPartyInviteRequestPacket(UUID creator, String invitee) {
         this.creator = creator;
         this.invitee = invitee;
     }
