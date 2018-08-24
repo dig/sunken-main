@@ -33,21 +33,33 @@ public class ModelCommand {
     @Command(
             aliases = {"animate"},
             desc = "Animates your current model selection.",
-            usage = "<animationName>",
-            min = 1,
-            max = 1)
+            usage = "<animationName> <repeat> <reverse>",
+            min = 3,
+            max = 3)
     public static void animate(final CommandContext args, final CommandSender sender) {
         if (!(sender instanceof Player)) return;
 
         Player player = (Player) sender;
         String args0 = args.getString(0);
+        String args1 = args.getString(1);
+        String args2 = args.getString(2);
         Model selected = selection.getIfPresent(player.getUniqueId());
 
         if (selected != null) {
             String animationName = args0;
 
             if (selected.getContainer().getAnimations().containsKey(animationName)) {
-                selected.playAnimation(animationName);
+                boolean repeat = false;
+                if (args1.equalsIgnoreCase("true")) {
+                    repeat = true;
+                }
+
+                boolean reverse = false;
+                if (args2.equalsIgnoreCase("true")) {
+                    reverse = true;
+                }
+
+                selected.playAnimation(animationName, repeat, reverse);
                 player.sendMessage("Playing animaton " + animationName);
             } else {
                 player.sendMessage("Animation not found for this model.");
@@ -73,12 +85,32 @@ public class ModelCommand {
     }
 
     @Command(
+            aliases = {"remove"},
+            desc = "Removes current selection.",
+            usage = "",
+            min = 0,
+            max = 0)
+    public static void remove(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof Player)) return;
+
+        Player player = (Player) sender;
+        Model selected = selection.getIfPresent(player.getUniqueId());
+
+        if (selected != null) {
+            selected.remove();
+            selection.invalidate(player.getUniqueId());
+
+            player.sendMessage("Removed model!");
+        }
+    }
+
+    @Command(
             aliases = {"rawrotation"},
             desc = "Rotation test command.",
             usage = "",
             min = 2,
             max = 2)
-    public static void test(final CommandContext args, final CommandSender sender) {
+    public static void rawrotation(final CommandContext args, final CommandSender sender) {
         if (!(sender instanceof Player)) return;
 
         Player player = (Player) sender;

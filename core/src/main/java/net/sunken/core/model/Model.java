@@ -24,10 +24,7 @@ import org.bukkit.util.EulerAngle;
 
 import javax.swing.text.html.ListView;
 import javax.swing.text.html.parser.Entity;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class Model {
@@ -178,18 +175,27 @@ public class Model {
         }
     }
 
-    public boolean playAnimation(String animationName) {
+    public boolean playAnimation(String animationName, boolean repeat, boolean reverse) {
         if (this.container.getAnimations().containsKey(animationName)) {
             Common.getLogger().log(Level.INFO, "Starting animation " + animationName);
 
             Animation animation = this.container.getAnimations().get(animationName);
-            AnimationTask task = new AnimationTask(animation, this);
+            AnimationTask task = new AnimationTask(animation, this, repeat, reverse);
             task.start();
 
             return true;
         }
 
         return false;
+    }
+
+    public void remove() {
+        for (LivingEntity entity : this.entities.values()) {
+            entity.remove();
+        }
+
+        this.entities.clear();
+        this.spawned = false;
     }
 
     private Villager spawnVillager(Structure structure) {
@@ -212,13 +218,10 @@ public class Model {
         entity.setBaby();
         entity.setAgeLock(true);
         entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
 
         EntityUtil.clearPathFinding(entity);
         ((CraftLivingEntity) entity).getHandle().noclip = true;
-
-        if (!structure.isVisible()) {
-            ((CraftLivingEntity) entity).getHandle().setInvisible(true);
-        }
 
         EntityUtil.setYaw(entity, pos.getYaw());
         EntityUtil.setPitch(entity, pos.getPitch());
