@@ -7,8 +7,6 @@ import lombok.ToString;
 import net.sunken.common.player.PlayerRank;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @ToString
@@ -31,14 +29,6 @@ public class PartyPlayer implements Serializable {
     }
 
     public PartyPlayer() {
-    }
-
-    public Map<String, String> toMap() {
-        Map<String, String> details = new HashMap<>();
-        details.put("name",  name);
-        details.put("uuid", uniqueId.toString());
-        details.put("player_rank", rank.name());
-        return details;
     }
 
     @Override

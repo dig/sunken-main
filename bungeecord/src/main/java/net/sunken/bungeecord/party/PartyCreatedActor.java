@@ -5,10 +5,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.packet.PartyCreatedPacket;
-import net.sunken.common.parties.service.status.PartyCreateStatus;
+import net.sunken.common.parties.packet.changes.PartyCreatedPacket;
+import net.sunken.common.parties.status.PartyCreateStatus;
 
-public class PartyCreatedHandler extends PacketHandler<PartyCreatedPacket> {
+public class PartyCreatedActor extends PacketHandler<PartyCreatedPacket> {
 
     @Override
     public void onReceive(PartyCreatedPacket packet) {
@@ -32,7 +32,7 @@ public class PartyCreatedHandler extends PacketHandler<PartyCreatedPacket> {
                 break;
             case FAILED:
                 if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("Could not create the party!"));
+                    creatorPlayer.sendMessage(new TextComponent("Could not create the party."));
                 }
                 break;
             default:

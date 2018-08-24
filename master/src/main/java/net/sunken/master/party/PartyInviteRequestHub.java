@@ -4,13 +4,15 @@ import net.sunken.common.Common;
 import net.sunken.common.DataManager;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.packet.PartyCreatedPacket;
-import net.sunken.common.parties.packet.PartyInviteSendPacket;
-import net.sunken.common.parties.packet.PartyInviteValidatedPacket;
-import net.sunken.common.parties.service.PartyService;
-import net.sunken.common.parties.service.status.PartyCreateStatus;
-import net.sunken.common.parties.service.status.PartyInviteStatus;
+import net.sunken.common.parties.packet.MustBeLeaderPacket;
+import net.sunken.common.parties.packet.changes.PartyCreatedPacket;
+import net.sunken.common.parties.packet.changes.PartyInviteValidatedPacket;
+import net.sunken.common.parties.packet.changes.PartyMemberJoinedPacket;
+import net.sunken.common.parties.packet.request.PartyInviteRequestPacket;
+import net.sunken.common.parties.status.PartyCreateStatus;
+import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.util.PlayerDetail;
 
@@ -21,57 +23,73 @@ import java.util.UUID;
  * When a request to send an invite is received i.e. /party (player), this
  * handler decides what to do next. It acts as a hub for invites requests.
  */
-public class PartyInviteRequestHub extends PacketHandler<PartyInviteSendPacket> {
+public class PartyInviteRequestHub extends PacketHandler<PartyInviteRequestPacket> {
 
     private static DataManager dataManager;
     private static Map<UUID, AbstractPlayer> onlinePlayers;
-    private static PartyService partyService;
 
     static {
         dataManager = Common.getInstance().getDataManager();
-        partyService = Common.getInstance().getPartyService();
         onlinePlayers = dataManager.getOnlinePlayers();
     }
 
     @Override
-    public void onReceive(PartyInviteSendPacket packet) {
+    public void onReceive(PartyInviteRequestPacket packet) {
         UUID creator = packet.getCreator();
-        UUID toInvite = dataManager.getNameToUUID().get(packet.getToInvite().toLowerCase());
+        UUID invitee = dataManager.getNameToUUID().get(packet.getInvitee().toLowerCase());
 
         AbstractPlayer creatorPlayer = onlinePlayers.get(creator);
         AbstractPlayer toInvitePlayer = null;
-        if (toInvite != null) {
-            toInvitePlayer = onlinePlayers.get(toInvite);
+        if (invitee != null) {
+            toInvitePlayer = onlinePlayers.get(invitee);
         }
 
-        if (creatorPlayer != null && toInvite != null) {
+        if (creatorPlayer != null && invitee != null) {
             PlayerDetail creatorDetail = new PlayerDetail(creator, creatorPlayer.getName());
-            PlayerDetail inviteeDetail = new PlayerDetail(toInvite, toInvitePlayer.getName());
+            PlayerDetail inviteeDetail = new PlayerDetail(invitee, toInvitePlayer.getName());
 
-            // check to see whether the person being invited has already
-            // sent a request to the creator in which case, create the party
-            if (PartyInviteManager.isInvitePresent(toInvite, creator)) {
-                PartyInviteManager.removeInvite(toInvite, creator);
+            PartyPlayer creatorPartyPlayer = new PartyPlayer(
+                    creator,
+                    creatorPlayer.getName(),
+                    creatorPlayer.getRank());
+            PartyPlayer inviteePartyPlayer = new PartyPlayer(
+                    invitee,
+                    toInvitePlayer.getName(),
+                    toInvitePlayer.getRank());
 
-                PartyPlayer leader = new PartyPlayer(creator, creatorPlayer.getName(), creatorPlayer.getRank());
-                PartyPlayer invitee = new PartyPlayer(toInvite, toInvitePlayer.getName(), toInvitePlayer.getRank());
-                PartyCreateStatus createStatus = partyService.createParty(leader, invitee);
+            PartyInviteStatus partyInviteStatus = PartyInviteManager.validateInviteRequest(creator, invitee);
 
-                PartyCreatedPacket partyCreatedPacket = new PartyCreatedPacket(leader, invitee, createStatus);
-                PacketUtil.sendPacket(partyCreatedPacket);
-
+            if (partyInviteStatus == PartyInviteStatus.NOT_LEADER) {
+                PacketUtil.sendPacket(
+                        new MustBeLeaderPacket(creator, "You must be the leader to invite players to the party!"));
                 return;
             }
 
-            // player is not accepting an existing party request
-            // continue with the premise this is a new party that is attempting to be made
-            PartyInviteStatus partyInviteStatus = partyService.validateInviteRequest(creator, toInvite);
+            // Check special cases first //
 
-            // make sure after the standard validation checks have ran, there isn't
-            // an invite already pending by the user to the same person
-            if (PartyInviteManager.isInvitePresent(creator, toInvite)) {
-                partyInviteStatus = PartyInviteStatus.INVITE_ALREADY_PENDING;
+            // check to see whether the person being invited has already
+            // sent a request to the creator in which case, create the party
+            // as long as there is no existing party with either player in it
+            if (PartyInviteManager.isInvitePresent(invitee, creator)
+                    && PartyManager.getPartyByPlayer(creator) == null
+                    && PartyManager.getPartyByPlayer(invitee) == null) {
+
+                PartyInviteManager.removeInvite(invitee, creator);
+                PartyCreateStatus createStatus = PartyManager.createParty(creatorPartyPlayer, inviteePartyPlayer);
+                PacketUtil.sendPacket(new PartyCreatedPacket(creatorPartyPlayer, inviteePartyPlayer, createStatus));
+                return;
             }
+
+            // if the inviter is already in a party and there is already
+            // an invite present between them, add the invitee as a member
+            Party creatorParty = PartyManager.getPartyByLeader(creator);
+            if (PartyInviteManager.isInvitePresent(invitee, creator) && creatorParty != null) {
+                creatorParty.getAllMembers().add(inviteePartyPlayer);
+                PacketUtil.sendPacket(new PartyMemberJoinedPacket(inviteePartyPlayer, creatorParty));
+                return;
+            }
+
+            // Is a regular invite //
 
             // party validation checks have passed, add the invite to the manager
             if (partyInviteStatus == PartyInviteStatus.SUCCESS) {

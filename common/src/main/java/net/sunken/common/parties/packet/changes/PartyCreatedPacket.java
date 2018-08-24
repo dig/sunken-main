@@ -3,7 +3,7 @@ package net.sunken.common.parties.packet;
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
 import net.sunken.common.parties.data.PartyPlayer;
-import net.sunken.common.parties.service.status.PartyCreateStatus;
+import net.sunken.common.parties.status.PartyCreateStatus;
 
 public class PartyCreatedPacket extends Packet {
 

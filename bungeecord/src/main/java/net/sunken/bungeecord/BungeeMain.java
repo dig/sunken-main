@@ -19,18 +19,18 @@ import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
 import net.sunken.bungeecord.listeners.JoinListener;
 import net.sunken.bungeecord.listeners.PingListener;
-import net.sunken.bungeecord.party.PartyCommands;
-import net.sunken.bungeecord.party.PartyCreatedHandler;
-import net.sunken.bungeecord.party.PartyInviteExpiredHandler;
-import net.sunken.bungeecord.party.PartyInviteValidateHandler;
+import net.sunken.bungeecord.party.*;
 import net.sunken.bungeecord.server.LobbyCommand;
 import net.sunken.common.Common;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
 import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
-import net.sunken.common.parties.packet.PartyCreatedPacket;
-import net.sunken.common.parties.packet.PartyInviteExpiredPacket;
-import net.sunken.common.parties.packet.PartyInviteValidatedPacket;
+import net.sunken.common.parties.packet.MustBeInPartyPacket;
+import net.sunken.common.parties.packet.MustBeLeaderPacket;
+import net.sunken.common.parties.packet.changes.PartyCreatedPacket;
+import net.sunken.common.parties.packet.changes.PartyInviteExpiredPacket;
+import net.sunken.common.parties.packet.changes.PartyInviteValidatedPacket;
+import net.sunken.common.parties.packet.changes.PartyMemberJoinedPacket;
 
 public class BungeeMain extends Plugin implements CommandExecutor<CommandSender> {
 
@@ -56,11 +56,14 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         this.registerEvents();
 
         // Register packet handlers
-        PacketHandlerRegistry.registerHandler(PartyInviteValidatedPacket.class, new PartyInviteValidateHandler());
+        PacketHandlerRegistry.registerHandler(PartyInviteValidatedPacket.class, new PartyInviteValidateActor());
         PacketHandlerRegistry.registerHandler(FriendStatusPacket.class, new FriendStatusHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptStatusPacket.class, new FriendAcceptStatusHandler());
-        PacketHandlerRegistry.registerHandler(PartyInviteExpiredPacket.class, new PartyInviteExpiredHandler());
-        PacketHandlerRegistry.registerHandler(PartyCreatedPacket.class, new PartyCreatedHandler());
+        PacketHandlerRegistry.registerHandler(PartyInviteExpiredPacket.class, new PartyInviteExpiredActor());
+        PacketHandlerRegistry.registerHandler(PartyCreatedPacket.class, new PartyCreatedActor());
+        PacketHandlerRegistry.registerHandler(PartyMemberJoinedPacket.class, new PartyMemberAddActor());
+        PacketHandlerRegistry.registerHandler(MustBeInPartyPacket.class, new MustBeInPartyActor());
+        PacketHandlerRegistry.registerHandler(MustBeLeaderPacket.class, new MustBeLeaderActor());
 
         // Get information about running servers
         Common.getInstance().getServerCache().updateCache();

@@ -14,9 +14,6 @@ public class Party implements Serializable {
 
     @Getter
     @Setter
-    private UUID partyUUID;
-    @Getter
-    @Setter
     private UUID leaderUniqueId;
     @Getter
     @Setter
@@ -25,15 +22,19 @@ public class Party implements Serializable {
     @Setter
     private long createdAt;
 
-    public Party(UUID partyUUID,
-                 UUID leaderUniqueId,
-                 Set<PartyPlayer> allMembers,
-                 long createdAt) {
-
-        this.partyUUID = partyUUID;
+    public Party(UUID leaderUniqueId, Set<PartyPlayer> allMembers, long createdAt) {
         this.leaderUniqueId = leaderUniqueId;
         this.allMembers = allMembers;
         this.createdAt = createdAt;
+    }
+
+    public PartyPlayer getLeader() {
+        for (PartyPlayer member : allMembers) {
+            if (member.getUniqueId().equals(leaderUniqueId)) {
+                return member;
+            }
+        }
+        throw new IllegalStateException("no PartyPlayer exists with the leader's unique ID");
     }
 
     @Override

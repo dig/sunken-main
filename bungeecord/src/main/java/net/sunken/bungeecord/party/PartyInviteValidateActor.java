@@ -4,11 +4,11 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketHandler;
-import net.sunken.common.parties.packet.PartyInviteValidatedPacket;
-import net.sunken.common.parties.service.status.PartyInviteStatus;
+import net.sunken.common.parties.packet.changes.PartyInviteValidatedPacket;
+import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 
-public class PartyInviteValidateHandler extends PacketHandler<PartyInviteValidatedPacket> {
+public class PartyInviteValidateActor extends PacketHandler<PartyInviteValidatedPacket> {
 
     @Override
     public void onReceive(PartyInviteValidatedPacket packet) {
@@ -28,16 +28,6 @@ public class PartyInviteValidateHandler extends PacketHandler<PartyInviteValidat
                     toInvitePlayer.sendMessage(new TextComponent("You received an invite from " + creator.name));
                 }
                 break;
-            case FAILED:
-                if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("Could not send party request!"));
-                }
-                break;
-            case INVITER_ALREADY_IN_PARTY:
-                if (creatorPlayer != null) {
-                    creatorPlayer.sendMessage(new TextComponent("You are already in a party!"));
-                }
-                break;
             case INVITEE_ALREADY_IN_PARTY:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("That player is already in a party!"));
@@ -46,6 +36,11 @@ public class PartyInviteValidateHandler extends PacketHandler<PartyInviteValidat
             case INVITE_ALREADY_PENDING:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You already have an invite pending!"));
+                }
+                break;
+            case FAILED:
+                if (creatorPlayer != null) {
+                    creatorPlayer.sendMessage(new TextComponent("Could not send party request."));
                 }
                 break;
             default:

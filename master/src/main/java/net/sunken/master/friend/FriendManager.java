@@ -14,5 +14,4 @@ public class FriendManager {
     public FriendManager () {
         this.friendInvites = ArrayListMultimap.create();
     }
-
 }
