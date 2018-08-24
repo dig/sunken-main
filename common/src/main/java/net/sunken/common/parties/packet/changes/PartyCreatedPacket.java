@@ -1,4 +1,4 @@
-package net.sunken.common.parties.packet;
+package net.sunken.common.parties.packet.changes;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
