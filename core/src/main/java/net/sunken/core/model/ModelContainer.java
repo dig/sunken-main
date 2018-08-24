@@ -122,7 +122,7 @@ public class ModelContainer {
                                     Frame frame = anim.getFrames().get(frameNum);
                                     frame.getStructures().add(structure);
                                 } else {
-                                    Frame frame = new Frame(500);
+                                    Frame frame = new Frame(50);
                                     frame.getStructures().add(structure);
                                     anim.getFrames().put(frameNum, frame);
                                 }
@@ -149,6 +149,13 @@ public class ModelContainer {
                 ((double) location.get("z"))
         );
 
+        Rotation rotation = new Rotation(0, 0);
+        if (yml.containsKey("rotation")) {
+            Map<String, Object> rotate = (Map<String, Object>) yml.get("rotation");
+            rotation = new Rotation(Double.valueOf((double) rotate.get("x")).floatValue(),
+                    Double.valueOf((double) rotate.get("y")).floatValue());
+        }
+
         Map<String, Position> pose = new HashMap<>();
         if (yml.containsKey("pose")) {
             Map<String, Object> poseCfg = (Map<String, Object>) yml.get("pose");
@@ -168,7 +175,13 @@ public class ModelContainer {
             }
         }
 
-        Structure structure = new Structure(fileName, matRaw, size, visible, position, pose);
+        Head head = null;
+        if (yml.containsKey("skull")) {
+            Map<String, Object> skull = (Map<String, Object>) yml.get("skull");
+            head = new Head((String) skull.get("id"), (String) skull.get("texture"));
+        }
+
+        Structure structure = new Structure(fileName, matRaw, size, visible, position, rotation, pose, head);
         return structure;
     }
 

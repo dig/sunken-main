@@ -3,26 +3,26 @@ package net.sunken.core.model;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.core.Core;
-import net.sunken.core.model.type.Animation;
-import net.sunken.core.model.type.Position;
-import net.sunken.core.model.type.Structure;
-import net.sunken.core.model.type.StructureSize;
+import net.sunken.core.model.type.*;
 import net.sunken.core.util.EntityUtil;
+import net.sunken.core.util.SkullUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 
 import javax.swing.text.html.ListView;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.swing.text.html.parser.Entity;
+import java.util.*;
 import java.util.logging.Level;
 
 public class Model {
@@ -62,7 +62,8 @@ public class Model {
                     ArmorStand ent = this.spawnArmorstand(structure);
                     entity = (LivingEntity) ent;
                 } else {
-                    // TODO: Handle villager support (StructureSize.SMALL)
+                    Villager villager = this.spawnVillager(structure);
+                    entity = (Villager) villager;
                 }
 
                 this.entities.put(structure, entity);
@@ -77,8 +78,15 @@ public class Model {
                 }
 
                 ItemStack head = new ItemStack(material, 1);
+                if (material.equals(Material.PLAYER_HEAD) && structure.getHead() != null) {
+                    Head opt = structure.getHead();
+                    head = SkullUtil.addTexture(head, opt.getId(), opt.getTexture());
+                }
+
                 entity.getEquipment().setHelmet(head);
             }
+
+            this.setRotation(0);
         }
     }
 
@@ -98,7 +106,8 @@ public class Model {
                 double z = (position.getX() * sinRad) + (position.getZ() * cosRad);
 
                 Location set = this.location.clone().add(x, position.getY(), z);
-                set.setPitch(0);
+                set.setPitch(updated.getRotation().getPitch());
+                set.setYaw(set.getYaw() + updated.getRotation().getYaw());
                 // TODO: Add a global rotation to container
 
                 double offsetY = 0;
@@ -150,7 +159,10 @@ public class Model {
                 }
 
                 set.setY((this.location.getY() - offsetY) + position.getY());
+
                 EntityUtil.setLocation(entity, set);
+                EntityUtil.setYaw(entity, set.getYaw());
+                EntityUtil.setPitch(entity, set.getPitch());
             }
         }
     }
@@ -166,12 +178,12 @@ public class Model {
         }
     }
 
-    public boolean playAnimation(String animationName) {
+    public boolean playAnimation(String animationName, boolean repeat, boolean reverse) {
         if (this.container.getAnimations().containsKey(animationName)) {
             Common.getLogger().log(Level.INFO, "Starting animation " + animationName);
 
             Animation animation = this.container.getAnimations().get(animationName);
-            AnimationTask task = new AnimationTask(animation, this);
+            AnimationTask task = new AnimationTask(animation, this, repeat, reverse);
             task.start();
 
             return true;
@@ -180,12 +192,52 @@ public class Model {
         return false;
     }
 
+    public void remove() {
+        for (LivingEntity entity : this.entities.values()) {
+            entity.remove();
+        }
+
+        this.entities.clear();
+        this.spawned = false;
+    }
+
+    private Villager spawnVillager(Structure structure) {
+        Location pos = this.location.clone().add(structure.getPosition().getX(),
+                structure.getPosition().getY(),
+                structure.getPosition().getZ());
+        pos.setYaw(pos.getYaw() + structure.getRotation().getYaw());
+        pos.setPitch(structure.getRotation().getPitch());
+
+        Villager entity = (Villager) this.location.getWorld().spawnEntity(pos, EntityType.VILLAGER);
+
+        entity.setSilent(true);
+        entity.setCustomNameVisible(false);
+        entity.setCanPickupItems(false);
+        entity.setNoDamageTicks(0);
+        entity.setGravity(false);
+        entity.setAI(false);
+        entity.setInvulnerable(true);
+        entity.setCollidable(true);
+        entity.setBaby();
+        entity.setAgeLock(true);
+        entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+        entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
+
+        EntityUtil.clearPathFinding(entity);
+        ((CraftLivingEntity) entity).getHandle().noclip = true;
+
+        EntityUtil.setYaw(entity, pos.getYaw());
+        EntityUtil.setPitch(entity, pos.getPitch());
+
+        return entity;
+    }
+
     private ArmorStand spawnArmorstand(Structure structure) {
         Location pos = this.location.clone().add(structure.getPosition().getX(),
                 structure.getPosition().getY(),
                 structure.getPosition().getZ());
-        pos.setYaw(0);
-        pos.setPitch(0);
+        pos.setYaw(pos.getYaw() + structure.getRotation().getYaw());
+        pos.setPitch(structure.getRotation().getPitch());
 
         ArmorStand entity = (ArmorStand) this.location.getWorld().spawnEntity(pos, EntityType.ARMOR_STAND);
         entity.setVisible(structure.isVisible());
@@ -194,6 +246,10 @@ public class Model {
         entity.setGravity(false);
         entity.setCustomName(ChatColor.DARK_GRAY + UUID.randomUUID().toString());
         entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+
+        if (structure.isVisible()) {
+            entity.setArms(true);
+        }
 
         if (structure.getPose().size() > 0) {
             for (String type : structure.getPose().keySet()) {
@@ -231,6 +287,9 @@ public class Model {
         } else {
             entity.setSmall(false);
         }
+
+        EntityUtil.setYaw(entity, pos.getYaw());
+        EntityUtil.setPitch(entity, pos.getPitch());
 
         return entity;
     }
