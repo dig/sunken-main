@@ -2,14 +2,22 @@ package net.sunken.core.model;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import net.minecraft.server.v1_13_R1.EntityBoat;
+import net.minecraft.server.v1_13_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntity;
 import net.sunken.common.Common;
 import net.sunken.core.Core;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import net.sunken.core.model.type.StructureSize;
+import net.sunken.core.util.protocol.EntityHider;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -21,7 +29,7 @@ import java.util.logging.Level;
 
 public class WalkTask extends BukkitRunnable {
 
-    private static double floorRadius = 1;
+    private static double floorRadius = 1.25;
     private static Cache<UUID, Location> locations;
 
     static {
@@ -39,7 +47,6 @@ public class WalkTask extends BukkitRunnable {
             Location oldLoc = locations.getIfPresent(player.getUniqueId());
 
             if (oldLoc == null || !(oldLoc.equals(player.getLocation()))) {
-                Common.getLogger().log(Level.INFO, "Updating player due to new movement");
                 locations.put(player.getUniqueId(), player.getLocation());
 
                 double maxX = location.getX() + floorRadius;
@@ -54,28 +61,45 @@ public class WalkTask extends BukkitRunnable {
                     Location loc = entity.getLocation();
 
                     if (entity.getType().equals(EntityType.ARMOR_STAND)
-                            && entity.hasMetadata("Model") && entity.hasMetadata("Walkable") && !entity.hasMetadata("WalkBoat")) {
+                            && entity.hasMetadata("Model") && entity.hasMetadata("Walkable")
+                            && !entity.hasMetadata("WalkBoat")) {
                         ArmorStand armorStand = (ArmorStand) entity;
+                        StructureSize size = StructureSize.valueOf(entity.getMetadata("Model").get(0).asString());
 
                         if (loc.getX() <= maxX && loc.getX() >= minX) {
                             if (loc.getZ() <= maxZ && loc.getZ() >= minZ) {
                                 if (loc.getY() <= maxY && loc.getY() >= minY) {
 
-                                    double height = 1.15;
-                                    if (armorStand.isSmall()) {
-                                        height = 0.25;
+                                    double height = -0.5;
+                                    if (armorStand.getHelmet() != null && Model.isSlab(armorStand.getHelmet().getType())) {
+                                        height = -0.81;
                                     }
 
                                     Location set = loc.clone().add(0, height, 0);
 
-                                    Boat boat = (Boat) location.getWorld().spawnEntity(set, EntityType.BOAT);
-                                    boat.setGravity(false);
-                                    boat.setSilent(true);
-                                    boat.setInvulnerable(true);
-                                    boat.setCustomNameVisible(false);
-                                    ((CraftEntity) boat).getHandle().noclip = true;
+                                    Shulker shulker = (Shulker) location.getWorld().spawnEntity(set, EntityType.SHULKER);
+                                    shulker.setGravity(false);
+                                    shulker.setAI(false);
+                                    shulker.setSilent(true);
+                                    shulker.setInvulnerable(true);
+                                    shulker.setColor(DyeColor.WHITE);
+                                    shulker.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
 
-                                    entity.setMetadata("WalkBoat", new FixedMetadataValue(Core.getPlugin(), boat.getEntityId()));
+                                    if (size == StructureSize.SOLID) {
+                                        entity.addPassenger(shulker);
+                                        entity.setMetadata("WalkBoat", new FixedMetadataValue(Core.getPlugin(), shulker.getEntityId()));
+                                    } else {
+                                        ArmorStand stand = (ArmorStand) location.getWorld().spawnEntity(set, EntityType.ARMOR_STAND);
+                                        stand.setVisible(false);
+                                        stand.setCustomNameVisible(false);
+                                        stand.setBasePlate(false);
+                                        stand.setGravity(false);
+                                        stand.setSmall(((ArmorStand) entity).isSmall());
+                                        stand.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+
+                                        stand.addPassenger(shulker);
+                                        entity.setMetadata("WalkBoat", new FixedMetadataValue(Core.getPlugin(), stand.getEntityId()));
+                                    }
                                 }
                             }
                         }
@@ -94,6 +118,8 @@ public class WalkTask extends BukkitRunnable {
                 if (entity.getType().equals(EntityType.ARMOR_STAND)
                         && entity.hasMetadata("Model") && entity.hasMetadata("Walkable") && entity.hasMetadata("WalkBoat")) {
                     ArmorStand armorStand = (ArmorStand) entity;
+                    StructureSize size = StructureSize.valueOf(entity.getMetadata("Model").get(0).asString());
+
                     boolean hasPlayer = false;
 
                     double maxX = location.getX() + floorRadius;
@@ -121,9 +147,27 @@ public class WalkTask extends BukkitRunnable {
                     if (!hasPlayer) {
                         int boatId = entity.getMetadata("WalkBoat").get(0).asInt();
 
-                        for (Entity ent : world.getEntities()) {
-                            if (ent.getEntityId() == boatId) {
-                                ent.remove();
+                        // Remove shulker if passenger of main armorstand
+                        if (entity.getPassengers() != null && entity.getPassengers().size() > 0) {
+                            for (Entity ent : entity.getPassengers()) {
+                                if (ent.getEntityId() == entity.getMetadata("WalkBoat").get(0).asInt()) {
+                                    ent.remove();
+                                }
+                            }
+                        } else {
+                            for (Entity ent : world.getEntities()) {
+                                if (ent.getEntityId() == entity.getMetadata("WalkBoat").get(0).asInt()) {
+
+                                    // Remove shulker
+                                    if (ent.getPassengers() != null && ent.getPassengers().size() > 0) {
+                                        for (Entity passenger : ent.getPassengers()) {
+                                            passenger.remove();
+                                        }
+                                    }
+
+
+                                    ent.remove();
+                                }
                             }
                         }
 

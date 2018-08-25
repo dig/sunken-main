@@ -7,6 +7,7 @@ import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
@@ -28,6 +29,15 @@ public class ModelListener implements Listener {
         event.getVehicle().setVelocity(new Vector(0, 0, 0));
         event.setCancelled(true);
         event.setCollisionCancelled(true);
+    }
+
+    @EventHandler
+    public void onBlockChange(EntityChangeBlockEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity.hasMetadata("Model")) {
+            event.setCancelled(true);
+        }
     }
 
 }

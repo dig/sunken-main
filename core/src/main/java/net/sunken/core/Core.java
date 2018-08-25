@@ -36,7 +36,7 @@ public class Core {
 
         // Used to enable players to walk on walkable models.
         WalkTask walkTask = new WalkTask();
-        walkTask.runTaskTimer(plugin, 0l, 3l);
+        walkTask.runTaskTimer(plugin, 0l, 2l);
     }
 
     public void onCoreDisable() {
