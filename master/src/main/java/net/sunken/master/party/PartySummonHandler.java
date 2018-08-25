@@ -11,7 +11,7 @@ import net.sunken.common.parties.packet.request.MPartySummonRequestPacket;
 import java.util.Set;
 import java.util.UUID;
 
-/** Requests for promoting party players are handled here. */
+/** Requests for summoning players to a server are handled here. */
 public class PartySummonHandler extends PacketHandler<MPartySummonRequestPacket> {
 
     @Override

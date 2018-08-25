@@ -14,7 +14,7 @@ import net.sunken.common.player.AbstractPlayer;
 import java.util.Set;
 import java.util.UUID;
 
-/** Requests for promoting party players are handled here. */
+/** Requests for chatting in the party channel are handled here. */
 public class PartyChatHandler extends PacketHandler<MPartyChatRequestPacket> {
 
     private static final DataManager dataManager = Common.getInstance().getDataManager();
