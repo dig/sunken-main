@@ -77,11 +77,11 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
 
             // if the inviter is already in a party and there is already
             // an invite present between them, add the invitee as a member
-            Party creatorParty = PartyManager.getPartyByLeader(creator);
-            if (PartyInviteManager.isInvitePresent(invitee, creator) && creatorParty != null) {
+            Party inviteeParty = PartyManager.getPartyByLeader(invitee);
+            if (PartyInviteManager.isInvitePresent(invitee, creator) && inviteeParty != null) {
                 PartyInviteManager.removeInvite(invitee, creator);
-                creatorParty.getAllMembers().add(inviteePartyPlayer);
-                PacketUtil.sendPacket(new PartyMemberJoinedPacket(inviteePartyPlayer, creatorParty));
+                inviteeParty.getAllMembers().add(inviteePartyPlayer);
+                PacketUtil.sendPacket(new PartyMemberJoinedPacket(inviteePartyPlayer, inviteeParty));
                 return;
             }
 
