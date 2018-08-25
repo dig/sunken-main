@@ -64,6 +64,8 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         PacketHandlerRegistry.registerHandler(MustBeLeaderPacket.class, new MustBeLeaderActor());
         PacketHandlerRegistry.registerHandler(PartyListPacket.class, new PartyListActor());
         PacketHandlerRegistry.registerHandler(SendPlayerBungeeMessagePacket.class, new SendPlayerBungeeMessageHandler());
+        PacketHandlerRegistry.registerHandler(PartyMemberLeftPacket.class, new PartyLeaveActor());
+        PacketHandlerRegistry.registerHandler(PartyDisbandedPacket.class, new PartyDisbandActor());
 
         // Get information about running servers
         Common.getInstance().getServerCache().updateCache();
