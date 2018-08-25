@@ -56,13 +56,13 @@ public class Master {
         // Register packets
         PacketHandlerRegistry.registerHandler(ParkourCacheUpdatePacket.class, new ParkourCacheHandler());
         PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
-        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyLeaveRequestHub());
         PacketHandlerRegistry.registerHandler(PlayerQuitPacket.class, new PlayerQuitHandler());
         PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
         PacketHandlerRegistry.registerHandler(MPartyInviteRequestPacket.class, new PartyInviteRequestHub());
+        PacketHandlerRegistry.registerHandler(MPartyListRequestPacket.class, new PartyListHandler());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
-        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyListHandler());
+        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyLeaveRequestHub());
         PacketHandlerRegistry.registerHandler(MPartyKickRequestPacket.class, new PartyKickHandler());
         PacketHandlerRegistry.registerHandler(MPartyPromoteRequestPacket.class, new PartyPromoteHandler());
         PacketHandlerRegistry.registerHandler(MPartyChatRequestPacket.class, new PartyChatHandler());

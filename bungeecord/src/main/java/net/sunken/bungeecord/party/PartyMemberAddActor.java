@@ -29,7 +29,7 @@ public class PartyMemberAddActor extends PacketHandler<PartyMemberJoinedPacket> 
             if (!member.equals(memberJoined)) { // don't send to the member that joined
                 ProxiedPlayer memberPlayer = ProxyServer.getInstance().getPlayer(member.getUniqueId());
                 if (memberPlayer != null) {
-                    memberPlayer.sendMessage(new TextComponent(memberJoined.getName() + "has joined the party!"));
+                    memberPlayer.sendMessage(new TextComponent(memberJoined.getName() + " has joined the party!"));
                 }
             }
         }
