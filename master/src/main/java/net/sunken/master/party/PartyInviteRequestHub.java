@@ -70,7 +70,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
                     && PartyManager.getPartyByPlayer(invitee) == null) {
 
                 PartyInviteManager.removeInvite(invitee, creator);
-                PartyCreateStatus createStatus = PartyManager.createParty(creatorPartyPlayer, inviteePartyPlayer);
+                PartyCreateStatus createStatus = PartyManager.createParty(inviteePartyPlayer, creatorPartyPlayer);
                 PacketUtil.sendPacket(new PartyCreatedPacket(creatorPartyPlayer, inviteePartyPlayer, createStatus));
                 return;
             }
@@ -79,6 +79,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             // an invite present between them, add the invitee as a member
             Party creatorParty = PartyManager.getPartyByLeader(creator);
             if (PartyInviteManager.isInvitePresent(invitee, creator) && creatorParty != null) {
+                PartyInviteManager.removeInvite(invitee, creator);
                 creatorParty.getAllMembers().add(inviteePartyPlayer);
                 PacketUtil.sendPacket(new PartyMemberJoinedPacket(inviteePartyPlayer, creatorParty));
                 return;
