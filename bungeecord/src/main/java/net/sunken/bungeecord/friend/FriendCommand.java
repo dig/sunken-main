@@ -25,7 +25,6 @@ public class FriendCommand {
         dataManager = Common.getInstance().getDataManager();
     }
 
-
     @Command(
             aliases = {"friend"},
             desc = "Base friend command",
@@ -50,16 +49,12 @@ public class FriendCommand {
                     player.sendMessage(new TextComponent("- " + rankColour + name));
                 }
             } else if (firstArg.equalsIgnoreCase("accept") && args.argsLength() == 2) {
-                FriendAcceptPacket friendAcceptPacket = new FriendAcceptPacket(player.getUniqueId(), args.getString(1), false);
-                PacketUtil.sendPacket(friendAcceptPacket);
+                PacketUtil.sendPacket(new FriendAcceptPacket(player.getUniqueId(), args.getString(1), false));
             } else if (firstArg.equalsIgnoreCase("deny") && args.argsLength() == 2) {
-                FriendAcceptPacket friendAcceptPacket = new FriendAcceptPacket(player.getUniqueId(), args.getString(1), true);
-                PacketUtil.sendPacket(friendAcceptPacket);
+                PacketUtil.sendPacket(new FriendAcceptPacket(player.getUniqueId(), args.getString(1), true));
             } else {
-                FriendRequestPacket friendRequestPacket = new FriendRequestPacket(player.getUniqueId(), firstArg);
-                PacketUtil.sendPacket(friendRequestPacket);
+                PacketUtil.sendPacket(new FriendRequestPacket(player.getUniqueId(), firstArg));
             }
         }
     }
-
 }

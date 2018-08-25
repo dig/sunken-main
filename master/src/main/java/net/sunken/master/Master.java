@@ -7,6 +7,7 @@ import net.sunken.common.friend.packet.FriendRequestPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourCacheUpdatePacket;
 import net.sunken.common.parties.packet.request.MPartyInviteRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyKickRequestPacket;
 import net.sunken.common.parties.packet.request.MPartyLeaveRequestPacket;
 import net.sunken.common.player.packet.PlayerConnectPacket;
 import net.sunken.common.player.packet.PlayerJoinPacket;
@@ -17,7 +18,8 @@ import net.sunken.master.friend.FriendRequestHandler;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
 import net.sunken.master.party.PartyInviteRequestHub;
-import net.sunken.master.party.PartyLeaveHub;
+import net.sunken.master.party.PartyKickHandler;
+import net.sunken.master.party.PartyLeaveRequestHub;
 import net.sunken.master.party.PartyListHandler;
 import net.sunken.master.player.PlayerConnectHandler;
 import net.sunken.master.player.PlayerJoinHandler;
@@ -59,13 +61,14 @@ public class Master {
         // Register packets
         PacketHandlerRegistry.registerHandler(ParkourCacheUpdatePacket.class, new ParkourCacheHandler());
         PacketHandlerRegistry.registerHandler(PlayerJoinPacket.class, new PlayerJoinHandler());
-        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyLeaveHub());
+        PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyLeaveRequestHub());
         PacketHandlerRegistry.registerHandler(PlayerQuitPacket.class, new PlayerQuitHandler());
         PacketHandlerRegistry.registerHandler(PlayerConnectPacket.class, new PlayerConnectHandler());
         PacketHandlerRegistry.registerHandler(MPartyInviteRequestPacket.class, new PartyInviteRequestHub());
         PacketHandlerRegistry.registerHandler(FriendRequestPacket.class, new FriendRequestHandler());
         PacketHandlerRegistry.registerHandler(FriendAcceptPacket.class, new FriendAcceptHandler());
         PacketHandlerRegistry.registerHandler(MPartyLeaveRequestPacket.class, new PartyListHandler());
+        PacketHandlerRegistry.registerHandler(MPartyKickRequestPacket.class, new PartyKickHandler());
     }
 
     public void onDisable() {

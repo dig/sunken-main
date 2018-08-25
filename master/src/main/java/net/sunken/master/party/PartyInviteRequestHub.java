@@ -25,13 +25,8 @@ import java.util.UUID;
  */
 public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPacket> {
 
-    private static DataManager dataManager;
-    private static Map<UUID, AbstractPlayer> onlinePlayers;
-
-    static {
-        dataManager = Common.getInstance().getDataManager();
-        onlinePlayers = dataManager.getOnlinePlayers();
-    }
+    private static DataManager dataManager = Common.getInstance().getDataManager();
+    private static Map<UUID, AbstractPlayer> onlinePlayers = dataManager.getOnlinePlayers();
 
     @Override
     public void onReceive(MPartyInviteRequestPacket packet) {
@@ -44,7 +39,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             toInvitePlayer = onlinePlayers.get(invitee);
         }
 
-        if (creatorPlayer != null && invitee != null) {
+        if (creatorPlayer != null && toInvitePlayer != null) {
             PlayerDetail creatorDetail = new PlayerDetail(creator, creatorPlayer.getName());
             PlayerDetail inviteeDetail = new PlayerDetail(invitee, toInvitePlayer.getName());
 
@@ -60,8 +55,8 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             PartyInviteStatus partyInviteStatus = PartyInviteManager.validateInviteRequest(creator, invitee);
 
             if (partyInviteStatus == PartyInviteStatus.NOT_LEADER) {
-                PacketUtil.sendPacket(
-                        new MustBeLeaderPacket(creator, "You must be the leader to invite players to the party!"));
+                PacketUtil.sendPacket(new MustBeLeaderPacket(
+                        creator, "You must be the leader to invite players to the party!"));
                 return;
             }
 

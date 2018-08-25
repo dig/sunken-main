@@ -46,9 +46,9 @@ public final class PartyManager {
     }
 
     /**
-     * Return the party the player or else null,
+     * Return the party the player is in or else null,
      * first checks if the player is a party leader in which case
-     * the retrieval of the party is O(1) else iterate over each
+     * the retrieval of the party is O(1), else iterate over each
      * party's member list
      */
     @Nullable

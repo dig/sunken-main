@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.packet.request.MPartyInviteRequestPacket;
+import net.sunken.common.parties.packet.request.MPartyKickRequestPacket;
 import net.sunken.common.parties.packet.request.MPartyLeaveRequestPacket;
 import net.sunken.common.parties.packet.request.MPartyListRequestPacket;
 import net.sunken.common.player.PlayerRank;
@@ -76,6 +77,31 @@ public class PartyCommands {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
         PacketUtil.sendPacket(new MPartyListRequestPacket(player.getUniqueId()));
+    }
+
+    @Command(
+            aliases = {"kick"},
+            desc = "Kick a party member",
+            min = 1,
+            max = 1,
+            usage = "<player> - The player to kick")
+    @PlayerRankRequired(PlayerRank.USER)
+    public static void kick(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof ProxiedPlayer)) return;
+
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        PacketUtil.sendPacket(new MPartyKickRequestPacket(player.getUniqueId(), args.getString(0), false));
+    }
+
+    @Command(
+            aliases = {"kickoffline"},
+            desc = "Kick all offline party members")
+    @PlayerRankRequired(PlayerRank.USER)
+    public static void kickOffline(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof ProxiedPlayer)) return;
+
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        PacketUtil.sendPacket(new MPartyKickRequestPacket(player.getUniqueId(), null, true));
     }
 
     public static class Parent {

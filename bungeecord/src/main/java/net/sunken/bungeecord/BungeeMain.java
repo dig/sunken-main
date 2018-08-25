@@ -25,6 +25,7 @@ import net.sunken.common.Common;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
 import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
+import net.sunken.common.packet.SendPlayerBungeeMessagePacket;
 import net.sunken.common.parties.packet.MustBeInPartyPacket;
 import net.sunken.common.parties.packet.MustBeLeaderPacket;
 import net.sunken.common.parties.packet.changes.*;
@@ -62,6 +63,7 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
         PacketHandlerRegistry.registerHandler(MustBeInPartyPacket.class, new MustBeInPartyActor());
         PacketHandlerRegistry.registerHandler(MustBeLeaderPacket.class, new MustBeLeaderActor());
         PacketHandlerRegistry.registerHandler(PartyListPacket.class, new PartyListActor());
+        PacketHandlerRegistry.registerHandler(SendPlayerBungeeMessagePacket.class, new SendPlayerBungeeMessageHandler());
 
         // Get information about running servers
         Common.getInstance().getServerCache().updateCache();

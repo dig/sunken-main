@@ -17,7 +17,7 @@ import java.util.UUID;
  * disband; if the player is a member, simply leave the party. Has
  * sanity checks.
  */
-public class PartyLeaveHub extends PacketHandler<MPartyLeaveRequestPacket> {
+public class PartyLeaveRequestHub extends PacketHandler<MPartyLeaveRequestPacket> {
 
     @Override
     public void onReceive(MPartyLeaveRequestPacket packet) {
