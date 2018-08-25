@@ -10,18 +10,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.EulerAngle;
 
-import javax.swing.text.html.ListView;
-import javax.swing.text.html.parser.Entity;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -168,6 +163,27 @@ public class Model {
                 EntityUtil.setLocation(entity, set);
                 EntityUtil.setYaw(entity, set.getYaw());
                 EntityUtil.setPitch(entity, set.getPitch());
+
+                // Teleport walking entity so players can continue walking
+                if (container.isWalkable() && entity.hasMetadata("WalkBoat")) {
+                    int boatId = entity.getMetadata("WalkBoat").get(0).asInt();
+
+                    for (Entity ent : this.location.getWorld().getEntities()) {
+                        if (ent.getType().equals(Material.ARMOR_STAND)
+                                && ent.getEntityId() == boatId) {
+                            ArmorStand armorStand = (ArmorStand) ent;
+
+                            double height = -0.5;
+                            if (armorStand.getHelmet() != null && isSlab(armorStand.getHelmet().getType())) {
+                                height = -0.81;
+                            }
+
+                            EntityUtil.setLocation((LivingEntity) ent, set.clone().add(0, height, 0));
+                            EntityUtil.setYaw(ent, set.getYaw());
+                            EntityUtil.setPitch(ent, set.getPitch());
+                        }
+                    }
+                }
             }
         }
     }
@@ -297,6 +313,10 @@ public class Model {
         EntityUtil.setPitch(entity, pos.getPitch());
 
         return entity;
+    }
+
+    public static boolean isSlab(Material material) {
+        return material.toString().endsWith("_SLAB");
     }
 
 }
