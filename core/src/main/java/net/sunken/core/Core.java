@@ -7,6 +7,7 @@ import lombok.Getter;
 import net.sunken.core.hologram.HologramInteractListener;
 import net.sunken.core.inventory.element.ElementListener;
 import net.sunken.core.model.ModelCommand;
+import net.sunken.core.model.WalkTask;
 import net.sunken.core.model.listener.ModelListener;
 import net.sunken.core.npc.NPCListener;
 import org.bukkit.Bukkit;
@@ -32,6 +33,10 @@ public class Core {
 
         this.registerEvents();
         this.setupCommands(plugin);
+
+        // Used to enable players to walk on walkable models.
+        WalkTask walkTask = new WalkTask();
+        walkTask.runTaskTimer(plugin, 0l, 3l);
     }
 
     public void onCoreDisable() {
