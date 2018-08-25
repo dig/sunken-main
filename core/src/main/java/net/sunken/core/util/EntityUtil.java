@@ -3,10 +3,12 @@ package net.sunken.core.util;
 import com.google.common.collect.Sets;
 import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftBoat;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
 
@@ -35,6 +37,17 @@ public class EntityUtil {
         ent.locZ = location.getZ();
         ent.yaw = location.getYaw();
         ent.pitch = location.getPitch();
+    }
+
+    public static void setLocation(Boat entity, Location location) {
+        EntityBoat ent = ((CraftBoat) entity).getHandle();
+        ent.locX = location.getX();
+        ent.locY = location.getY();
+        ent.locZ = location.getZ();
+        ent.yaw = location.getYaw();
+        ent.pitch = location.getPitch();
+
+        ent.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 
     public static void clearPathFinding(LivingEntity entity) {

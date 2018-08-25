@@ -1,20 +1,16 @@
 package net.sunken.core;
 
 import com.sk89q.bukkit.util.BukkitCommandsManager;
-import com.sk89q.bukkit.util.CommandRegistration;
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
-import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
-import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
-import net.sunken.common.Common;
 import net.sunken.core.hologram.HologramInteractListener;
 import net.sunken.core.inventory.element.ElementListener;
-import net.sunken.core.model.AnimationTask;
 import net.sunken.core.model.ModelCommand;
+import net.sunken.core.model.WalkTask;
+import net.sunken.core.model.listener.ModelListener;
 import net.sunken.core.npc.NPCListener;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -37,6 +33,10 @@ public class Core {
 
         this.registerEvents();
         this.setupCommands(plugin);
+
+        // Used to enable players to walk on walkable models.
+        WalkTask walkTask = new WalkTask();
+        walkTask.runTaskTimer(plugin, 0l, 3l);
     }
 
     public void onCoreDisable() {
@@ -55,6 +55,8 @@ public class Core {
         pm.registerEvents(new NPCListener(), plugin);
         pm.registerEvents(new HologramInteractListener(), plugin);
         pm.registerEvents(new ElementListener(), plugin);
+
+        pm.registerEvents(new ModelListener(), plugin);
     }
 
     private Core() {

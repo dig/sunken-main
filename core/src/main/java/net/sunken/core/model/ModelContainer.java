@@ -29,6 +29,8 @@ public class ModelContainer {
     private String description;
     @Getter
     private long created;
+    @Getter
+    private boolean walkable;
 
     /*
         Each model has a convert.yml, which allows to easily update the models
@@ -78,6 +80,11 @@ public class ModelContainer {
                         this.name = (String) result.get("name");
                         this.description = (String) result.get("description");
                         this.created = (Long) result.get("created");
+
+                        this.walkable = false;
+                        if (result.containsKey("walkable")) {
+                            this.walkable = (Boolean) result.get("walkable");
+                        }
                     } else if (fileName.equalsIgnoreCase("convert.yml")) {
                         if (result.size() > 0) {
                             for (String line : result.keySet()) {
