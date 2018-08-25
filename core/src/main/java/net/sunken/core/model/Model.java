@@ -84,7 +84,7 @@ public class Model {
                 }
 
                 // Make walkable if the item is a block.
-                if (material.isBlock()) {
+                if (material.isBlock() && container.isWalkable()) {
                     entity.setMetadata("Walkable", new FixedMetadataValue(Core.getPlugin(), true));
                 }
 
