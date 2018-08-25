@@ -31,6 +31,11 @@ public class PartyPlayer implements Serializable {
     public PartyPlayer() {
     }
 
+    /** Creates a dummy object for use in contains/equals comparisons in the collections framework */
+    public static PartyPlayer fromUUID(UUID uuid) {
+        return new PartyPlayer(uuid, null, null);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
