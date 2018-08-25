@@ -81,7 +81,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             if (PartyInviteManager.isInvitePresent(invitee, creator) && inviteeParty != null) {
                 PartyInviteManager.removeInvite(invitee, creator);
                 inviteeParty.getAllMembers().add(creatorPartyPlayer);
-                PacketUtil.sendPacket(new PartyMemberJoinedPacket(inviteePartyPlayer, inviteeParty));
+                PacketUtil.sendPacket(new PartyMemberJoinedPacket(creatorPartyPlayer, inviteeParty));
                 return;
             }
 
