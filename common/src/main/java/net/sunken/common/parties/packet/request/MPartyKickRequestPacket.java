@@ -6,6 +6,7 @@ import net.sunken.common.packet.Packet;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
+/** Request to kick a player or all offline party members */
 public class MPartyKickRequestPacket extends Packet {
 
     @Getter

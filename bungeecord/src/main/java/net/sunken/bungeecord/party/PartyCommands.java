@@ -5,12 +5,10 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.packet.PacketUtil;
-import net.sunken.common.parties.packet.request.MPartyInviteRequestPacket;
-import net.sunken.common.parties.packet.request.MPartyKickRequestPacket;
-import net.sunken.common.parties.packet.request.MPartyLeaveRequestPacket;
-import net.sunken.common.parties.packet.request.MPartyListRequestPacket;
+import net.sunken.common.parties.packet.request.*;
 import net.sunken.common.player.PlayerRank;
 
 /** All the party commands */
@@ -104,6 +102,44 @@ public class PartyCommands {
         PacketUtil.sendPacket(new MPartyKickRequestPacket(player.getUniqueId(), null, true));
     }
 
+    @Command(
+            aliases = {"promote"},
+            desc = "Promote a party member to the leader of the party",
+            min = 1,
+            max = 1,
+            usage = "<player> - The party member to promote")
+    @PlayerRankRequired(PlayerRank.USER)
+    public static void promote(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof ProxiedPlayer)) return;
+
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        PacketUtil.sendPacket(new MPartyPromoteRequestPacket(player.getUniqueId(), args.getString(0)));
+    }
+
+    @Command(
+            aliases = {"chat"},
+            desc = "Chat amongst your party members",
+            min = 1,
+            usage = "<message...> - The message to say")
+    @PlayerRankRequired(PlayerRank.USER)
+    public static void chat(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof ProxiedPlayer)) return;
+
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        PacketUtil.sendPacket(new MPartyChatRequestPacket(player.getUniqueId(), args.getJoinedStrings(0)));
+    }
+
+    @Command(
+            aliases = {"summon"},
+            desc = "Summon party members to your server")
+    @PlayerRankRequired(PlayerRank.USER)
+    public static void summon(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof ProxiedPlayer)) return;
+
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        PacketUtil.sendPacket(new MPartyChatRequestPacket(player.getUniqueId(), args.getJoinedStrings(0)));
+    }
+
     public static class Parent {
 
         @Command(
@@ -112,6 +148,8 @@ public class PartyCommands {
         @NestedCommand(value = PartyCommands.class, executeBody = true)
         public static void parent(final CommandContext args, final CommandSender sender) {
             // Display party help //
+            sender.sendMessage(new TextComponent("PARTY HELP"));
+            sender.sendMessage(new TextComponent("/party"));
         }
     }
 }
