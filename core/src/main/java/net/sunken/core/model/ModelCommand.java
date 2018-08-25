@@ -10,6 +10,8 @@ import net.sunken.common.player.PlayerRank;
 import net.sunken.core.Core;
 import net.sunken.core.util.EntityUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 

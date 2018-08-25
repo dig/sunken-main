@@ -83,6 +83,11 @@ public class Model {
                     head = SkullUtil.addTexture(head, opt.getId(), opt.getTexture());
                 }
 
+                // Make walkable if the item is a block.
+                if (material.isBlock()) {
+                    entity.setMetadata("Walkable", new FixedMetadataValue(Core.getPlugin(), true));
+                }
+
                 entity.getEquipment().setHelmet(head);
             }
 
