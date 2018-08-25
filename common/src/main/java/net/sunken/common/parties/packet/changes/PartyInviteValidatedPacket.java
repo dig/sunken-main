@@ -1,8 +1,8 @@
-package net.sunken.common.parties.packet;
+package net.sunken.common.parties.packet.changes;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
-import net.sunken.common.parties.service.status.PartyInviteStatus;
+import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 
 /**

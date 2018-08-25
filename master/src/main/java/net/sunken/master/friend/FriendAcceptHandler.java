@@ -2,10 +2,9 @@ package net.sunken.master.friend;
 
 import net.sunken.common.Common;
 import net.sunken.common.DataManager;
-import net.sunken.common.friend.packet.FriendAcceptPacket;
 import net.sunken.common.friend.data.FriendStatus;
+import net.sunken.common.friend.packet.FriendAcceptPacket;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
-import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;
@@ -63,5 +62,4 @@ public class FriendAcceptHandler extends PacketHandler<FriendAcceptPacket> {
                 new PlayerDetail(creator, creatorName),
                 packet.getTarget(), status));
     }
-
 }

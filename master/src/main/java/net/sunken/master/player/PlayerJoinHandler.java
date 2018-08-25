@@ -9,14 +9,14 @@ public class PlayerJoinHandler extends PacketHandler<PlayerJoinPacket> {
 
     @Override
     public void onReceive(PlayerJoinPacket packet) {
-        MasterPlayer masterPlayer = new MasterPlayer(packet.getUuid().toString(), packet.getName(),
-                packet.getDocument(), packet.isFirstJoin());
+        MasterPlayer masterPlayer = new MasterPlayer(
+                packet.getUuid().toString(),
+                packet.getName(),
+                packet.getDocument(),
+                packet.isFirstJoin());
 
         DataManager dataManager = Common.getInstance().getDataManager();
-        dataManager.getOnlinePlayers()
-                .put(packet.getUuid(), masterPlayer);
-        dataManager.getNameToUUID()
-                .put(packet.getName().toLowerCase(), packet.getUuid());
+        dataManager.getOnlinePlayers().put(packet.getUuid(), masterPlayer);
+        dataManager.getNameToUUID().put(packet.getName().toLowerCase(), packet.getUuid());
     }
-
 }

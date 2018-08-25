@@ -25,7 +25,7 @@ public class ParkourCache {
 
     private MongoCollection<Document> playerCollection;
 
-    public ParkourCache (){
+    public ParkourCache() {
         this.playerCollection = Common.getInstance()
                 .getMongo()
                 .getConnection()
@@ -33,7 +33,7 @@ public class ParkourCache {
                 .getCollection(DatabaseConstants.PLAYER_COLLECTION);
     }
 
-    public CompletableFuture<Void> updateCache(String id){
+    public CompletableFuture<Void> updateCache(String id) {
         return CompletableFuture.runAsync(() -> {
             RedisConnection redisConnection = Common.getInstance().getRedis();
             Jedis jedis = redisConnection.getConnection();

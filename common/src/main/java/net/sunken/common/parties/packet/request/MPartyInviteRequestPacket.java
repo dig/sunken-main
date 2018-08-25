@@ -1,4 +1,4 @@
-package net.sunken.common.parties.packet;
+package net.sunken.common.parties.packet.request;
 
 import lombok.Getter;
 import net.sunken.common.packet.Packet;
@@ -9,15 +9,15 @@ import java.util.UUID;
  * Sent when a player does /party (player) indicating
  * a party request was sent.
  */
-public class PartyInviteSendPacket extends Packet {
+public class MPartyInviteRequestPacket extends Packet {
 
     @Getter
     private UUID creator;
     @Getter
-    private String toInvite;
+    private String invitee;
 
-    public PartyInviteSendPacket(UUID creator, String toInvite) {
+    public MPartyInviteRequestPacket(UUID creator, String invitee) {
         this.creator = creator;
-        this.toInvite = toInvite;
+        this.invitee = invitee;
     }
 }

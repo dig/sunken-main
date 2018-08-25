@@ -15,5 +15,4 @@ public class MasterPlayer extends AbstractPlayer {
         super(uuid, name, document, firstJoin);
         this.serverName = null;
     }
-
 }

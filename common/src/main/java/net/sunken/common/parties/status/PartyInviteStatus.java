@@ -1,10 +1,11 @@
-package net.sunken.common.parties.service.status;
+package net.sunken.common.parties.status;
 
+/** Party invite statuses */
 public enum PartyInviteStatus {
 
     SUCCESS,
     FAILED,
-    INVITER_ALREADY_IN_PARTY,
     INVITEE_ALREADY_IN_PARTY,
     INVITE_ALREADY_PENDING,
+    NOT_LEADER
 }

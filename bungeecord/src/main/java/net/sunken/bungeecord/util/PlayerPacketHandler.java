@@ -18,5 +18,6 @@ public abstract class PlayerPacketHandler<E extends PlayerPacket> extends Packet
         }
     }
 
+    /** Will only be called if the targeted player exists on the Bungee instance */
     public abstract void onPlayerPacketReceive(E packet, ProxiedPlayer player);
 }

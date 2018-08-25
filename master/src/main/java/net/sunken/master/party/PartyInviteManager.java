@@ -5,7 +5,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import net.sunken.common.packet.PacketUtil;
-import net.sunken.common.parties.packet.PartyInviteExpiredPacket;
+import net.sunken.common.parties.data.Party;
+import net.sunken.common.parties.packet.changes.PartyInviteExpiredPacket;
+import net.sunken.common.parties.status.PartyInviteStatus;
 import net.sunken.common.util.PlayerDetail;
 import net.sunken.common.util.ScheduleHelper;
 import net.sunken.common.util.Tuple2;
@@ -57,6 +59,26 @@ public final class PartyInviteManager {
         invites.remove(from, to);
     }
 
+    public static PartyInviteStatus validateInviteRequest(UUID creator, UUID invitee) {
+        Party creatorParty = PartyManager.getPartyByPlayer(creator);
+        if (creatorParty != null) { // if person inviting is in a party
+            if (!creatorParty.getLeaderUniqueId().equals(creator)) { // if the inviter is not the leader
+                return PartyInviteStatus.NOT_LEADER; // deny the invite
+            }
+        }
+        // see if an invite is already present
+        if (PartyInviteManager.isInvitePresent(creator, invitee)) {
+            return PartyInviteStatus.INVITE_ALREADY_PENDING;
+        }
+        // see if the invitee is already in a party
+        if (PartyManager.getPartyByPlayer(invitee) != null) {
+            return PartyInviteStatus.INVITEE_ALREADY_IN_PARTY;
+        }
+        return PartyInviteStatus.SUCCESS;
+    }
+
+    /** Private constructor as it is a singleton */
     private PartyInviteManager() {
+        throw new AssertionError("You must not attempt to instantiate this class.");
     }
 }

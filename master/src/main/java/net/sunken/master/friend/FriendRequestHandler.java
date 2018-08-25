@@ -2,8 +2,8 @@ package net.sunken.master.friend;
 
 import net.sunken.common.Common;
 import net.sunken.common.DataManager;
-import net.sunken.common.friend.packet.FriendRequestPacket;
 import net.sunken.common.friend.data.FriendStatus;
+import net.sunken.common.friend.packet.FriendRequestPacket;
 import net.sunken.common.friend.packet.FriendStatusPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
@@ -15,7 +15,6 @@ import net.sunken.master.player.MasterPlayer;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
 
@@ -72,5 +71,4 @@ public class FriendRequestHandler extends PacketHandler<FriendRequestPacket> {
                 new PlayerDetail(creator, creatorName),
                 packet.getToInvite(), status));
     }
-
 }

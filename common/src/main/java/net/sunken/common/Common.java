@@ -8,8 +8,6 @@ import net.sunken.common.database.MongoConnection;
 import net.sunken.common.database.RedisConnection;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.packet.PacketListener;
-import net.sunken.common.parties.service.PartyService;
-import net.sunken.common.parties.service.RedisPartyService;
 import net.sunken.common.server.ServerCacheUpdater;
 import net.sunken.common.server.ServerChangeInformer;
 import net.sunken.common.server.data.ServerObject;
@@ -39,9 +37,6 @@ public class Common {
     private ServerObjectCache serverObjectCache;
     private ServerChangeInformer serverChangeInformer;
 
-    @Getter
-    private PartyService partyService;
-
     public void onCommonLoad(boolean listenForServers) {
         this.mongo = new MongoConnection(
                 "***REMOVED***",
@@ -70,8 +65,6 @@ public class Common {
         serverChangeInformer = new ServerChangeInformer(this.redis);
 
         AchievementRegistry.addAchievement(new NetworkFirstJoinAchievement());
-
-        this.partyService = new RedisPartyService(redis);
 
         this.loaded = true;
     }
