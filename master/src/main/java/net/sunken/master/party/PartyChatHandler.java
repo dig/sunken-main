@@ -36,6 +36,7 @@ public class PartyChatHandler extends PacketHandler<MPartyChatRequestPacket> {
         for (PartyPlayer member : allMembers) {
             SendPlayerBungeeMessagePacket chatPacket = new SendPlayerBungeeMessagePacket(member.getUniqueId(),
                     "[PARTY CHAT] " + requesterPlayer.getName() + ": " + chatMessage);
+            PacketUtil.sendPacket(chatPacket);
         }
     }
 }

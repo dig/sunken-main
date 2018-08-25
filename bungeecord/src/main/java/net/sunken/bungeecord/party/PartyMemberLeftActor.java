@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /** Act on an invite expired packet */
-public class PartyLeaveActor extends PacketHandler<PartyMemberLeftPacket> {
+public class PartyMemberLeftActor extends PacketHandler<PartyMemberLeftPacket> {
 
     @Override
     public void onReceive(PartyMemberLeftPacket packet) {

@@ -3,6 +3,7 @@ package net.sunken.master.party;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.data.Party;
+import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.MustBeInPartyPacket;
 import net.sunken.common.parties.packet.MustBeLeaderPacket;
 import net.sunken.common.parties.packet.changes.PartyDisbandedPacket;
@@ -37,6 +38,8 @@ public class PartyLeaveRequestHub extends PacketHandler<MPartyLeaveRequestPacket
         } else {
             Party asMember = PartyManager.getPartyByPlayer(leaverUUID);
             if (asMember != null) {
+                asMember.getAllMembers().remove(PartyPlayer.fromUUID(leaverUUID));
+
                 PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(leaverUUID, asMember);
                 PacketUtil.sendPacket(partyMemberLeftPacket);
 
