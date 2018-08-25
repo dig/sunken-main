@@ -6,9 +6,11 @@ import net.sunken.core.Core;
 import net.sunken.core.model.type.*;
 import net.sunken.core.util.EntityUtil;
 import net.sunken.core.util.SkullUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +54,8 @@ public class Model {
             for (Structure structure : this.container.getStructures()) {
                 LivingEntity entity = null;
 
-                if (structure.getSize() == StructureSize.LARGE
+                if (structure.getSize() == StructureSize.SOLID
+                        || structure.getSize() == StructureSize.LARGE
                         || structure.getSize() == StructureSize.MEDIUM) {
                     ArmorStand ent = this.spawnArmorstand(structure);
                     entity = (LivingEntity) ent;
@@ -72,18 +75,31 @@ public class Model {
                     material = Material.valueOf(matRaw);
                 }
 
-                ItemStack head = new ItemStack(material, 1);
-                if (material.equals(Material.PLAYER_HEAD) && structure.getHead() != null) {
-                    Head opt = structure.getHead();
-                    head = SkullUtil.addTexture(head, opt.getId(), opt.getTexture());
+                if (structure.getSize() == StructureSize.SOLID) {
+                    BlockData blockData = Bukkit.getServer().createBlockData(material);
+                    FallingBlock block = entity.getLocation().getWorld().spawnFallingBlock(entity.getLocation(), blockData);
+                    block.setSilent(true);
+                    block.setGravity(false);
+                    block.setDropItem(false);
+                    block.setHurtEntities(false);
+                    block.setFallDistance(0);
+                    block.setTicksLived(Integer.MAX_VALUE);
+
+                    entity.addPassenger(block);
+                } else {
+                    ItemStack head = new ItemStack(material, 1);
+                    if (material.equals(Material.PLAYER_HEAD) && structure.getHead() != null) {
+                        Head opt = structure.getHead();
+                        head = SkullUtil.addTexture(head, opt.getId(), opt.getTexture());
+                    }
+
+                    entity.getEquipment().setHelmet(head);
                 }
 
                 // Make walkable if the item is a block.
                 if (material.isBlock() && container.isWalkable()) {
                     entity.setMetadata("Walkable", new FixedMetadataValue(Core.getPlugin(), true));
                 }
-
-                entity.getEquipment().setHelmet(head);
             }
 
             this.setRotation(0);
@@ -215,6 +231,31 @@ public class Model {
 
     public void remove() {
         for (LivingEntity entity : this.entities.values()) {
+
+            // Remove passengers
+            if (entity.getPassengers() != null && entity.getPassengers().size() > 0) {
+                for (Entity ent : entity.getPassengers()) {
+                    ent.remove();
+                }
+            }
+
+            // Remove walking entities
+            if (entity.hasMetadata("WalkBoat")) {
+                for (Entity ent : entity.getLocation().getWorld().getEntities()) {
+                    if (ent.getEntityId() == entity.getMetadata("WalkBoat").get(0).asInt()) {
+
+                        if (ent.getPassengers() != null && ent.getPassengers().size() > 0) {
+                            for (Entity passenger : ent.getPassengers()) {
+                                passenger.remove();
+                            }
+                        }
+
+
+                        ent.remove();
+                    }
+                }
+            }
+
             entity.remove();
         }
 
@@ -241,7 +282,7 @@ public class Model {
         entity.setCollidable(true);
         entity.setBaby();
         entity.setAgeLock(true);
-        entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+        entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), structure.getSize().toString()));
         entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE, false, false));
 
         EntityUtil.clearPathFinding(entity);
@@ -266,7 +307,7 @@ public class Model {
         entity.setBasePlate(false);
         entity.setGravity(false);
         entity.setCustomName(ChatColor.DARK_GRAY + UUID.randomUUID().toString());
-        entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), true));
+        entity.setMetadata("Model", new FixedMetadataValue(Core.getPlugin(), structure.getSize().toString()));
 
         if (structure.isVisible()) {
             entity.setArms(true);

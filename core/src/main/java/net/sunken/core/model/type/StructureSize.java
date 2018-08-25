@@ -4,6 +4,7 @@ public enum StructureSize {
 
     SMALL,
     MEDIUM,
-    LARGE
+    LARGE,
+    SOLID
 
 }
