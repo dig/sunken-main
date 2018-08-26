@@ -35,11 +35,12 @@ Main
 - [x] Player cache
 - [x] Achievements
 - [x] Packet system
+- [x] Event system
 - [x] Database connections (redis, mongo)
 
 ##### BungeeCord
 - [x] Lobby balancer (& command)
-- [ ] Parties (Master as backend) 
+- [x] Parties (Master as backend) 
 - [ ] Friends (Master as backend) 
 - [ ] Admin commands (banning, muting, kicking and /servers)
 
@@ -48,7 +49,7 @@ Main
 - [x] Parkour (with synced leaderboard)
 - [ ] Cosmetic menu (armorstand entities, hats, pets, items)
 - [ ] Profile menu (achievements, cosmetic link, stats)
-- [ ] Scoreboard
+- [x] Scoreboard
 
 ##### Minigame API
 - [ ] Basic API for minigames to follow
