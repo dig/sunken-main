@@ -42,6 +42,11 @@ public class PartyKickHandler extends PacketHandler<MPartyKickRequestPacket> {
             String toKick = packet.getToKick();
             UUID toKickUUID = dataManager.getNameToUUID().get(toKick.toLowerCase());
 
+            if (requestingKick.equals(toKickUUID)) {
+                PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(requestingKick, "You cannot kick yourself!"));
+                return;
+            }
+
             boolean foundAndRemoved = allMembers.remove(PartyPlayer.fromUUID(toKickUUID));
             if (!foundAndRemoved) {
                 PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(requestingKick,
