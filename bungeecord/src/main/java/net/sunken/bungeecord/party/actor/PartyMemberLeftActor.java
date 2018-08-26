@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.party;
+package net.sunken.bungeecord.party.actor;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -10,7 +10,7 @@ import net.sunken.common.parties.packet.changes.PartyMemberLeftPacket;
 
 import java.util.UUID;
 
-/** Act on an invite expired packet */
+/** Act on a member left packet */
 public class PartyMemberLeftActor extends PacketHandler<PartyMemberLeftPacket> {
 
     @Override

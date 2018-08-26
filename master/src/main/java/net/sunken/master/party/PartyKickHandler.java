@@ -44,14 +44,14 @@ public class PartyKickHandler extends PacketHandler<MPartyKickRequestPacket> {
 
             boolean foundAndRemoved = allMembers.remove(PartyPlayer.fromUUID(toKickUUID));
             if (!foundAndRemoved) {
-                PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(
-                        requestingKick, "Player is not in the party!"));
+                PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(requestingKick,
+                        "Player is not in the party!"));
             } else {
-                PacketUtil.sendPacket(
-                        new SendPlayerBungeeMessagePacket(toKickUUID, "You have been kicked from the party!"));
+                PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(toKickUUID,
+                        "You have been kicked from the party!"));
                 for (PartyPlayer member : allMembers) {
-                    PacketUtil.sendPacket(
-                            new SendPlayerBungeeMessagePacket(member.getUniqueId(), toKick + " has been kicked!"));
+                    PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(member.getUniqueId(),
+                            toKick + " has been kicked!"));
                 }
             }
         } else {

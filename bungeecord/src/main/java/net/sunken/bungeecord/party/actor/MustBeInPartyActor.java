@@ -1,4 +1,4 @@
-package net.sunken.bungeecord.party;
+package net.sunken.bungeecord.party.actor;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

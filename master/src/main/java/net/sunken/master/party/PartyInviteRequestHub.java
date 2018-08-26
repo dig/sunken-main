@@ -4,6 +4,7 @@ import net.sunken.common.Common;
 import net.sunken.common.DataManager;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
+import net.sunken.common.packet.SendPlayerBungeeMessagePacket;
 import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.MustBeLeaderPacket;
@@ -33,6 +34,11 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
         UUID creator = packet.getCreator();
         UUID invitee = dataManager.getNameToUUID().get(packet.getInvitee().toLowerCase());
 
+        if (creator.equals(invitee)) {
+            PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(creator, "You cannot invite yourself!"));
+            return;
+        }
+
         AbstractPlayer creatorPlayer = onlinePlayers.get(creator);
         AbstractPlayer toInvitePlayer = null;
         if (invitee != null) {
@@ -52,9 +58,9 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
                     toInvitePlayer.getName(),
                     toInvitePlayer.getRank());
 
-            PartyInviteStatus partyInviteStatus = PartyInviteManager.validateInviteRequest(creator, invitee);
+            PartyInviteStatus inviteStatus = PartyInviteManager.validateInviteRequest(creator, invitee);
 
-            if (partyInviteStatus == PartyInviteStatus.NOT_LEADER) {
+            if (inviteStatus == PartyInviteStatus.NOT_LEADER) {
                 PacketUtil.sendPacket(new MustBeLeaderPacket(
                         creator, "You must be the leader to invite players to the party!"));
                 return;
@@ -88,7 +94,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             // Is a regular invite //
 
             // party validation checks have passed, add the invite to the manager
-            if (partyInviteStatus == PartyInviteStatus.SUCCESS) {
+            if (inviteStatus == PartyInviteStatus.SUCCESS) {
                 PartyInviteManager.addInvite(creatorDetail, inviteeDetail);
             }
 
@@ -98,7 +104,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
             PartyInviteValidatedPacket partyInviteValidatedPacket = new PartyInviteValidatedPacket(
                     creatorDetail,
                     inviteeDetail,
-                    partyInviteStatus);
+                    inviteStatus);
             PacketUtil.sendPacket(partyInviteValidatedPacket);
         }
     }
