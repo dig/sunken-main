@@ -8,7 +8,6 @@ import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.changes.PartyMemberLeftPacket;
 
-import java.util.Set;
 import java.util.UUID;
 
 /** Act on an invite expired packet */
@@ -25,20 +24,10 @@ public class PartyMemberLeftActor extends PacketHandler<PartyMemberLeftPacket> {
             memberLeft.sendMessage(new TextComponent("You left the party!"));
         }
 
-        Set<PartyPlayer> allMembers = party.getAllMembers();
-        String memberLeftName = null;
-        for (PartyPlayer member : allMembers) {
-            if (member.getUniqueId().equals(memberLeftUUID)) {
-                memberLeftName = member.getName();
-            }
-        }
-
-        if (memberLeftName != null) {
-            for (PartyPlayer member : allMembers) {
-                ProxiedPlayer memberPlayer = ProxyServer.getInstance().getPlayer(member.getUniqueId());
-                if (memberPlayer != null && !member.getUniqueId().equals(memberLeftUUID)) {
-                    memberPlayer.sendMessage(new TextComponent(memberLeftName + " left the party!"));
-                }
+        for (PartyPlayer member : party.getAllMembers()) {
+            ProxiedPlayer memberPlayer = ProxyServer.getInstance().getPlayer(member.getUniqueId());
+            if (memberPlayer != null && !member.getUniqueId().equals(memberLeftUUID)) {
+                memberPlayer.sendMessage(new TextComponent(packet.getNameLeft() + " left the party!"));
             }
         }
     }
