@@ -95,6 +95,8 @@ public class ScoreboardUtil {
         applyText(team, text, result);
 
         team.setColor(this.nameColor);
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
+
         teams.add(team);
         return new AbstractMap.SimpleEntry<>(team, result);
     }
@@ -104,6 +106,8 @@ public class ScoreboardUtil {
         String prefix = iterator.next();
 
         team.setPrefix(prefix);
+        team.setColor(this.nameColor);
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
 
         if (!team.hasPlayer(result))
             team.addPlayer(result);

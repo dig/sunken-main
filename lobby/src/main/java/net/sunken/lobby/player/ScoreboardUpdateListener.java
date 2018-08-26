@@ -1,6 +1,5 @@
 package net.sunken.lobby.player;
 
-import com.sk89q.minecraft.util.commands.Command;
 import net.sunken.common.Common;
 import net.sunken.common.event.ListensToEvent;
 import net.sunken.common.event.SunkenListener;
