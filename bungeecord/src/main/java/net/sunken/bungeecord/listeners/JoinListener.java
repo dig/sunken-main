@@ -90,7 +90,6 @@ public class JoinListener implements Listener {
         }
 
         // Add player to the network
-        Common.getLogger().log(Level.INFO, "PlayerJoinPacket");
         PacketUtil.sendPacket(new PlayerJoinPacket(player.getName(), player.getUniqueId(),
                 document, firstJoin));
 
@@ -128,7 +127,6 @@ public class JoinListener implements Listener {
 
         if (!event.isCancelled() && event.getTarget() != null) {
             // Update our network because player is joining new server
-            Common.getLogger().log(Level.INFO, "PlayerConnectPacket");
             PacketUtil.sendPacket(new PlayerConnectPacket(player.getUniqueId(), event.getTarget().getName()));
         }
     }
@@ -139,7 +137,6 @@ public class JoinListener implements Listener {
         joined.remove(player.getUniqueId().toString());
 
         // Remove player from our network
-        Common.getLogger().log(Level.INFO, "PlayerQuitPacket");
         PacketUtil.sendPacket(new PlayerQuitPacket(player.getName(), player.getUniqueId()));
 
         // Remove player from local cache

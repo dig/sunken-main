@@ -8,12 +8,14 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.BungeeMain;
 import net.sunken.bungeecord.Constants;
+import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PingListener implements Listener {
 
@@ -31,7 +33,9 @@ public class PingListener implements Listener {
         serverPing.setDescriptionComponent(new TextComponent(message));
         serverPing.setFavicon(Favicon.create(favicon));
 
-
+        ServerPing.PlayerInfo[] pingHover = {};
+        ServerPing.Players playerCount = new ServerPing.Players(Constants.MAX_PLAYERS, ServerHandler.getTotalPlayers(), pingHover);
+        serverPing.setPlayers(playerCount);
 
         event.setResponse(serverPing);
     }

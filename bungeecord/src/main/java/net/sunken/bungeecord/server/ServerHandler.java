@@ -1,5 +1,6 @@
 package net.sunken.bungeecord.server;
 
+import com.mongodb.connection.Server;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -61,6 +62,17 @@ public class ServerHandler {
         }
 
         return null;
+    }
+
+    public static int getTotalPlayers() {
+        Set<ServerObject> servers = Common.getInstance().getServerCache().getCache();
+
+        int totalPlayers = 0;
+        for (ServerObject server : servers) {
+            totalPlayers += server.getPlayerCount();
+        }
+
+        return totalPlayers;
     }
 
     public static void sendPlayerToServer(ProxiedPlayer player, ServerObject server) {
