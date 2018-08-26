@@ -2,6 +2,7 @@ package net.sunken.bungeecord.server;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.sunken.common.Common;
 import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
@@ -60,6 +61,16 @@ public class ServerHandler {
         }
 
         return null;
+    }
+
+    public static void sendPlayerToServer(ProxiedPlayer player, ServerObject server) {
+        ServerInfo serverObj = ProxyServer.getInstance().constructServerInfo(
+                server.getServerName(),
+                new InetSocketAddress(server.getServerIp(), server.getServerPort()),
+                server.getServerName(),
+                false);
+
+        player.connect(serverObj);
     }
 
 }

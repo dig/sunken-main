@@ -6,6 +6,7 @@ import net.sunken.common.ServerInstance;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.server.ServerObjectCache;
+import net.sunken.common.server.data.ServerObject;
 import net.sunken.core.util.ScoreboardUtil;
 import net.sunken.lobby.LobbyPlugin;
 import org.bson.Document;
@@ -106,6 +107,11 @@ public class LobbyPlayer extends AbstractPlayer {
         }
 
         int serverNum = serverCache.getServerNumber(ServerInstance.instance().getServerObject());
+        int totalPlayers = 0;
+
+        for (ServerObject server : Common.getInstance().getServerCache().getCache()) {
+            totalPlayers += server.getPlayerCount();
+        }
 
         scoreboard.add(ChatColor.WHITE + "   ", 10);
         scoreboard.add(ChatColor.GREEN + "" + ChatColor.BOLD + "You", 9);
@@ -115,7 +121,7 @@ public class LobbyPlayer extends AbstractPlayer {
         scoreboard.add(ChatColor.WHITE + "  ", 6);
         scoreboard.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Network", 5);
         scoreboard.add(ChatColor.WHITE + "\u25AA Lobby: #" + serverNum, 4);
-        scoreboard.add(ChatColor.WHITE + "\u25AA Players: 0", 3);
+        scoreboard.add(ChatColor.WHITE + "\u25AA Players: " + totalPlayers, 3);
 
         scoreboard.add(ChatColor.WHITE + " ", 2);
         scoreboard.add(ChatColor.YELLOW + "www.sunken.net", 1);

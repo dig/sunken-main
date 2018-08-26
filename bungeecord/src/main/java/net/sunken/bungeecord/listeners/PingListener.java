@@ -30,6 +30,9 @@ public class PingListener implements Listener {
                 + "\n" + MessageUtil.getCenteredMessage(Constants.MOTD_BOTTOM_LINE, MessageUtil.CENTER_PX_BUNGEE);
         serverPing.setDescriptionComponent(new TextComponent(message));
         serverPing.setFavicon(Favicon.create(favicon));
+
+
+
         event.setResponse(serverPing);
     }
 

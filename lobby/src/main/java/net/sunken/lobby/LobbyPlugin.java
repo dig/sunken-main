@@ -5,6 +5,8 @@ import com.sk89q.minecraft.util.commands.cooldowns.OnCooldownException;
 import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.sunken.common.Common;
+import net.sunken.common.event.EventManager;
+import net.sunken.common.event.example.ExampleListener;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourLeaderboardUpdatePacket;
 import net.sunken.common.type.ServerType;
@@ -17,6 +19,7 @@ import net.sunken.lobby.listeners.WorldListener;
 import net.sunken.lobby.parkour.ParkourCache;
 import net.sunken.lobby.parkour.ParkourHandler;
 import net.sunken.lobby.parkour.ParkourListener;
+import net.sunken.lobby.player.ScoreboardUpdateListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -109,6 +112,8 @@ public class LobbyPlugin extends JavaPlugin implements CommandExecutor {
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new ParkourListener(), this);
+
+        EventManager.register(new ScoreboardUpdateListener());
     }
 
     public ParkourCache getParkourCache() {
