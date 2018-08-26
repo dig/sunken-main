@@ -34,6 +34,7 @@ public class PartyInviteRequestHub extends PacketHandler<MPartyInviteRequestPack
         UUID creator = packet.getCreator();
         UUID invitee = dataManager.getNameToUUID().get(packet.getInvitee().toLowerCase());
 
+        // cannot invite self
         if (creator.equals(invitee)) {
             PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(creator, "You cannot invite yourself!"));
             return;

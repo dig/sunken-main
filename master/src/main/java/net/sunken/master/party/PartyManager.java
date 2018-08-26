@@ -34,6 +34,11 @@ public final class PartyManager {
         return PartyCreateStatus.SUCCESS;
     }
 
+    /** Force put a pre-constructed party into memory */
+    public static void putParty(Party party) {
+        parties.put(party.getLeaderUniqueId(), party);
+    }
+
     /** Delete the party from memory */
     public static void deleteParty(Party party) {
         parties.remove(party.getLeaderUniqueId());

@@ -41,9 +41,14 @@ public class PartyPromoteHandler extends PacketHandler<MPartyPromoteRequestPacke
             return;
         }
 
+        // delete the original
+        PartyManager.deleteParty(party);
+        // set the new UUID of the leader
         party.setLeaderUniqueId(toPromoteUUID);
-        PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(
-                requestingPromote,
+        // put the new party back with the new leader key UUID
+        PartyManager.putParty(party);
+
+        PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(requestingPromote,
                 "Successfully promoted " + toPromoteName + " to party leader!"));
         PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(toPromoteUUID, "You are now the party leader!"));
     }
