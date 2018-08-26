@@ -102,7 +102,7 @@ public class LobbyPlayer extends AbstractPlayer {
         ServerObjectCache serverCache = Common.getInstance().getServerCache();
 
         if (scoreboard == null) {
-            scoreboard = new ScoreboardUtil(ChatColor.BLUE + "" + ChatColor.BOLD + "SUNKEN");
+            scoreboard = new ScoreboardUtil(ChatColor.BLUE + "" + ChatColor.BOLD + "SUNKEN", this.getRankColour());
             firstUpdate = true;
         }
 
