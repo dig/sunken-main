@@ -139,8 +139,8 @@ public class PartyCommands {
         if (!(sender instanceof ProxiedPlayer)) return;
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        ServerObject serverObject = ServerInstance.instance().getServerObject();
-        PacketUtil.sendPacket(new MPartySummonRequestPacket(player.getUniqueId(), serverObject.getServerName()));
+        String serverName = player.getServer().getInfo().getName();
+        PacketUtil.sendPacket(new MPartySummonRequestPacket(player.getUniqueId(), serverName));
     }
 
     public static class Parent {
