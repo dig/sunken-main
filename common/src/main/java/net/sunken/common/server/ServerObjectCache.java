@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import net.sunken.common.Common;
 import net.sunken.common.database.RedisConnection;
+import net.sunken.common.event.EventManager;
+import net.sunken.common.event.example.ExampleEvent;
 import net.sunken.common.server.data.ServerObject;
+import net.sunken.common.server.event.ServerCacheUpdateEvent;
 import net.sunken.common.type.ServerType;
 import net.sunken.common.util.AsyncHelper;
 import redis.clients.jedis.Jedis;
@@ -90,6 +93,7 @@ public class ServerObjectCache {
                 redisConnection.getJedisPool().returnBrokenResource(jedis);
             } finally {
                 redisConnection.getJedisPool().returnResource(jedis);
+                EventManager.callEvent(new ServerCacheUpdateEvent());
             }
         });
     }

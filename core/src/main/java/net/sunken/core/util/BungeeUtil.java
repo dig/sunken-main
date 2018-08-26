@@ -5,7 +5,6 @@ import com.google.common.io.ByteStreams;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class BungeeUtil {
 
