@@ -49,6 +49,10 @@ public class PartyKickHandler extends PacketHandler<MPartyKickRequestPacket> {
             } else {
                 PacketUtil.sendPacket(
                         new SendPlayerBungeeMessagePacket(toKickUUID, "You have been kicked from the party!"));
+                for (PartyPlayer member : allMembers) {
+                    PacketUtil.sendPacket(
+                            new SendPlayerBungeeMessagePacket(member.getUniqueId(), toKick + " has been kicked!"));
+                }
             }
         } else {
             boolean hasKickedAnyone = false;
