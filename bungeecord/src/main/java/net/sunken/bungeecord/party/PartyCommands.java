@@ -7,9 +7,11 @@ import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.sunken.common.ServerInstance;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.parties.packet.request.*;
 import net.sunken.common.player.PlayerRank;
+import net.sunken.common.server.data.ServerObject;
 
 /** All the party commands */
 public class PartyCommands {
@@ -137,7 +139,8 @@ public class PartyCommands {
         if (!(sender instanceof ProxiedPlayer)) return;
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        PacketUtil.sendPacket(new MPartyChatRequestPacket(player.getUniqueId(), args.getJoinedStrings(0)));
+        ServerObject serverObject = ServerInstance.instance().getServerObject();
+        PacketUtil.sendPacket(new MPartySummonRequestPacket(player.getUniqueId(), serverObject.getServerName()));
     }
 
     public static class Parent {

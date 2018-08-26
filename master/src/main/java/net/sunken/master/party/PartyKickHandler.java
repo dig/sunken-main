@@ -40,7 +40,7 @@ public class PartyKickHandler extends PacketHandler<MPartyKickRequestPacket> {
 
         if (!packet.isRequestingKickOffline()) {
             String toKick = packet.getToKick();
-            UUID toKickUUID = dataManager.getNameToUUID().get(toKick);
+            UUID toKickUUID = dataManager.getNameToUUID().get(toKick.toLowerCase());
 
             boolean foundAndRemoved = allMembers.remove(PartyPlayer.fromUUID(toKickUUID));
             if (!foundAndRemoved) {
@@ -58,7 +58,7 @@ public class PartyKickHandler extends PacketHandler<MPartyKickRequestPacket> {
                 // discard leader from kicking though it shouldn't make
                 // much difference as they should be online when doing the command
                 if (!memberUUID.equals(requestingKick)) {
-                    if (dataManager.getOnlinePlayers().containsKey(memberUUID)) {
+                    if (!dataManager.getOnlinePlayers().containsKey(memberUUID)) {
                         iterator.remove();
                         hasKickedAnyone = true;
                     }

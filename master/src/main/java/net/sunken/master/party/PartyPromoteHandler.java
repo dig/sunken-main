@@ -22,7 +22,7 @@ public class PartyPromoteHandler extends PacketHandler<MPartyPromoteRequestPacke
     public void onReceive(MPartyPromoteRequestPacket packet) {
         UUID requestingPromote = packet.getRequester();
         String toPromoteName = packet.getToPromote();
-        UUID toPromoteUUID = dataManager.getNameToUUID().get(toPromoteName);
+        UUID toPromoteUUID = dataManager.getNameToUUID().get(toPromoteName.toLowerCase());
 
         Party party = PartyManager.getPartyByPlayer(requestingPromote);
         if (party == null) {
@@ -37,7 +37,7 @@ public class PartyPromoteHandler extends PacketHandler<MPartyPromoteRequestPacke
         }
 
         if (!party.getAllMembers().contains(PartyPlayer.fromUUID(toPromoteUUID))) {
-            PacketUtil.sendPacket(new MustBeLeaderPacket(requestingPromote, "That player is not in the party."));
+            PacketUtil.sendPacket(new MustBeInPartyPacket(requestingPromote));
             return;
         }
 

@@ -38,9 +38,20 @@ public class PartyLeaveRequestHub extends PacketHandler<MPartyLeaveRequestPacket
         } else {
             Party asMember = PartyManager.getPartyByPlayer(leaverUUID);
             if (asMember != null) {
-                asMember.getAllMembers().remove(PartyPlayer.fromUUID(leaverUUID));
+                PartyPlayer leaverPlayer = PartyPlayer.fromUUID(leaverUUID);
 
-                PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(leaverUUID, nameLeft, asMember);
+                for (PartyPlayer member : asMember.getAllMembers()) {
+                    if (member.equals(leaverPlayer)) {
+                        leaverPlayer = member;
+                    }
+                }
+
+                asMember.getAllMembers().remove(leaverPlayer);
+
+                PartyMemberLeftPacket partyMemberLeftPacket = new PartyMemberLeftPacket(
+                        leaverUUID,
+                        leaverPlayer.getName(),
+                        asMember);
                 PacketUtil.sendPacket(partyMemberLeftPacket);
 
                 isSuccessfulLeave = true;

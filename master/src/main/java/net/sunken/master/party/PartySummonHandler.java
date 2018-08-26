@@ -6,6 +6,7 @@ import net.sunken.common.parties.data.Party;
 import net.sunken.common.parties.data.PartyPlayer;
 import net.sunken.common.parties.packet.MustBeInPartyPacket;
 import net.sunken.common.parties.packet.MustBeLeaderPacket;
+import net.sunken.common.parties.packet.changes.PartyAttemptSummonPacket;
 import net.sunken.common.parties.packet.request.MPartySummonRequestPacket;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ public class PartySummonHandler extends PacketHandler<MPartySummonRequestPacket>
     @Override
     public void onReceive(MPartySummonRequestPacket packet) {
         UUID requester = packet.getRequester();
+        String serverName = packet.getServerName();
 
         Party party = PartyManager.getPartyByPlayer(requester);
         if (party == null) {
@@ -31,8 +33,10 @@ public class PartySummonHandler extends PacketHandler<MPartySummonRequestPacket>
         }
 
         Set<PartyPlayer> allMembers = party.getAllMembers();
-        for (PartyPlayer member : allMembers) {
-            // TODO: send each member to the requester's server
-        }
+        PartyAttemptSummonPacket partyAttemptSummonPacket = new PartyAttemptSummonPacket(
+                serverName,
+                requester,
+                allMembers);
+        PacketUtil.sendPacket(partyAttemptSummonPacket);
     }
 }
