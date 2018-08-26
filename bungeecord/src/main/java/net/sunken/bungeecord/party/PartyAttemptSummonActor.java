@@ -2,6 +2,7 @@ package net.sunken.bungeecord.party;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.common.Common;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.parties.data.PartyPlayer;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public class PartyAttemptSummonActor extends PacketHandler<PartyAttemptSummonPacket> {
 
-    public static final ServerObjectCache serverCache = Common.getInstance().getServerCache();
+    private static final ServerObjectCache serverCache = Common.getInstance().getServerCache();
 
     @Override
     public void onReceive(PartyAttemptSummonPacket packet) {
@@ -29,12 +30,12 @@ public class PartyAttemptSummonActor extends PacketHandler<PartyAttemptSummonPac
                     if (!partyPlayerUUID.equals(requestingSummon)) {
                         ProxiedPlayer bungeePartyPlayer = ProxyServer.getInstance().getPlayer(partyPlayerUUID);
                         if (bungeePartyPlayer != null) {
-
+                            ServerHandler.sendPlayerToServer(bungeePartyPlayer, serverObject);
                         }
                     }
                 }
+                break;
             }
-            break;
         }
     }
 }
