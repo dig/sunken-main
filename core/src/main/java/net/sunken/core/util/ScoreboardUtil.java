@@ -24,14 +24,16 @@ public class ScoreboardUtil {
     private List<Team> teams;
     private List<Integer> removed;
     private Set<String> updated;
+    private ChatColor nameColor;
 
-    public ScoreboardUtil(String title) {
+    public ScoreboardUtil(String title, ChatColor nameColor) {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.title = ChatColor.translateAlternateColorCodes('&', title);
         this.scores = new ConcurrentHashMap<>();
         this.teams = Collections.synchronizedList(new ArrayList<>());
         this.removed = Lists.newArrayList();
         this.updated = Collections.synchronizedSet(new HashSet<>());
+        this.nameColor = nameColor;
     }
 
     public void add(String text, Integer score) {
@@ -92,6 +94,7 @@ public class ScoreboardUtil {
 
         applyText(team, text, result);
 
+        team.setColor(this.nameColor);
         teams.add(team);
         return new AbstractMap.SimpleEntry<>(team, result);
     }
