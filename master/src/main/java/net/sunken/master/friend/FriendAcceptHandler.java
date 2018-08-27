@@ -3,8 +3,8 @@ package net.sunken.master.friend;
 import net.sunken.common.Common;
 import net.sunken.common.DataManager;
 import net.sunken.common.friend.data.FriendStatus;
-import net.sunken.common.friend.packet.FriendAcceptPacket;
 import net.sunken.common.friend.packet.FriendAcceptStatusPacket;
+import net.sunken.common.friend.packet.MFriendAcceptPacket;
 import net.sunken.common.packet.PacketHandler;
 import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;
@@ -15,7 +15,7 @@ import net.sunken.master.player.MasterPlayer;
 import java.util.Map;
 import java.util.UUID;
 
-public class FriendAcceptHandler extends PacketHandler<FriendAcceptPacket> {
+public class FriendAcceptHandler extends PacketHandler<MFriendAcceptPacket> {
 
     private static DataManager dataManager;
     private static Map<UUID, AbstractPlayer> onlinePlayers;
@@ -28,7 +28,7 @@ public class FriendAcceptHandler extends PacketHandler<FriendAcceptPacket> {
     }
 
     @Override
-    public void onReceive(FriendAcceptPacket packet) {
+    public void onReceive(MFriendAcceptPacket packet) {
         UUID creator = packet.getCreator();
         String targetName = packet.getTarget();
 

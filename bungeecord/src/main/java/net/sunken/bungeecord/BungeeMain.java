@@ -14,6 +14,7 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.config.ConfigHandler;
 import net.sunken.bungeecord.friend.FriendAcceptStatusHandler;
 import net.sunken.bungeecord.friend.FriendCommand;
+import net.sunken.bungeecord.friend.FriendCommands;
 import net.sunken.bungeecord.friend.FriendStatusHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
 import net.sunken.bungeecord.listeners.FailListener;
@@ -86,10 +87,11 @@ public class BungeeMain extends Plugin implements CommandExecutor<CommandSender>
                 this.getProxy().getPluginManager(),
                 this.commands,
                 this);
+
         // register all commands
         registry.register(PartyCommands.Parent.class);
         registry.register(LobbyCommand.class);
-        registry.register(FriendCommand.class);
+        registry.register(FriendCommands.Parent.class);
     }
 
     @Override

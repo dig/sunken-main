@@ -17,7 +17,7 @@ import net.sunken.common.server.data.ServerObject;
 public class PartyCommands {
 
     @Command(
-            aliases = {"invite"},
+            aliases = {"add", "invite"},
             desc = "Invite a player to the party",
             usage = "<player> - The player to invite",
             min = 1,

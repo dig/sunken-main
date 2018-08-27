@@ -5,20 +5,16 @@ import net.sunken.common.packet.Packet;
 
 import java.util.UUID;
 
-public class FriendAcceptPacket extends Packet {
+public class MFriendRemovePacket extends Packet {
 
     @Getter
     private UUID creator;
     @Getter
     private String target;
 
-    @Getter
-    private boolean deny;
-
-    public FriendAcceptPacket (UUID creator, String target, boolean deny) {
+    public MFriendRemovePacket (UUID creator, String target) {
         this.creator = creator;
         this.target = target;
-        this.deny = deny;
     }
 
 }
