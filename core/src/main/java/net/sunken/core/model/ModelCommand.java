@@ -9,11 +9,15 @@ import com.sk89q.minecraft.util.commands.playerrank.PlayerRankRequired;
 import net.sunken.common.player.PlayerRank;
 import net.sunken.core.Core;
 import net.sunken.core.util.EntityUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Boat;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.util.UUID;
@@ -174,6 +178,40 @@ public class ModelCommand {
         } else {
             player.sendMessage("Could not find model file.");
         }
+    }
+
+    @Command(
+            aliases = {"test"},
+            desc = "Test command.",
+            usage = "<invisible> <offset> <rotation>",
+            min = 3,
+            max = 3)
+    public static void test(final CommandContext args, final CommandSender sender) {
+        if (!(sender instanceof Player)) return;
+
+        Player player = (Player) sender;
+        String args0 = args.getString(0);
+        String args1 = args.getString(1);
+        String args2 = args.getString(2);
+
+        Minecart minecart = (Minecart) player.getWorld().spawnEntity(player.getLocation(), EntityType.MINECART);
+
+        BlockData blockData = Bukkit.getServer().createBlockData(Material.DIAMOND_BLOCK);
+        FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation(), blockData);
+        block.setSilent(true);
+        block.setDropItem(false);
+        block.setHurtEntities(false);
+        block.setFallDistance(0);
+        block.setTicksLived(Integer.MAX_VALUE);
+
+        EntityUtil.setYaw(block, Float.parseFloat(args2));
+        EntityUtil.setYaw(minecart, Float.parseFloat(args2));
+
+        minecart.addPassenger(block);
+
+        // minecart.setGravity(false);
+        minecart.setSilent(true);
+        minecart.setDisplayBlockOffset(Integer.parseInt(args1));
     }
 
     public static class Parent {

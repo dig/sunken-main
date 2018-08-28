@@ -13,7 +13,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.sunken.bungeecord.config.ConfigHandler;
 import net.sunken.bungeecord.friend.FriendAcceptStatusHandler;
-import net.sunken.bungeecord.friend.FriendCommand;
 import net.sunken.bungeecord.friend.FriendCommands;
 import net.sunken.bungeecord.friend.FriendStatusHandler;
 import net.sunken.bungeecord.listeners.ConnectListener;
