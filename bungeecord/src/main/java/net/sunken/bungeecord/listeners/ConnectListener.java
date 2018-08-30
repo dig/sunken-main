@@ -10,6 +10,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.Constants;
 import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
+import net.sunken.common.Common;
 import net.sunken.common.server.data.ServerObject;
 import net.sunken.common.type.ServerType;
 
@@ -17,6 +18,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class ConnectListener implements Listener {
 
@@ -32,10 +35,10 @@ public class ConnectListener implements Listener {
 
                 // Connect to specified server
                 if (channel.equals("server")) {
-                    String name = in.readUTF();
+                    String uuid = in.readUTF();
                     String server = in.readUTF();
 
-                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
+                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
                     if (target != null && target.isConnected()) {
                         ServerObject serv = ServerHandler.getServer(server);
 
@@ -50,10 +53,10 @@ public class ConnectListener implements Listener {
                         }
                     }
                 } else if (channel.equals("type")) { // Sends player to a free server of that type
-                    String name = in.readUTF();
+                    String uuid = in.readUTF();
                     ServerType type = ServerType.valueOf(in.readUTF());
 
-                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
+                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
                     if (target != null && target.isConnected() && type != null) {
                         ServerObject lobby = ServerHandler.getFreeServer(type);
 

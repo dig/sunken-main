@@ -12,6 +12,7 @@ public class BungeeUtil {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("type");
+        out.writeUTF(player.getUniqueId().toString());
         out.writeUTF(type.toString());
 
         player.sendPluginMessage(Core.getPlugin(), "BungeeCord", out.toByteArray());
@@ -21,6 +22,7 @@ public class BungeeUtil {
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
         out.writeUTF("server");
+        out.writeUTF(player.getUniqueId().toString());
         out.writeUTF(name);
 
         player.sendPluginMessage(Core.getPlugin(), "BungeeCord", out.toByteArray());

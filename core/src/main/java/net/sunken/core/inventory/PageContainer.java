@@ -1,6 +1,7 @@
 package net.sunken.core.inventory;
 
 import com.google.common.collect.Maps;
+import lombok.Getter;
 import net.sunken.core.inventory.element.Element;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,8 +13,10 @@ import static com.google.common.base.Preconditions.checkState;
 
 public class PageContainer {
 
+    @Getter
     private final Map<String, Page> pages;
 
+    @Getter
     private String initialPage;
 
     {

@@ -22,7 +22,7 @@ public class Page {
     private final String title;
     @Getter
     private final int size;
-    @Getter(value = AccessLevel.PACKAGE)
+    @Getter
     private final Map<Integer, Element> elements;
 
     @Getter
