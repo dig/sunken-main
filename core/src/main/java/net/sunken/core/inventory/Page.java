@@ -41,6 +41,13 @@ public class Page {
         this.inventory = Bukkit.createInventory(null, size, title);
     }
 
+    public void clearElements() {
+        for (Element element : this.elements.values()) {
+            element.destroy();
+        }
+        this.elements.clear();
+    }
+
     public void updateInventory(){
         this.inventory.clear();
         elements.forEach((position, element) -> this.inventory.setItem(position, element.getItem()));

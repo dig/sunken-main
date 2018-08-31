@@ -3,6 +3,7 @@ package net.sunken.bungeecord.listeners;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -101,6 +102,11 @@ public class JoinListener implements Listener {
                 .getDataManager()
                 .getOnlinePlayers()
                 .put(player.getUniqueId(), bungeePlayer);
+
+        // Network join message
+        for (String message : Constants.JOIN_MESSAGES) {
+            MessageUtil.sendMessage(player, message);
+        }
     }
 
     @EventHandler

@@ -6,13 +6,12 @@ import com.sk89q.minecraft.util.commands.playerrank.PlayerNotHasRankException;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.event.EventManager;
-import net.sunken.common.event.example.ExampleListener;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourLeaderboardUpdatePacket;
 import net.sunken.common.type.ServerType;
 import net.sunken.core.Core;
-import net.sunken.core.inventory.Page;
-import net.sunken.core.inventory.PageContainer;
+import net.sunken.lobby.inventory.InventoryListener;
+import net.sunken.lobby.inventory.LobbyInventory;
 import net.sunken.lobby.listeners.LobbyPlayerCountUpdater;
 import net.sunken.lobby.listeners.PlayerListener;
 import net.sunken.lobby.listeners.WorldListener;
@@ -33,9 +32,6 @@ public class LobbyPlugin extends JavaPlugin implements CommandExecutor {
 
     private ParkourCache parkourCache;
 
-    @Getter
-    private PageContainer lobbyInventory;
-
     @Override
     public void onEnable() {
         instance = this;
@@ -49,12 +45,6 @@ public class LobbyPlugin extends JavaPlugin implements CommandExecutor {
         PacketHandlerRegistry.registerHandler(ParkourLeaderboardUpdatePacket.class, new ParkourHandler());
 
         this.parkourCache = new ParkourCache(this.getConfig());
-
-        this.lobbyInventory = new PageContainer();
-        Page lobbies = Page.builder("lobby-selector")
-                .title("Lobby Selector")
-                .size(27)
-                .build();
 
         this.registerEvents();
     }
@@ -112,8 +102,10 @@ public class LobbyPlugin extends JavaPlugin implements CommandExecutor {
         pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new ParkourListener(), this);
+        pm.registerEvents(new InventoryListener(), this);
 
         EventManager.register(new ScoreboardUpdateListener());
+        EventManager.register(new LobbyInventory());
     }
 
     public ParkourCache getParkourCache() {

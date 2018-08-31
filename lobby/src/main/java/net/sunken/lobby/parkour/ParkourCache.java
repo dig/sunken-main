@@ -42,7 +42,7 @@ public class ParkourCache {
     private void loadParkours(){
         ConfigurationSection all = this.config.getConfigurationSection("parkours");
 
-        for(String id : all.getKeys(false)){
+        for (String id : all.getKeys(false)) {
             ConfigurationSection parkour = this.config.getConfigurationSection("parkours." + id);
 
             Material mainBlock = Material.valueOf(parkour.getString("mainMaterial"));
@@ -51,12 +51,12 @@ public class ParkourCache {
             Location resetPoint = this.parseCoordinates(parkour.getConfigurationSection("resetPoint"));
 
             List<Location> checkpoints = new ArrayList<>();
-            for(String index : parkour.getConfigurationSection("checkpoints").getKeys(false)){
+            for (String index : parkour.getConfigurationSection("checkpoints").getKeys(false)) {
                 checkpoints.add(this.parseCoordinates(parkour.getConfigurationSection("checkpoints." + index)));
             }
 
             ArrayList<Material> allowedMaterials = new ArrayList<>();
-            for(String matName : parkour.getStringList("allowedMaterials")){
+            for (String matName : parkour.getStringList("allowedMaterials")) {
                 allowedMaterials.add(Material.valueOf(matName));
             }
 
@@ -73,14 +73,14 @@ public class ParkourCache {
     }
 
     public void cleanupParkours(){
-        for(Parkour parkour : this.parkours){
+        for (Parkour parkour : this.parkours) {
             parkour.cleanup();
         }
     }
 
     private Location parseCoordinates(ConfigurationSection section){
         String worldName = Bukkit.getWorlds().get(0).getName();
-        if(section.contains("world")){
+        if (section.contains("world")) {
             worldName = section.getString("world");
         }
 
@@ -89,12 +89,12 @@ public class ParkourCache {
         double z = section.getDouble("z");
 
         double yaw = 0;
-        if(section.contains("yaw")){
+        if (section.contains("yaw")) {
             yaw = section.getDouble("yaw");
         }
 
         double pitch = 0;
-        if(section.contains("pitch")){
+        if (section.contains("pitch")) {
             pitch = section.getDouble("pitch");
         }
 
@@ -102,8 +102,8 @@ public class ParkourCache {
     }
 
     public Parkour getCurrentParkour(LobbyPlayer player){
-        for(Parkour parkour : this.parkours){
-            if(parkour.getPlayers().containsKey(player.getUUID())){
+        for (Parkour parkour : this.parkours) {
+            if (parkour.getPlayers().containsKey(player.getUUID())) {
                 return parkour;
             }
         }
@@ -112,7 +112,7 @@ public class ParkourCache {
     }
 
     public List<ParkourData> getBestTimes(String id){
-        if(this.bestTimeCache.containsKey(id)){
+        if (this.bestTimeCache.containsKey(id)) {
             List<ParkourData> sorted = this.bestTimeCache.get(id)
                     .stream()
                     .sorted(Comparator.comparing(ParkourData::getTime))
@@ -168,7 +168,7 @@ public class ParkourCache {
                 @Override
                 public void run(){
                     ParkourCache cache = LobbyPlugin.getInstance().getParkourCache();
-                    for(Parkour parkour : cache.getParkours()){
+                    for (Parkour parkour : cache.getParkours()){
                         parkour.updateLeaderboard();
                     }
                 }

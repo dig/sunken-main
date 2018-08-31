@@ -55,33 +55,16 @@ public class PlayerListener implements Listener {
         player.getActivePotionEffects().clear();
         player.setGameMode(GameMode.ADVENTURE);
 
-        // Tab
         TabListUtil.sendTabTitle(player, Constants.TAB_TOP, Constants.TAB_BOTTOM);
-
-        // Scoreboard
         lobbyPlayer.updateScoreboard();
-
-        // Chat
-        for(int i = 0; i<Constants.JOIN_MESSAGES.size(); i++){
-            player.sendMessage(MessageUtil.getCenteredMessage(Constants.JOIN_MESSAGES.get(i), MessageUtil.CENTER_PX));
-        }
 
         // Rank
         player.setPlayerListName(lobbyPlayer.getRankColour() + player.getName());
         NametagUtil.changePlayerName(player, lobbyPlayer.getRankColour(), NametagUtil.TeamAction.CREATE);
 
         // Inventory
-        player.getInventory().setItem(0, new ActionableElement(Constants.ITEM_SELECTOR.make(), Action.INTERACT, context -> {
-            Player observer = context.getObserver();
-            observer.sendMessage("selector");
-            return context;
-        }).getItem());
-
-        player.getInventory().setItem(8, new ActionableElement(Constants.ITEM_LOBBY.make(), Action.INTERACT, context -> {
-            Player observer = context.getObserver();
-
-            return context;
-        }).getItem());
+        player.getInventory().setItem(0, Constants.ITEM_SELECTOR.make());
+        player.getInventory().setItem(8, Constants.ITEM_LOBBY.make());
     }
 
     @EventHandler(ignoreCancelled = true)

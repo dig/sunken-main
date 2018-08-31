@@ -52,6 +52,11 @@ public class ServersListener implements SunkenListener {
     public void onServerCacheUpdate(ServerCacheUpdateEvent event) {
         PageContainer container = ServersCommand.getContainer();
 
+        // Clear all elements
+        for (Page page : container.getPages().values()) {
+            page.clearElements();
+        }
+
         int index = 0;
         for (ServerType type : ServerType.values()) {
             for (ServerObject server : Common.getInstance().getServerCache().getCache(type)) {
@@ -77,12 +82,8 @@ public class ServersListener implements SunkenListener {
                         i++;
                     }
 
+                    // Add new element if page is found
                     if (currentPage != null) {
-                        // Destroy old element if exists
-                        if (currentPage.getElements().get(index) != null) {
-                            currentPage.getElements().get(index).destroy();
-                        }
-
                         currentPage.getElements().put(index, element);
 
                         // Once we have updated the elements, call to rebuild the inventory.
@@ -112,7 +113,8 @@ public class ServersListener implements SunkenListener {
         String name = ChatColor.GREEN + server.getServerType().getFriendlyName();
         Material material = materialList.get(server.getServerType().ordinal());
 
-        if (server.getPlayerCount() >= server.getMaxPlayers()) {
+        if (server.getPlayerCount() >= server.getMaxPlayers()
+                || ServerInstance.instance().getServerObject().equals(server)) {
             name = ChatColor.RED + server.getServerType().getFriendlyName();
         }
 
@@ -128,7 +130,7 @@ public class ServersListener implements SunkenListener {
         lores.add(" ");
 
         if (ServerInstance.instance().getServerObject().equals(server)) {
-            lores.add(ChatColor.GREEN + "CONNECTED");
+            lores.add(ChatColor.RED + "CONNECTED");
         } else {
             lores.add(ChatColor.YELLOW + "Click to connect!");
         }
