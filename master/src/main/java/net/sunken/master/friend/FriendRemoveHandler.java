@@ -80,10 +80,6 @@ public class FriendRemoveHandler extends PacketHandler<MFriendRemovePacket> {
         if (!removed) {
             PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(
                     creator, "Unable to find that player on your friends list."));
-        } else {
-            // Refresh creator and target if online friend
-            // list.
-            creatorPlayer.refreshFriends();
         }
     }
 

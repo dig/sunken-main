@@ -3,6 +3,7 @@ package net.sunken.common.player;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.achievements.Achievement;
@@ -43,10 +44,6 @@ public abstract class AbstractPlayer {
     @Getter
     protected Map<String, Achievement> achievements;
 
-    @Getter
-    protected List<Document> friends;
-    private boolean friendsLoaded;
-
     public AbstractPlayer (String uuid, String name, Document document, boolean firstJoin) {
         this.uuid = uuid;
         this.name = name;
@@ -70,9 +67,6 @@ public abstract class AbstractPlayer {
         this.achievements = new HashMap<>();
         this.loadAchievements();
 
-        this.friends = new ArrayList<>();
-        this.friendsLoaded = false;
-
         if (this.firstJoin) {
             TriggerManager.NETWORK_JOIN_TRIGGER.trigger(this, false);
         }
@@ -87,8 +81,10 @@ public abstract class AbstractPlayer {
             persistedAchievements.add(new Document(ImmutableMap.of(ACHIEVEMENTS_ID_FIELD, achievementId,
                                                                    ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd,
                                                                    ACHIEVEMENTS_DONE_FIELD, progressToAdd >= targetProgress)));
-            playerCollection.replaceOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid), playerDocument);
+            playerCollection.updateOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid),
+                    Updates.set(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, persistedAchievements));
             this.achievements.put(achievementId, achievement);
+
         } else {
             for (Document persistedAchievement : persistedAchievements) {
                 if (persistedAchievement.getString(ACHIEVEMENTS_ID_FIELD).equals(achievementId)) {
@@ -98,7 +94,9 @@ public abstract class AbstractPlayer {
                         if (persistedAchievement.getInteger(ACHIEVEMENTS_PROGRESS_FIELD) >= targetProgress) {
                             persistedAchievement.put(ACHIEVEMENTS_DONE_FIELD, true);
                         }
-                        playerCollection.replaceOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid), playerDocument);
+                        playerCollection.updateOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid),
+                                Updates.set(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, persistedAchievements));
+
                         this.achievements.put(achievementId, achievement);
                     }
                     break;
@@ -127,65 +125,6 @@ public abstract class AbstractPlayer {
         return playerDocument.get(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, List.class);
     }
 
-    public void loadFriendsCache() {
-        if (!this.friendsLoaded) {
-            this.friendsLoaded = true;
-            this.friends.clear();
-
-            if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
-                List<ObjectId> friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
-
-                for (ObjectId objId : friendObjects) {
-                    this.friends.add(this.playerCollection.find(Filters.eq("_id", objId)).first());
-                }
-            }
-        }
-    }
-
-    public void refreshFriends() {
-        this.friendsLoaded = false;
-        this.loadFriendsCache();
-    }
-
-    public void addFriend(ObjectId objId) {
-        List<ObjectId> friendObjects = new ArrayList<>();
-
-        if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
-            friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
-        }
-
-        friendObjects.add(objId);
-        playerDocument.put(DatabaseConstants.PLAYER_FRIENDS_FIELD, friendObjects);
-
-        this.friends.add(this.playerCollection.find(Filters.eq("_id", objId)).first());
-        playerCollection.replaceOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid), playerDocument);
-    }
-
-    public boolean isFriends(UUID uuid) {
-        this.loadFriendsCache();
-
-        if (this.friends.size() > 0) {
-            for (Document friend : this.friends) {
-                if (friend.getString(DatabaseConstants.PLAYER_UUID_FIELD).equals(uuid.toString())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void removeFriend(ObjectId objId) {
-        if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
-            List<ObjectId> friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
-            friendObjects.remove(objId);
-
-            playerDocument.put(DatabaseConstants.PLAYER_FRIENDS_FIELD, friendObjects);
-            playerCollection.replaceOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid), playerDocument);
-
-            this.refreshFriends();
-        }
-    }
 
     public UUID getUUID() {
         return UUID.fromString(this.uuid);
