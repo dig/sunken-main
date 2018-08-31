@@ -42,11 +42,9 @@ public class FriendAcceptStatusHandler extends PacketHandler<FriendAcceptStatusP
             case PLAYER_ADDED:
                 if (creatorPlayer != null) {
                     creatorPlayer.sendMessage(new TextComponent("You are now friends with " + packet.getTarget() + "!"));
-                    dataManager.getOnlinePlayers().get(creatorPlayer.getUniqueId()).refreshFriends();
                 }
                 if (invitedPlayer != null) {
                     invitedPlayer.sendMessage(new TextComponent("You are now friends with " + creator.name + "!"));
-                    dataManager.getOnlinePlayers().get(invitedPlayer.getUniqueId()).refreshFriends();
                 }
                 break;
             default:

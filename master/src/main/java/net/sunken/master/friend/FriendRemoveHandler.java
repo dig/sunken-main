@@ -38,8 +38,6 @@ public class FriendRemoveHandler extends PacketHandler<MFriendRemovePacket> {
         MasterPlayer creatorPlayer = (MasterPlayer) onlinePlayers.get(creator);
         String targetName = packet.getTarget();
 
-        creatorPlayer.loadFriendsCache();
-
         boolean removed = false;
 
         for (Document friend : creatorPlayer.getFriends()) {
@@ -52,7 +50,7 @@ public class FriendRemoveHandler extends PacketHandler<MFriendRemovePacket> {
                 ObjectId targetId = friend.getObjectId("_id");
 
                 // Remove target from creator
-                creatorPlayer.removeFriend(targetId);
+                // creatorPlayer.removeFriend(targetId);
 
                 // Remove creator from target, I'm calling a fresh copy
                 // of the target document and not using friend document

@@ -20,10 +20,6 @@ public abstract class AbstractPlayer {
 
     protected static Common common = Common.getInstance();
 
-    protected static final String ACHIEVEMENTS_ID_FIELD = "id";
-    protected static final String ACHIEVEMENTS_PROGRESS_FIELD = "progress";
-    protected static final String ACHIEVEMENTS_DONE_FIELD = "done";
-
     protected MongoCollection<Document> playerCollection;
     @Getter
     protected Document playerDocument;
@@ -44,6 +40,9 @@ public abstract class AbstractPlayer {
     @Getter
     protected Map<String, Achievement> achievements;
 
+    @Getter
+    protected List<Document> friends;
+
     public AbstractPlayer (String uuid, String name, Document document, boolean firstJoin) {
         this.uuid = uuid;
         this.name = name;
@@ -61,12 +60,24 @@ public abstract class AbstractPlayer {
             this.playerDocument = document;
         }
 
+        // Load basic information from document
         this.rank = PlayerRank.valueOf(this.playerDocument.getString(DatabaseConstants.PLAYER_RANK_FIELD));
         this.firstJoin = firstJoin;
 
+        // Load achievements from document
         this.achievements = new HashMap<>();
         this.loadAchievements();
 
+        // Load friends from document
+        if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
+            List<ObjectId> friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
+
+            for (ObjectId objId : friendObjects) {
+                this.friends.add(this.playerCollection.find(Filters.eq("_id", objId)).first());
+            }
+        }
+
+        // Trigger first join achievement
         if (this.firstJoin) {
             TriggerManager.NETWORK_JOIN_TRIGGER.trigger(this, false);
         }
@@ -78,21 +89,23 @@ public abstract class AbstractPlayer {
         List<Document> persistedAchievements = this.getPersistedAchievements();
         // this achievement has not yet been progressed
         if (!this.achievements.containsKey(achievementId)) {
-            persistedAchievements.add(new Document(ImmutableMap.of(ACHIEVEMENTS_ID_FIELD, achievementId,
-                                                                   ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd,
-                                                                   ACHIEVEMENTS_DONE_FIELD, progressToAdd >= targetProgress)));
+            persistedAchievements.add(new Document(ImmutableMap.of(DatabaseConstants.ACHIEVEMENTS_ID_FIELD, achievementId,
+                    DatabaseConstants.ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd,
+                    DatabaseConstants.ACHIEVEMENTS_DONE_FIELD, progressToAdd >= targetProgress)));
+
             playerCollection.updateOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid),
                     Updates.set(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, persistedAchievements));
+
             this.achievements.put(achievementId, achievement);
 
         } else {
             for (Document persistedAchievement : persistedAchievements) {
-                if (persistedAchievement.getString(ACHIEVEMENTS_ID_FIELD).equals(achievementId)) {
-                    boolean done = persistedAchievement.getBoolean(ACHIEVEMENTS_DONE_FIELD);
+                if (persistedAchievement.getString(DatabaseConstants.ACHIEVEMENTS_ID_FIELD).equals(achievementId)) {
+                    boolean done = persistedAchievement.getBoolean(DatabaseConstants.ACHIEVEMENTS_DONE_FIELD);
                     if (!done) {
-                        persistedAchievement.put(ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd);
-                        if (persistedAchievement.getInteger(ACHIEVEMENTS_PROGRESS_FIELD) >= targetProgress) {
-                            persistedAchievement.put(ACHIEVEMENTS_DONE_FIELD, true);
+                        persistedAchievement.put(DatabaseConstants.ACHIEVEMENTS_PROGRESS_FIELD, progressToAdd);
+                        if (persistedAchievement.getInteger(DatabaseConstants.ACHIEVEMENTS_PROGRESS_FIELD) >= targetProgress) {
+                            persistedAchievement.put(DatabaseConstants.ACHIEVEMENTS_DONE_FIELD, true);
                         }
                         playerCollection.updateOne(new Document(DatabaseConstants.PLAYER_UUID_FIELD, uuid),
                                 Updates.set(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, persistedAchievements));
@@ -113,7 +126,7 @@ public abstract class AbstractPlayer {
         this.achievements = this.getPersistedAchievements()
                                 .stream()
                                 .map(achievement -> {
-                                    String id = achievement.getString(ACHIEVEMENTS_ID_FIELD);
+                                    String id = achievement.getString(DatabaseConstants.ACHIEVEMENTS_ID_FIELD);
                                     return AchievementRegistry.allAchievements().get(id);
                                 })
                                 // remove nulls from the list from bad achievement IDs present for reasons such as the removal of that achievement from the registry
@@ -125,8 +138,19 @@ public abstract class AbstractPlayer {
         return playerDocument.get(DatabaseConstants.PLAYER_ACHIEVEMENTS_FIELD, List.class);
     }
 
-
     public UUID getUUID() {
         return UUID.fromString(this.uuid);
+    }
+
+    public boolean isFriend(UUID uuid) {
+        if (this.friends.size() > 0) {
+            for (Document friend : this.friends) {
+                if (friend.getString(DatabaseConstants.PLAYER_UUID_FIELD).equals(uuid.toString())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

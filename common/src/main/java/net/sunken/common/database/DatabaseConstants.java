@@ -11,6 +11,10 @@ public final class DatabaseConstants {
     public static final String PLAYER_ACHIEVEMENTS_FIELD = "achievements";
     public static final String PLAYER_FRIENDS_FIELD = "friends";
 
+    public static final String ACHIEVEMENTS_ID_FIELD = "id";
+    public static final String ACHIEVEMENTS_PROGRESS_FIELD = "progress";
+    public static final String ACHIEVEMENTS_DONE_FIELD = "done";
+
     private DatabaseConstants() {
     }
 }

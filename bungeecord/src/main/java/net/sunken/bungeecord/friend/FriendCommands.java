@@ -39,6 +39,7 @@ public class FriendCommands {
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
         String args0 = args.getString(0);
+
         PacketUtil.sendPacket(new MFriendRequestPacket(player.getUniqueId(), args0));
     }
 
@@ -85,7 +86,6 @@ public class FriendCommands {
         ProxiedPlayer player = (ProxiedPlayer) sender;
 
         BungeePlayer bungeePlayer = (BungeePlayer) dataManager.getOnlinePlayers().get(player.getUniqueId());
-        bungeePlayer.loadFriendsCache();
 
         for (Document friend : bungeePlayer.getFriends()) {
             String name = friend.getString(DatabaseConstants.PLAYER_NAME_FIELD);
