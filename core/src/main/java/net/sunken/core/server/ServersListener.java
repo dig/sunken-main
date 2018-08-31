@@ -119,7 +119,8 @@ public class ServersListener implements SunkenListener {
         }
 
         TimeHelper timeHelper = new TimeHelper(System.currentTimeMillis() - server.getCreated());
-        name += " #" + Common.getInstance().getServerCache().getServerNumber(server);
+        int serverNum = Common.getInstance().getServerCache().getServerNumber(server);
+        name += " #" + serverNum;
 
         List<String> lores = new ArrayList<>();
         // lores.add(ChatColor.GRAY + "UUID: " + server.getServerName());
@@ -135,7 +136,10 @@ public class ServersListener implements SunkenListener {
             lores.add(ChatColor.YELLOW + "Click to connect!");
         }
 
-        return ItemFactory.createItemStack(material, name, lores);
+        ItemStack item = ItemFactory.createItemStack(material, name, lores);
+        item.setAmount(serverNum);
+
+        return item;
     }
 
 }

@@ -2,30 +2,17 @@ package net.sunken.core.model;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import net.minecraft.server.v1_13_R1.EntityBoat;
-import net.minecraft.server.v1_13_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_13_R1.PacketPlayOutSpawnEntity;
-import net.sunken.common.Common;
 import net.sunken.core.Core;
 import net.sunken.core.model.type.StructureSize;
-import net.sunken.core.util.protocol.EntityHider;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class WalkTask extends BukkitRunnable {
 

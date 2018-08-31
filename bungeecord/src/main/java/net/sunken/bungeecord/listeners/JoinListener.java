@@ -104,7 +104,7 @@ public class JoinListener implements Listener {
         // Network join message
         for (String message : Constants.JOIN_MESSAGES) {
             MessageUtil.sendMessage(player,
-                    MessageUtil.getCenteredMessage(message, MessageUtil.CENTER_PX_BUNGEE));
+                    MessageUtil.getCenteredMessage(message, MessageUtil.CENTER_PX));
         }
     }
 

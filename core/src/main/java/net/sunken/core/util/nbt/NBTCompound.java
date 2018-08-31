@@ -32,7 +32,7 @@ public class NBTCompound {
     public void mergeCompound(NBTCompound comp){
         NBTReflectionUtil.addOtherNBTCompound(this, comp);
     }
-    
+
     public void setString(String key, String value) {
         NBTReflectionUtil.setData(this, ReflectionMethod.COMPOUND_SET_STRING, key, value);
     }
@@ -130,7 +130,9 @@ public class NBTCompound {
     }
 
     public Boolean hasKey(String key) {
-        return (Boolean) NBTReflectionUtil.getData(this, ReflectionMethod.COMPOUND_HAS_KEY, key);
+        Boolean b =  (Boolean) NBTReflectionUtil.getData(this, ReflectionMethod.COMPOUND_HAS_KEY, key);
+        if(b == null)return false;
+        return b;
     }
 
     public void removeKey(String key) {
@@ -183,7 +185,7 @@ public class NBTCompound {
             return result + "-" + key + ": " + getContent(key) + System.lineSeparator();
         }
     }
-    
+
     public String asNBTString(){
         return NBTReflectionUtil.gettoCompount(getCompound(), this).toString();
     }

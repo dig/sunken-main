@@ -3,6 +3,7 @@ package net.sunken.master;
 import lombok.Getter;
 import net.sunken.common.Common;
 import net.sunken.common.friend.packet.MFriendAcceptPacket;
+import net.sunken.common.friend.packet.MFriendRemovePacket;
 import net.sunken.common.friend.packet.MFriendRequestPacket;
 import net.sunken.common.packet.PacketHandlerRegistry;
 import net.sunken.common.parkour.ParkourCacheUpdatePacket;
@@ -12,6 +13,7 @@ import net.sunken.common.player.packet.PlayerJoinPacket;
 import net.sunken.common.player.packet.PlayerQuitPacket;
 import net.sunken.master.friend.FriendAcceptHandler;
 import net.sunken.master.friend.FriendManager;
+import net.sunken.master.friend.FriendRemoveHandler;
 import net.sunken.master.friend.FriendRequestHandler;
 import net.sunken.master.parkour.ParkourCache;
 import net.sunken.master.parkour.ParkourCacheHandler;
@@ -67,6 +69,7 @@ public class Master {
         PacketHandlerRegistry.registerHandler(MPartyPromoteRequestPacket.class, new PartyPromoteHandler());
         PacketHandlerRegistry.registerHandler(MPartyChatRequestPacket.class, new PartyChatHandler());
         PacketHandlerRegistry.registerHandler(MPartySummonRequestPacket.class, new PartySummonHandler());
+        PacketHandlerRegistry.registerHandler(MFriendRemovePacket.class, new FriendRemoveHandler());
     }
 
     public void onDisable() {

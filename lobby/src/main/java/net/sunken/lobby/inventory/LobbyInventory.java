@@ -102,7 +102,8 @@ public class LobbyInventory implements SunkenListener {
             material = Material.RED_CONCRETE;
         }
 
-        name += " #" + Common.getInstance().getServerCache().getServerNumber(server);
+        int serverNum = Common.getInstance().getServerCache().getServerNumber(server);
+        name += " #" + serverNum;
 
         List<String> lores = new ArrayList<>();
         lores.add(ChatColor.GRAY + "Players: " + server.getPlayerCount() + "/" + server.getMaxPlayers());
@@ -114,7 +115,10 @@ public class LobbyInventory implements SunkenListener {
             lores.add(ChatColor.YELLOW + "> Click to connect!");
         }
 
-        return ItemFactory.createItemStack(material, name, lores);
+        ItemStack item = ItemFactory.createItemStack(material, name, lores);
+        item.setAmount(serverNum);
+
+        return item;
     }
 
 }

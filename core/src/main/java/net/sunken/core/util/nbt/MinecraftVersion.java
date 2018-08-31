@@ -11,7 +11,8 @@ public enum MinecraftVersion {
     MC1_10_R1(1101),
     MC1_11_R1(1111),
     MC1_12_R1(1121),
-    MC1_13_R1(1131);
+    MC1_13_R1(1131),
+    MC1_13_R2(1132);
 
     private static MinecraftVersion version;
     private static Boolean hasGsonSupport;
@@ -40,7 +41,7 @@ public enum MinecraftVersion {
         if (version != Unknown) {
             System.out.println("[NBTAPI] NMS support '" + version.name() + "' loaded!");
         } else {
-            System.out.println("[NBTAPI] Wasn't able to find NMS Support! Some functions will not work!");
+            System.out.println("[NBTAPI] Wasn't able to find NMS Support! Some functions may not work!");
         }
         return version;
     }

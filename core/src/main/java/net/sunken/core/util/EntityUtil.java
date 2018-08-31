@@ -1,14 +1,13 @@
 package net.sunken.core.util;
 
 import com.google.common.collect.Sets;
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftBoat;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftBoat;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
 
@@ -19,10 +18,10 @@ public class EntityUtil {
 
     static {
         try {
-            bField = PathfinderGoalSelector.class.getDeclaredField("b");
+            bField = ReflectionHelper.getNMSClass("PathfinderGoalSelector").getDeclaredField("b");
             bField.setAccessible(true);
 
-            cField = PathfinderGoalSelector.class.getDeclaredField("c");
+            cField = ReflectionHelper.getNMSClass("PathfinderGoalSelector").getDeclaredField("c");
             cField.setAccessible(true);
 
         } catch (NoSuchFieldException e) {

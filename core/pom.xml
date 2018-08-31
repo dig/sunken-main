@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -79,11 +79,11 @@
         </dependency>
 
         <dependency>
-            <groupId>BungeeCord</groupId>
-            <artifactId>net.sunken.bungeecord</artifactId>
-            <version>1.13</version>
+            <groupId>craftbukkit</groupId>
+            <artifactId>net.sunken.craftbukkit</artifactId>
+            <version>1.13.1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/craftbukkit-1.13.jar</systemPath>
+            <systemPath>${project.basedir}/../lib/craftbukkit-1.13.1.jar</systemPath>
         </dependency>
 
         <dependency>

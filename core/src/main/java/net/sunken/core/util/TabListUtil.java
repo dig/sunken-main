@@ -1,10 +1,10 @@
 package net.sunken.core.util;
 
-import net.minecraft.server.v1_13_R1.IChatBaseComponent;
-import net.minecraft.server.v1_13_R1.PacketPlayOutPlayerListHeaderFooter;
-import net.minecraft.server.v1_13_R1.PlayerConnection;
+import net.minecraft.server.v1_13_R2.IChatBaseComponent;
+import net.minecraft.server.v1_13_R2.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_13_R2.PlayerConnection;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -23,11 +23,11 @@ public class TabListUtil {
         PacketPlayOutPlayerListHeaderFooter headerPacket = new PacketPlayOutPlayerListHeaderFooter();
 
         try {
-            Field a = headerPacket.getClass().getDeclaredField("a");
+            Field a = headerPacket.getClass().getDeclaredField("header");
             a.setAccessible(true);
             a.set(headerPacket, tabTitle);
 
-            Field b = headerPacket.getClass().getDeclaredField("b");
+            Field b = headerPacket.getClass().getDeclaredField("footer");
             b.setAccessible(true);
             b.set(headerPacket, tabFoot);
         } catch (Exception e) {
