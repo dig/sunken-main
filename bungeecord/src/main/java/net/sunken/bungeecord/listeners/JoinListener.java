@@ -3,7 +3,6 @@ package net.sunken.bungeecord.listeners;
 import com.google.common.collect.ImmutableMap;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 public class JoinListener implements Listener {
 
@@ -105,7 +103,8 @@ public class JoinListener implements Listener {
 
         // Network join message
         for (String message : Constants.JOIN_MESSAGES) {
-            MessageUtil.sendMessage(player, message);
+            MessageUtil.sendMessage(player,
+                    MessageUtil.getCenteredMessage(message, MessageUtil.CENTER_PX_BUNGEE));
         }
     }
 
