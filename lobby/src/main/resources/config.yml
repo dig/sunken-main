@@ -1,9 +1,9 @@
 type: "MAIN_LOBBY"
 spawn:
     world: "world"
-    x: 0
-    y: 0
-    z: 0
-    yaw: 0
+    x: -126.5
+    y: 78
+    z: -67.5
+    yaw: 90
     pitch: 0
 parkours: []
