@@ -51,7 +51,7 @@ public class LobbyPlayer extends AbstractPlayer {
     }
 
     private List<Document> getPersistedParkourTimes(){
-        if(this.playerDocument.containsKey(PARKOUR_FIELD)){
+        if (this.playerDocument.containsKey(PARKOUR_FIELD)) {
             return this.playerDocument.get(PARKOUR_FIELD, List.class);
         }
 
@@ -59,7 +59,7 @@ public class LobbyPlayer extends AbstractPlayer {
     }
 
     private void loadParkourTimes(){
-        for(Document parkour : this.getPersistedParkourTimes()){
+        for (Document parkour : this.getPersistedParkourTimes()) {
             parkourTimes.put(parkour.getString(PARKOUR_ID_FIELD),
                     parkour.getLong(PARKOUR_TIME_FIELD));
         }
@@ -77,7 +77,7 @@ public class LobbyPlayer extends AbstractPlayer {
         List<Document> parkours = this.getPersistedParkourTimes();
         boolean found = false;
 
-        for(Document parkour : parkours) {
+        for (Document parkour : parkours) {
             if(parkour.getString(PARKOUR_ID_FIELD).equals(id)){
                 parkour.put(PARKOUR_TIME_FIELD, time);
 
@@ -86,7 +86,7 @@ public class LobbyPlayer extends AbstractPlayer {
             }
         }
 
-        if(!found){
+        if (!found) {
             parkours.add(new Document(ImmutableMap.of(PARKOUR_ID_FIELD, id, PARKOUR_TIME_FIELD, time)));
         }
 
