@@ -1,4 +1,4 @@
-package net.sunken.core.server;
+package net.sunken.core.commands.servers;
 
 import net.sunken.common.Common;
 import net.sunken.common.ServerInstance;

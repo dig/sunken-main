@@ -1,4 +1,4 @@
-package net.sunken.core.server;
+package net.sunken.core.commands.servers;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
