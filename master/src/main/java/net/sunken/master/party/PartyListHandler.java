@@ -26,7 +26,7 @@ public class PartyListHandler extends PacketHandler<MPartyListRequestPacket> {
         }
 
         Set<PartyPlayer> allMembers = party.getAllMembers();
-        PartyListPacket partyListPacket = new PartyListPacket(leaverUUID, allMembers);
+        PartyListPacket partyListPacket = new PartyListPacket(leaverUUID, allMembers, packet.getChat());
         PacketUtil.sendPacket(partyListPacket);
     }
 }
