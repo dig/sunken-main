@@ -11,14 +11,12 @@ import net.sunken.core.model.ModelCommand;
 import net.sunken.core.model.WalkTask;
 import net.sunken.core.model.listener.ModelListener;
 import net.sunken.core.npc.NPCListener;
-import net.sunken.core.server.ServersCommand;
-import net.sunken.core.server.ServersListener;
+import net.sunken.core.commands.servers.ServersCommand;
+import net.sunken.core.commands.servers.ServersListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import java.util.logging.Level;
 
 public class Core {
 
