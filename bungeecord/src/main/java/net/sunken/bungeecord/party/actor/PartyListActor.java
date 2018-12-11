@@ -14,8 +14,11 @@ public class PartyListActor extends PlayerPacketHandler<PartyListPacket> {
     @Override
     public void onPlayerPacketReceive(PartyListPacket packet, ProxiedPlayer player) {
         Set<PartyPlayer> partyPlayers = packet.getPartyPlayers();
-        for (PartyPlayer pPlayer : partyPlayers) {
-            player.sendMessage(new TextComponent(pPlayer.getName()));
+
+        if (packet.getChat()) {
+            for (PartyPlayer pPlayer : partyPlayers) {
+                player.sendMessage(new TextComponent(pPlayer.getName()));
+            }
         }
     }
 }

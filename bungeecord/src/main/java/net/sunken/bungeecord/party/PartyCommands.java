@@ -76,7 +76,7 @@ public class PartyCommands {
         if (!(sender instanceof ProxiedPlayer)) return;
 
         ProxiedPlayer player = (ProxiedPlayer) sender;
-        PacketUtil.sendPacket(new MPartyListRequestPacket(player.getUniqueId()));
+        PacketUtil.sendPacket(new MPartyListRequestPacket(player.getUniqueId(), true));
     }
 
     @Command(

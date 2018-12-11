@@ -13,7 +13,11 @@ public class MPartyListRequestPacket extends Packet {
     @Getter
     private UUID requester;
 
-    public MPartyListRequestPacket(UUID requester) {
+    @Getter
+    private Boolean chat;
+
+    public MPartyListRequestPacket(UUID requester, Boolean chat) {
         this.requester = requester;
+        this.chat = chat;
     }
 }

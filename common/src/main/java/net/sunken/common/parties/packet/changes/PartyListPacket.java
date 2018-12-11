@@ -13,8 +13,12 @@ public class PartyListPacket extends PlayerPacket {
     @Getter
     private final Set<PartyPlayer> partyPlayers;
 
-    public PartyListPacket(UUID playerTargeted, Set<PartyPlayer> partyPlayers) {
+    @Getter
+    private Boolean chat;
+
+    public PartyListPacket(UUID playerTargeted, Set<PartyPlayer> partyPlayers, Boolean chat) {
         super(playerTargeted);
         this.partyPlayers = partyPlayers;
+        this.chat = chat;
     }
 }
