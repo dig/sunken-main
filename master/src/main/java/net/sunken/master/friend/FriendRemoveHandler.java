@@ -2,6 +2,7 @@ package net.sunken.master.friend;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import net.sunken.common.Common;
 import net.sunken.common.database.DatabaseConstants;
 import net.sunken.common.friend.packet.MFriendRemovePacket;
@@ -49,21 +50,22 @@ public class FriendRemoveHandler extends PacketHandler<MFriendRemovePacket> {
                 ObjectId creatorId = creatorPlayer.getPlayerDocument().getObjectId("_id");
                 ObjectId targetId = friend.getObjectId("_id");
 
-                // Remove target from creator
-                // creatorPlayer.removeFriend(targetId);
+                //--- Remove target from creator.
+                creatorPlayer.removeFriend(targetId);
 
-                // Remove creator from target, I'm calling a fresh copy
-                // of the target document and not using friend document
-                // because they could be online and need the most up to
-                // date version.
+                //--- Remove creator from target, I'm calling a fresh copy
+                //--- of the target document and not using friend document
+                //--- because they could be online and need the most up to
+                //--- date version.
                 Document targetDocument = playerCollection.find(Filters.eq("_id", targetId)).first();
                 List<ObjectId> friendObjects = (List<ObjectId>) targetDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
                 friendObjects.remove(creatorId);
 
-                targetDocument.put(DatabaseConstants.PLAYER_FRIENDS_FIELD, friendObjects);
-                playerCollection.replaceOne(new Document("_id", targetId), targetDocument);
+                //--- Update database.
+                playerCollection.updateOne(new Document("_id", targetId),
+                        Updates.set(DatabaseConstants.PLAYER_FRIENDS_FIELD, friendObjects));
 
-                // Send removed messages to target and creator.
+                //--- Send removed messages to target and creator.
                 PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(
                         creator, "Removed " + name + " from your friends list!"));
                 PacketUtil.sendPacket(new SendPlayerBungeeMessagePacket(
