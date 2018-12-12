@@ -10,6 +10,7 @@ import net.sunken.common.packet.PacketUtil;
 import net.sunken.common.player.AbstractPlayer;
 import net.sunken.common.util.PlayerDetail;
 import net.sunken.master.Master;
+import net.sunken.master.player.MasterPlayer;
 
 import java.util.Collection;
 import java.util.Map;
@@ -40,7 +41,13 @@ public class FriendRequestHandler extends PacketHandler<MFriendRequestPacket> {
             boolean needsToAccept = friendManager.getFriendInvites().containsEntry(toInvite, creator);
             boolean alreadyInvited = friendManager.getFriendInvites().containsEntry(creator, toInvite);
 
-            if (!alreadyInvited && !needsToAccept) {
+            MasterPlayer targetPlayer = (MasterPlayer) dataManager.getOnlinePlayers().get(toInvite);
+
+            if (creator.equals(toInvite)) {
+                status = FriendStatus.INVITE_NOT_ALLOWED;
+            } else if (targetPlayer.isFriend(creator)) {
+                status = FriendStatus.ALREADY_FRIENDS;
+            } else if (!alreadyInvited && !needsToAccept) {
                 int totalInvites = 0;
 
                 Collection<UUID> creatorInvites = friendManager.getFriendInvites().get(creator);

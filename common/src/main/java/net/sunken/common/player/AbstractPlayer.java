@@ -69,13 +69,8 @@ public abstract class AbstractPlayer {
         this.loadAchievements();
 
         // Load friends from document
-        if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
-            List<ObjectId> friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
-
-            for (ObjectId objId : friendObjects) {
-                this.friends.add(this.playerCollection.find(Filters.eq("_id", objId)).first());
-            }
-        }
+        this.friends = new ArrayList<>();
+        this.loadFriends();
 
         // Trigger first join achievement
         if (this.firstJoin) {
@@ -142,15 +137,13 @@ public abstract class AbstractPlayer {
         return UUID.fromString(this.uuid);
     }
 
-    public boolean isFriend(UUID uuid) {
-        if (this.friends.size() > 0) {
-            for (Document friend : this.friends) {
-                if (friend.getString(DatabaseConstants.PLAYER_UUID_FIELD).equals(uuid.toString())) {
-                    return true;
-                }
+    private void loadFriends() {
+        if (playerDocument.containsKey(DatabaseConstants.PLAYER_FRIENDS_FIELD)) {
+            List<ObjectId> friendObjects = (List<ObjectId>) playerDocument.get(DatabaseConstants.PLAYER_FRIENDS_FIELD);
+
+            for (ObjectId objId : friendObjects) {
+                this.friends.add(this.playerCollection.find(Filters.eq("_id", objId)).first());
             }
         }
-
-        return false;
     }
 }

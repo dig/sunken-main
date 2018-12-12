@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.sunken.common.friend.data.FriendStatus;
 import net.sunken.common.packet.Packet;
 import net.sunken.common.util.PlayerDetail;
+import org.bson.types.ObjectId;
 
 public class FriendAcceptStatusPacket extends Packet {
 
