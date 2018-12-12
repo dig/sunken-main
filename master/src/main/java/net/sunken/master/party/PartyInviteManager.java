@@ -12,6 +12,8 @@ import net.sunken.common.util.PlayerDetail;
 import net.sunken.common.util.ScheduleHelper;
 import net.sunken.common.util.Tuple2;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
@@ -23,12 +25,16 @@ import static com.google.common.base.Preconditions.checkState;
 public final class PartyInviteManager {
 
     private static final Tuple2<Long, TimeUnit> INVITE_EXPIRY_TIME;
-    /** player -> those invited */
+    /** inviter -> those invited */
     private static Multimap<UUID, UUID> invites = Multimaps.synchronizedSetMultimap(HashMultimap.create());
     private static Map<Tuple2<UUID, UUID>, ScheduledFuture<Void>> expiryTasks = Maps.newHashMap();
 
     static {
         INVITE_EXPIRY_TIME = new Tuple2<>(60L, TimeUnit.SECONDS);
+    }
+
+    public static Collection<UUID> getInvites(UUID player) {
+        return invites.get(player);
     }
 
     public static void addInvite(PlayerDetail inviter, PlayerDetail invitee) {
