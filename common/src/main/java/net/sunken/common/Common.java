@@ -39,17 +39,17 @@ public class Common {
 
     public void onCommonLoad(boolean listenForServers) {
         this.mongo = new MongoConnection(
-                "***REMOVED***",
-                19802,
+                "",
+                0,
                 "admin",
-                "***REMOVED***",
+                "",
                 DatabaseConstants.DATABASE_NAME
         );
 
         this.redis = new RedisConnection(
-                "***REMOVED***",
-                11640,
-                "***REMOVED***"
+                "",
+                0,
+                ""
         );
 
         this.dataManager = new DataManager();
