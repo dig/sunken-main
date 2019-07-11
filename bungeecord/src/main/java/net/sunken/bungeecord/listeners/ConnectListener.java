@@ -8,14 +8,18 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.sunken.bungeecord.Constants;
-import net.sunken.bungeecord.lobby.LobbyHandler;
+import net.sunken.bungeecord.server.ServerHandler;
 import net.sunken.bungeecord.util.MessageUtil;
-import net.sunken.common.lobby.LobbyInfo;
+import net.sunken.common.Common;
+import net.sunken.common.server.data.ServerObject;
+import net.sunken.common.type.ServerType;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class ConnectListener implements Listener {
 
@@ -31,18 +35,30 @@ public class ConnectListener implements Listener {
 
                 // Connect to specified server
                 if (channel.equals("server")) {
-                    String name = in.readUTF();
+                    String uuid = in.readUTF();
                     String server = in.readUTF();
-                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
-                    if (target != null && target.isConnected()) {
-                        // TODO: Check local cache then check redis for server and connect
-                    }
-                } else if (channel.equals("lobby")) { // Connect to a free lobby
-                    String name = in.readUTF();
 
-                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(name);
+                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
                     if (target != null && target.isConnected()) {
-                        LobbyInfo lobby = LobbyHandler.getFreeLobby();
+                        ServerObject serv = ServerHandler.getServer(server);
+
+                        if (serv != null) {
+                            ServerInfo serverObj = ProxyServer.getInstance().constructServerInfo(
+                                    serv.getServerName(),
+                                    new InetSocketAddress(serv.getServerIp(), serv.getServerPort()),
+                                    serv.getServerName(),
+                                    false);
+
+                            target.connect(serverObj);
+                        }
+                    }
+                } else if (channel.equals("type")) { // Sends player to a free server of that type
+                    String uuid = in.readUTF();
+                    ServerType type = ServerType.valueOf(in.readUTF());
+
+                    ProxiedPlayer target = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
+                    if (target != null && target.isConnected() && type != null) {
+                        ServerObject lobby = ServerHandler.getFreeServer(type);
 
                         if (lobby != null) {
                             ServerInfo lobbyObj = ProxyServer.getInstance().constructServerInfo(

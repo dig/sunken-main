@@ -1,26 +1,33 @@
 package net.sunken.minigameapi;
 
-import lombok.Getter;
-import net.sunken.minigameapi.npc.NPCListener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
+import net.sunken.common.Common;
+import net.sunken.common.type.ServerType;
+import net.sunken.core.Core;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class Minigame {
+public class Minigame extends MinigameBase {
 
-    @Getter
-    private static Plugin instance;
+    public Minigame(JavaPlugin plugin,
+                    MinigameInfo information,
+                    Lobby lobby,
+                    Arena arena) {
+        super(plugin, information, lobby, arena);
+    }
 
-    public void onMinigameLoad(Plugin plugin) {
-        instance = plugin;
+    public void onMinigameLoad() {
+        Common.getInstance().onCommonLoad(
+                false,
+                ServerType.valueOf(this.getPlugin().getConfig().getString("type")),
+                Bukkit.getMaxPlayers(),
+                Bukkit.getPort());
+        Core.getInstance().onCoreLoad(this.getPlugin());
 
-        this.registerEvents();
+        this.initialize();
     }
 
     public void onMinigameDisable() {
-    }
-
-    private void registerEvents() {
-        PluginManager pm = instance.getServer().getPluginManager();
-        pm.registerEvents(new NPCListener(), instance);
+        Common.getInstance().onCommonDisable();
+        Core.getInstance().onCoreDisable();
     }
 }

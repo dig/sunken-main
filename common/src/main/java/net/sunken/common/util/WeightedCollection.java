@@ -5,11 +5,9 @@ import java.util.Random;
 import java.util.TreeMap;
 
 /**
- * Created by Digital on 21/01/2018.
- *
  * This class is used for picking a random item using chance.
- *
- * Create a new weightedcollection<type>,
+ * <p>
+ * Create a new WeightedCollection,
  * add the items and their chance using add(chance, item),
  * use next() to pull a random item.
  */

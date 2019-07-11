@@ -8,6 +8,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class MessageUtil {
 
     public final static int CENTER_PX_BUNGEE = 127;
+    public final static int CENTER_PX = 154;
 
     public static BaseComponent[] stringToComponent(String msg){
         BaseComponent[] bc = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', msg));
